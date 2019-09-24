@@ -1,11 +1,26 @@
+@media (min-width: 992px){
 .card.dashboard-card{
-  .card-header{
-    height: 56px;
-  }
-  .card-body {
-    height: 568px;
+    .card-header{
+      height: 56px;
+    }
+
     .card-body {
-      height: unset;
+      height: 568px;
+      .card-body {
+        height: unset;
+      }
+    }
+  }
+}
+
+@media (min-height: 992px){
+  .card.dashboard-card{
+
+    .card-body {
+      height: 768px;
+      .card-body {
+        height: unset;
+      }
     }
   }
 }

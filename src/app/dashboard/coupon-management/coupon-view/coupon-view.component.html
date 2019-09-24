@@ -7,8 +7,8 @@
       >
         ➕ Agregar
       </button>
-      <button class="btn btn-sm btn-outline-primary">🔄 Modificar</button>
-      <button class="btn btn-sm btn-outline-danger">❌ Eliminar</button>
+      <button class="btn btn-sm btn-outline-primary" (click)="couponManagementService.update(couponManagementService.selectedCoupon)">🔄 Modificar</button>
+      <button class="btn btn-sm btn-outline-danger" (click)="couponManagementService.delete(couponManagementService.selectedCoupon)">❌ Eliminar</button>
     </div>
   </div>
   <div class="card-body">

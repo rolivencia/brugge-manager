@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import {NotificationManagementService} from "@app/dashboard/notification-management/notification-management.service";
 
 @Component({
   selector: "app-notification-grid",
@@ -6,7 +7,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./notification-grid.component.scss", "../notification-management.component.scss"]
 })
 export class NotificationGridComponent implements OnInit {
-  constructor() {}
+  constructor(public notificationManagementService: NotificationManagementService) {}
 
   ngOnInit() {}
 }

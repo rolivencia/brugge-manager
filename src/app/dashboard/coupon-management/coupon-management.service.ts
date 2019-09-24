@@ -160,6 +160,15 @@ export class CouponManagementService {
     return this.couponList.filter(coupon => coupon.id === id).pop();
   }
 
+  //TODO: Implement method - It should clone the object passed as parameter and then serve it for update
+  public update(coupon: Coupon): Coupon {
+    return coupon;
+  }
+
+  public delete(coupon: Coupon): boolean {
+    return true;
+  }
+
   //TODO: Implement method - It should check if QR code already exists before assigning
   public generateQrCode(): string {
     return "BRGG-RTSQ-240919";

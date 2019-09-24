@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Customer} from "@app/_models";
 
 @Injectable({
   providedIn: 'root'
@@ -10,4 +11,12 @@ export class CustomerManagementService {
   showRightOutlet: boolean = true;
 
   constructor() { }
+
+  disable(customer: Customer){
+
+  }
+
+  sendNotification(customer: Customer){
+
+  }
 }

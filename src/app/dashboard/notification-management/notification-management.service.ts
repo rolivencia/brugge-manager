@@ -10,4 +10,18 @@ export class NotificationManagementService {
   showRightOutlet: boolean = true;
 
   constructor() { }
+
+  goToSend(){
+    this.showTopOutlet = true;
+    this.showLeftOutlet = false;
+    this.showRightOutlet = false;
+  }
+
+  send(notification: Notification){
+
+  }
+}
+
+export class Notification{
+
 }

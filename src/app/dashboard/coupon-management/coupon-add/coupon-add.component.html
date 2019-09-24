@@ -4,16 +4,28 @@
       <h5>Agregar nuevo cupón</h5>
       <div>
         <button
-          class="btn btn-sm btn-outline-dark mr-3"
+          class="btn btn-sm btn-outline-primary mr-2 mr-lg-3"
           (click)="couponManagementService.add()"
         >
-          💾 Guardar
+          🔄 <div class="d-none d-lg-inline">Cargar nuevo</div>
+        </button>
+        <button
+          class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
+          (click)="couponManagementService.showGrid()"
+        >
+          ⬅️ <div class="d-none d-lg-inline">Volver</div>
+        </button>
+        <button
+          class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
+          (click)="couponManagementService.add()"
+        >
+          💾 <div class="d-none d-lg-inline">Guardar</div>
         </button>
         <button
           class="btn btn-sm btn-outline-danger"
           (click)="couponManagementService.showGrid()"
         >
-          🗑️ Descartar
+          🗑️ <div class="d-none d-lg-inline">Descartar</div>
         </button>
       </div>
     </div>
@@ -22,7 +34,7 @@
   <div class="card-body">
     <form>
       <div class="row">
-        <div class="col">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <label for="title"><strong>Título:</strong></label>
             <input
@@ -62,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <label for="title"><strong>Tipo de Cupón:</strong></label>
             <select
@@ -112,7 +124,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col-12 col-lg-4">
           <div class="form-group">
             <label for="user"
               ><strong>Usuario responsable de carga:</strong></label

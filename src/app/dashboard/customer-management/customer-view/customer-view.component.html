@@ -1,8 +1,8 @@
 <div class="card dashboard-card">
   <div class="card-header">
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-outline-dark">📣 Enviar notificación</button>
-      <button class="btn btn-sm btn-outline-danger">❌ Dar de baja</button>
+      <button class="btn btn-sm btn-outline-dark" (click)="customerManagementService.sendNotification()">📣 Enviar notificación</button>
+      <button class="btn btn-sm btn-outline-danger" (click)="customerManagementService.disable()">❌ Dar de baja</button>
     </div>
   </div>
   <div class="card-body">
