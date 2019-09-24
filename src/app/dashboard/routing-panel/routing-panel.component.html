@@ -1,0 +1,48 @@
+<div class="card-deck pt-2">
+  <div
+    class="card mb-3"
+    (click)="goTo('dashboard/coupons')"
+  >
+    <div class="card-body">
+      <h5 class="card-title">🎫 Gestión de Cupones</h5>
+      <p class="card-text">Ingresar al menú de gestión de cupones de Brugge</p>
+    </div>
+  </div>
+
+  <div
+    class="card mb-3"
+    (click)="goTo('dashboard/customer')"
+  >
+    <div class="card-body">
+      <h5 class="card-title">👥 Gestión de Clientes</h5>
+      <p class="card-text">
+        Ingresar al menú de gestión de Clientes
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="card mb-3"
+    (click)="goTo('dashboard/notification')"
+  >
+    <div class="card-body">
+      <h5 class="card-title">📣 Envío de Notificaciones</h5>
+      <p class="card-text">
+        Ingresar al menú de envío de Notificaciones
+      </p>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<h3>Usuario actual:</h3>
+{{ currentUser.userName }} ({{ currentUser.firstName }}
+{{ currentUser.lastName }})
+<h3>Usuarios registrados:</h3>
+<ul>
+  <li *ngFor="let user of users">
+    {{ user.userName }} ({{ user.firstName }} {{ user.lastName }})
+    <!-- - <a (click)="deleteUser(user.id)" class="text-danger">Delete</a>-->
+  </li>
+</ul>

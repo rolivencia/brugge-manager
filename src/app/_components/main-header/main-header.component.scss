@@ -1,0 +1,37 @@
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "../../../assets/scss/inputs";
+
+#main-header {
+  @extend .px-0;
+
+  #navbar {
+    position: sticky;
+    height: 74px;
+  }
+
+  .navbar {
+    width: 100%;
+    top: 0;
+    z-index: 4;
+
+    .nav-item {
+      width: 160px;
+      &.disabled {
+        cursor: default;
+      }
+    }
+  }
+
+  .logo {
+    img {
+      max-width: 200px;
+
+      @media (max-width: 420px) {
+        max-height: 40px;
+      }
+      @media (min-width: 420px) {
+        max-height: 74px;
+      }
+    }
+  }
+}

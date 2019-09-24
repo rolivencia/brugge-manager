@@ -1,0 +1,30 @@
+<section id="main-header" class="container">
+  <nav
+    id="navbar"
+    class="navbar navbar-expand-lg navbar-white bg-white d-flex justify-content-between"
+  >
+    <div class="nav-item">
+      <ng-container *ngIf="currentUser">
+        <a class="btn btn-outline-black active w-100" routerLink="/dashboard">
+          <i class="fa fa-columns mr-2" aria-hidden="true"></i>Panel Principal
+        </a>
+      </ng-container>
+    </div>
+
+    <div class="nav-item">
+      <div class="logo text-center">
+        <img [src]="'assets/img/logo.jpg'" />
+      </div>
+      <!--      <a class="navbar-brand ml-3 d-none d-md-inline" routerLink="/deportes"><img [src]="'assets/img/deportes/jeut.png'"></a>-->
+    </div>
+
+    <!-- TODO: Borrar d-none del div de abajo para CEUT -->
+    <div class="nav-item">
+      <ng-container *ngIf="currentUser">
+        <a class="btn btn-outline-black active w-100" (click)="logout()">
+          <i class="fa fa-sign-out-alt mr-2" aria-hidden="true"></i>Salir
+        </a>
+      </ng-container>
+    </div>
+  </nav>
+</section>

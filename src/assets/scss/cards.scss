@@ -1,0 +1,11 @@
+.card.dashboard-card{
+  .card-header{
+    height: 56px;
+  }
+  .card-body {
+    height: 568px;
+    .card-body {
+      height: unset;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+@import "../../../../../node_modules/bootstrap/scss/bootstrap";
+
+qrcode{
+  img{
+    display: inline !important;
+  }
+}
+
+hr{
+  @extend .mt-2;
+  @extend .mb-2;
+}

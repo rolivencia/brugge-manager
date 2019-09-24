@@ -1,0 +1,13 @@
+.btn-black {
+  color: white;
+  background-color: black;
+}
+
+.btn-outline-black {
+  color: black;
+  border-color: black;
+  &:hover {
+    background-color: black;
+    color: white !important;
+  }
+}
