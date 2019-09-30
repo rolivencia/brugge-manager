@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ceut-frsf": {
+    "brugge": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -57,18 +57,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ceut-frsf:build"
+            "browserTarget": "brugge:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ceut-frsf:build:production"
+              "browserTarget": "brugge:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ceut-frsf:build"
+            "browserTarget": "brugge:build"
           }
         },
         "test": {
@@ -92,7 +92,7 @@
         }
       }
     },
-    "ceut-frsf-e2e": {
+    "brugge-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -101,11 +101,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ceut-frsf:serve"
+            "devServerTarget": "brugge:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ceut-frsf:serve:production"
+              "devServerTarget": "brugge:serve:production"
             }
           }
         },
@@ -119,5 +119,5 @@
       }
     }
   },
-  "defaultProject": "ceut-frsf"
+  "defaultProject": "brugge"
 }

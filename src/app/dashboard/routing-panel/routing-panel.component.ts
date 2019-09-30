@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { User } from "@app/_models";
 import { Subscription } from "rxjs";
 import {
@@ -14,7 +14,7 @@ import { first } from "rxjs/operators";
   templateUrl: "./routing-panel.component.html",
   styleUrls: ["./routing-panel.component.scss"]
 })
-export class RoutingPanelComponent implements OnInit {
+export class RoutingPanelComponent implements OnInit, OnDestroy {
   currentUser: User;
   currentUserSubscription: Subscription;
   users: User[] = [];
