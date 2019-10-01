@@ -7,8 +7,22 @@
       >
         ➕ Agregar
       </button>
-      <button class="btn btn-sm btn-outline-primary" (click)="couponManagementService.update(couponManagementService.selectedCoupon)">🔄 Modificar</button>
-      <button class="btn btn-sm btn-outline-danger" (click)="couponManagementService.delete(couponManagementService.selectedCoupon)">❌ Eliminar</button>
+      <button
+        class="btn btn-sm btn-outline-primary"
+        (click)="
+          couponManagementService.update(couponManagementService.selectedCoupon)
+        "
+      >
+        🔄 Modificar
+      </button>
+      <button
+        class="btn btn-sm btn-outline-danger"
+        (click)="
+          couponManagementService.delete(couponManagementService.selectedCoupon)
+        "
+      >
+        ❌ Eliminar
+      </button>
     </div>
   </div>
   <div class="card-body">
@@ -67,7 +81,7 @@
         <strong>Válida hasta:</strong>
         {{
           couponManagementService.selectedCoupon.endsAt.format(
-            "DD/MM/YYYY, hh:mm"
+            "DD/MM/YYYY, HH:mm"
           )
         }}
       </div>
@@ -76,7 +90,7 @@
         <strong>Agregado en:</strong>
         {{
           couponManagementService.selectedCoupon.audit.createdAt.format(
-            "DD/MM/YYYY - hh:mm"
+            "DD/MM/YYYY - HH:mm"
           )
         }}
         <strong>Agregado por:</strong>

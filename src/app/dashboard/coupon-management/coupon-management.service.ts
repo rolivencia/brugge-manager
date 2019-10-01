@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Coupon } from "@app/_models";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Moment } from 'moment';
-import * as moment from 'moment';
-
+import { Moment } from "moment";
+import * as moment from "moment";
+import { CouponService } from "@app/_services/coupon.service";
 
 @Injectable({
   providedIn: "root"
@@ -23,7 +23,7 @@ export class CouponManagementService {
       startsAt: moment("09-26-2019 19:00"),
       endsAt: moment("10-04-2019 23:55"),
       code: "BRGG-HGZT-240919",
-      description: 'Canjeá este cupón por una pinta',
+      description: "Canjeá este cupón por una pinta",
       type: {
         id: 1,
         description: "Canje por única vez",
@@ -34,7 +34,7 @@ export class CouponManagementService {
           updatedAt: moment()
         }
       },
-      imageUrl: 'assets/img/logo.jpg',
+      imageUrl: "assets/img/logo.jpg",
       audit: {
         deleted: false,
         enabled: true,
@@ -54,7 +54,7 @@ export class CouponManagementService {
       startsAt: moment("09-27-2019 21:00"),
       endsAt: moment("10-01-2019 23:55"),
       code: "BRGG-APFM-270919",
-      description: 'Canjeá este cupón por una pinta y una pizza con descuento.',
+      description: "Canjeá este cupón por una pinta y una pizza con descuento.",
       type: {
         id: 2,
         description: "Canje por única vez",
@@ -65,7 +65,7 @@ export class CouponManagementService {
           updatedAt: moment()
         }
       },
-      imageUrl: 'assets/img/logo.jpg',
+      imageUrl: "assets/img/logo.jpg",
       audit: {
         deleted: false,
         enabled: true,
@@ -85,7 +85,7 @@ export class CouponManagementService {
       startsAt: moment("09-30-2019 21:00"),
       endsAt: moment("10-07-2019 23:55"),
       code: "BRGG-JJSG-270919",
-      description: 'Dos por uno en pintas',
+      description: "Dos por uno en pintas",
       type: {
         id: 2,
         description: "Canje por única vez",
@@ -96,7 +96,7 @@ export class CouponManagementService {
           updatedAt: moment()
         }
       },
-      imageUrl: 'assets/img/logo.jpg',
+      imageUrl: "assets/img/logo.jpg",
       audit: {
         deleted: false,
         enabled: true,
@@ -112,7 +112,11 @@ export class CouponManagementService {
     }
   ];
 
-  constructor(public router: Router, public activatedRoute: ActivatedRoute) {}
+  constructor(
+    public router: Router,
+    public activatedRoute: ActivatedRoute,
+    public couponService: CouponService
+  ) {}
 
   public toggleAdd() {
     this.showTopOutlet = true;
@@ -153,7 +157,7 @@ export class CouponManagementService {
         endsAt: "7/10/2019 23:55",
         code: "BRGG-JJSG-270919"
       }
-    ]
+    ];
   }
 
   public getCouponById(id: number): Coupon {

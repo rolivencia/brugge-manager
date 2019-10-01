@@ -6,6 +6,8 @@ import { CustomerManagementComponent } from "./customer-management.component";
 import { CustomerGridComponent } from "./customer-grid/customer-grid.component";
 import { CustomerViewComponent } from "./customer-view/customer-view.component";
 import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
+import { WjGridModule } from "wijmo/wijmo.angular2.grid";
+import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
 
 @NgModule({
   declarations: [
@@ -13,7 +15,12 @@ import { CustomerManagementService } from "@app/dashboard/customer-management/cu
     CustomerGridComponent,
     CustomerViewComponent
   ],
-  imports: [CommonModule, CustomerManagementRoutingModule],
+  imports: [
+    CommonModule,
+    CustomerManagementRoutingModule,
+    WjGridFilterModule,
+    WjGridModule
+  ],
   providers: [CustomerManagementService]
 })
 export class CustomerManagementModule {}

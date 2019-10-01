@@ -15,7 +15,7 @@ function authenticate(req, res, next) {
         const { password, ...userWithoutPassword } = user;
         res.json(userWithoutPassword);
       } else {
-        res.status(400).json({ message: "Username or password is incorrect" });
+        res.status(400).json({ message: "Username or password is incorrect." });
       }
     })
     .catch(err => next(err));

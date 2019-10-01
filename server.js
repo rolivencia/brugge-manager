@@ -19,6 +19,7 @@ app.use(express.static("./dist"));
 const rutasAccesibles = ["/", "/dashboard", "/login", "/home"];
 const rutasApi = [
   { path: "/users", controller: "./server/users/users.controller" },
+  { path: "/customer", controller: "./server/customer/customer.controller" },
   { path: "/api/keys", controller: "server/keys/keys.controller" }
 ];
 

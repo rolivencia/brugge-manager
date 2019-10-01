@@ -4,7 +4,7 @@ import { Coupon } from "@app/_models";
 @Injectable({
   providedIn: "root"
 })
-export class CouponServiceService {
+export class CouponService {
   constructor() {}
 
   public generateCode = length => {

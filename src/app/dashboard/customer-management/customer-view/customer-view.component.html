@@ -1,11 +1,110 @@
 <div class="card dashboard-card">
   <div class="card-header">
     <div class="d-flex justify-content-between">
-      <button class="btn btn-sm btn-outline-dark" (click)="customerManagementService.sendNotification()">📣 Enviar notificación</button>
-      <button class="btn btn-sm btn-outline-danger" (click)="customerManagementService.disable()">❌ Dar de baja</button>
+      <button
+        class="btn btn-sm btn-outline-dark"
+        (click)="customerManagementService.sendNotification()"
+      >
+        📣 Notificación
+      </button>
+
+      <button
+        class="btn btn-sm btn-outline-danger"
+        (click)="customerManagementService.disable()"
+      >
+        ❌ Dar de baja
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    Seleccione un cliente de la grilla de la izquierda
+  <div class="card-body d-flex align-content-between flex-wrap flex-grow-1">
+    <ng-container *ngIf="!customerManagementService.selectedCustomer">
+      Seleccione un cliente de la grilla de la izquierda
+    </ng-container>
+    <ng-container *ngIf="customerManagementService.selectedCustomer">
+      <div id="basic-customer-info" class="flex-grow-1">
+        <p>
+          <strong>ID:</strong>
+          {{ customerManagementService.selectedCustomer.id }}
+        </p>
+        <p>
+          <strong>ID Firebase:</strong>
+          {{ customerManagementService.selectedCustomer.uidFirebase }}
+        </p>
+        <p>
+          <strong>Nombre y Apellido:</strong>
+          {{ customerManagementService.selectedCustomer.firstName }}
+          {{ customerManagementService.selectedCustomer.lastName }}
+        </p>
+        <p>
+          <strong>Email:</strong>
+          {{ customerManagementService.selectedCustomer.email }}
+        </p>
+        <hr />
+      </div>
+      <div id="audit-customer-info" class="flex-grow-1" *ngIf="showAudit">
+        <h5>Información de Auditoría:</h5>
+        <p>
+          <strong>Registrado en:</strong>
+          {{
+            customerManagementService.selectedCustomer.audit.createdAt.format(
+              "DD/MM/YYYY, HH:mm"
+            )
+          }}
+        </p>
+        <p>
+          <strong>Actualizado en:</strong>
+          {{
+            customerManagementService.selectedCustomer.audit.createdAt.format(
+              "DD/MM/YYYY, HH:mm"
+            )
+          }}
+        </p>
+        <p>
+          <strong>Habilitado: </strong>
+          {{
+            customerManagementService.selectedCustomer.audit.enabled
+              ? "Sí"
+              : "No"
+          }}
+        </p>
+        <p>
+          <strong>Eliminado: </strong>
+          {{
+            customerManagementService.selectedCustomer.audit.deleted
+              ? "Sí"
+              : "No"
+          }}
+        </p>
+      </div>
+      <div id="coupons-customer-info" class="flex-grow-1" *ngIf="showCoupons">
+        <h5>Cupones canjeados:</h5>
+      </div>
+
+      <div id="customer-info-buttons" class="flex-grow-1">
+        <hr />
+        <div class="d-flex justify-content-between">
+          <button
+            class="btn btn-sm"
+            [ngClass]="{
+              'btn-dark': showAudit,
+              'btn-outline-dark': !showAudit
+            }"
+            (click)="toggleAudit()"
+          >
+            🔎 Ver info de auditoría
+          </button>
+          <button
+            class="btn btn-sm"
+            [ngClass]="{
+              'btn-dark': showCoupons,
+              'btn-outline-dark': !showCoupons
+            }"
+            (click)="toggleCoupons()"
+          >
+            🎫 Ver canjes
+          </button>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>
