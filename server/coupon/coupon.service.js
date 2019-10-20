@@ -52,17 +52,40 @@ async function create({
 }
 
 async function getAll() {
-  return Coupon().findAll({
+  const result = await Coupon().findAll({
     include: [
+      { as: "type", model: CouponType() },
       {
-        model: CouponType(),
-        attributes: ["id", "description"]
-      },
-      {
-        model: User(),
-        attributes: ["id", "first_name", "last_name", "user_name"]
+        as: "user",
+        model: User()
       }
     ]
+  });
+
+  return new Promise((resolve, reject) => {
+    const coupons = result.map(coupon => ({
+      id: coupon.id,
+      title: coupon.title,
+      code: coupon.code,
+      description: coupon.description,
+      startsAt: coupon.startsAt,
+      endsAt: coupon.endsAt,
+      imageUrl: coupon.imageUrl,
+      type: coupon.type,
+      user: coupon.user,
+      audit: {
+        createdAt: coupon.createdAt,
+        updatedAt: coupon.updatedAt,
+        enabled: coupon.enabled,
+        deleted: coupon.deleted
+      }
+    }));
+
+    if (true) {
+      resolve(coupons);
+    } else {
+      reject(error);
+    }
   });
 }
 

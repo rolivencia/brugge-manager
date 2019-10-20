@@ -87,17 +87,21 @@
       </div>
       <hr />
       <div>
-        <strong>Agregado en:</strong>
-        {{
-          couponManagementService.selectedCoupon.audit.createdAt.format(
-            "DD/MM/YYYY - HH:mm"
-          )
-        }}
-        <strong>Agregado por:</strong>
-        {{ couponManagementService.selectedCoupon.user.firstName }}
-        {{ couponManagementService.selectedCoupon.user.lastName }} ({{
-          couponManagementService.selectedCoupon.user.userName
-        }})
+        <div *ngIf="couponManagementService.selectedCoupon.audit">
+          <strong>Agregado en:</strong>
+          {{
+            couponManagementService.selectedCoupon.audit.createdAt.format(
+              "DD/MM/YYYY - HH:mm"
+            )
+          }}
+        </div>
+        <div *ngIf="couponManagementService.selectedCoupon.user">
+          <strong>Agregado por:</strong>
+          {{ couponManagementService.selectedCoupon.user.firstName }}
+          {{ couponManagementService.selectedCoupon.user.lastName }} ({{
+            couponManagementService.selectedCoupon.user.userName
+          }})
+        </div>
       </div>
     </ng-container>
   </div>

@@ -97,9 +97,11 @@ Coupon.init(
 );
 
 Coupon.belongsTo(CouponType(), {
-  foreignKey: "id_type"
+  foreignKey: "id_type",
+  as: "type"
 });
 
 Coupon.belongsTo(User(), {
-  foreignKey: "id_user"
+  foreignKey: "id_user",
+  as: "user"
 });
