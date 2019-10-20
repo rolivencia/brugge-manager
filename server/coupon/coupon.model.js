@@ -11,8 +11,14 @@ Coupon.init(
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
       field: "id"
+    },
+    title: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false,
+      field: "title"
     },
     startsAt: {
       type: Sequelize.DATE,
@@ -23,12 +29,6 @@ Coupon.init(
       type: Sequelize.DATE,
       allowNull: true,
       field: "ends_at"
-    },
-    title: {
-      type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
-      field: "title"
     },
     description: {
       type: Sequelize.TEXT,
@@ -70,9 +70,13 @@ Coupon.init(
     },
     idUser: {
       type: Sequelize.INTEGER,
-      primaryKey: true,
       allowNull: false,
       field: "id_user"
+    },
+    idType: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      field: "id_type"
     }
   },
   {

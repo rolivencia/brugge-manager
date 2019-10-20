@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { CollectionView } from "wijmo/wijmo";
 import { CouponManagementService } from "@app/dashboard/coupon-management/coupon-management.service";
+import { CouponService } from "@app/_services/coupon.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-coupon-grid",
@@ -11,7 +13,6 @@ import { CouponManagementService } from "@app/dashboard/coupon-management/coupon
   ]
 })
 export class CouponGridComponent implements OnInit {
-
   columns: any[] = [
     { header: "ID", binding: "id", width: 50 },
     { header: "Título", binding: "title", width: "*" },
@@ -22,18 +23,30 @@ export class CouponGridComponent implements OnInit {
 
   gridCollection: CollectionView;
 
-  constructor(public couponManagementService: CouponManagementService) {}
+  constructor(
+    public couponManagementService: CouponManagementService,
+    private couponService: CouponService
+  ) {}
 
   ngOnInit() {
     this.getGridData();
   }
 
   getGridData() {
-    const couponData = this.couponManagementService.getCoupons();
-    this.gridCollection = new CollectionView(couponData);
+    let couponData = this.couponManagementService.getCoupons();
+
+    this.couponService
+      .getAll()
+      .pipe(first())
+      .subscribe(coupons => {
+        couponData = couponData.concat(coupons);
+        this.gridCollection = new CollectionView(couponData);
+      });
   }
 
   getCouponDetails(currentItem) {
-    this.couponManagementService.selectedCoupon = this.couponManagementService.getCouponById(currentItem.id);
+    this.couponManagementService.selectedCoupon = this.couponManagementService.getCouponById(
+      currentItem.id
+    );
   }
 }

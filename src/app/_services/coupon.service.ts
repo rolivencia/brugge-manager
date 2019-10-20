@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Coupon } from "@app/_models";
+import { Coupon, User } from "@app/_models";
+import { environment } from "@environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class CouponService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   public generateCode = length => {
     let result = "";
@@ -21,8 +24,8 @@ export class CouponService {
     return false;
   };
 
-  public getAll = (): Coupon[] => {
-    return [];
+  public getAll = (): Observable<Coupon[]> => {
+    return this.http.get<Coupon[]>(`${environment.apiUrl}/coupon`);
   };
 
   public getById = (idCoupon: number): Coupon => {
