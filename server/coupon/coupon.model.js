@@ -2,6 +2,9 @@ const Sequelize = require("sequelize");
 const connector = require("server/_helpers/mysql-connector");
 const sequelizeConnector = connector.sequelizeConnector();
 
+const CouponType = require("./coupon-type.model");
+const User = require("../users/user.model");
+
 class Coupon extends Sequelize.Model {}
 
 module.exports = () => Coupon;
@@ -71,12 +74,20 @@ Coupon.init(
     idUser: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      field: "id_user"
+      field: "id_user",
+      references: {
+        model: "user",
+        key: "id"
+      }
     },
     idType: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      field: "id_type"
+      field: "id_type",
+      references: {
+        model: "coupon_type",
+        key: "id"
+      }
     }
   },
   {
@@ -84,3 +95,11 @@ Coupon.init(
     modelName: "coupon"
   }
 );
+
+Coupon.belongsTo(CouponType(), {
+  foreignKey: "id_type"
+});
+
+Coupon.belongsTo(User(), {
+  foreignKey: "id_user"
+});

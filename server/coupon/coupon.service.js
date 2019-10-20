@@ -1,8 +1,12 @@
 const environment = require("server/_helpers/environment");
-const Coupon = require("./coupon.model");
+
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const moment = require("moment");
+
+const Coupon = require("./coupon.model");
+const User = require("../users/user.model");
+const CouponType = require("./coupon-type.model");
 
 module.exports = {
   getAll,
@@ -48,7 +52,18 @@ async function create({
 }
 
 async function getAll() {
-  return Coupon().findAll();
+  return Coupon().findAll({
+    include: [
+      {
+        model: CouponType(),
+        attributes: ["id", "description"]
+      },
+      {
+        model: User(),
+        attributes: ["id", "first_name", "last_name", "user_name"]
+      }
+    ]
+  });
 }
 
 async function update() {}

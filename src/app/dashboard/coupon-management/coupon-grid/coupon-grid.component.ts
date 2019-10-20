@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { CollectionView } from "wijmo/wijmo";
 import { CouponManagementService } from "@app/dashboard/coupon-management/coupon-management.service";
 import { CouponService } from "@app/_services/coupon.service";
-import { first } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
+import * as moment from "moment";
 
 @Component({
   selector: "app-coupon-grid",
@@ -38,6 +39,23 @@ export class CouponGridComponent implements OnInit {
     this.couponService
       .getAll()
       .pipe(first())
+      .pipe(
+        map(coupons =>
+          coupons.map(coupon => ({
+            id: coupon.id,
+            title: coupon.title,
+            description: coupon.description,
+            type: coupon.type,
+            code: coupon.code,
+            imageUrl: coupon.imageUrl,
+            audit: coupon.audit,
+            user: coupon.user,
+            startsAt: moment(coupon.startsAt),
+            endsAt: moment(coupon.endsAt),
+            ...coupon
+          }))
+        )
+      )
       .subscribe(coupons => {
         couponData = couponData.concat(coupons);
         this.gridCollection = new CollectionView(couponData);

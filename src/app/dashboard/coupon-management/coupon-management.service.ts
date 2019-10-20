@@ -177,4 +177,12 @@ export class CouponManagementService {
   public generateQrCode(): string {
     return "BRGG-RTSQ-240919";
   }
+
+  private parseCouponObjects(rawCoupons: Coupon[]): Coupon[] {
+    return rawCoupons.map(coupon => ({
+      ...coupon,
+      startsAt: moment(coupon.startsAt),
+      endsAt: moment(coupon.endsAt)
+    }));
+  }
 }
