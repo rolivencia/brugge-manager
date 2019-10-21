@@ -10,7 +10,8 @@ function jwt() {
       // public routes that don't require authentication
       "/users/authenticate",
       "/backend",
-      "/customer/create"
+      "/customer/create",
+      "/api/keys/get"
     ]
   });
 }
