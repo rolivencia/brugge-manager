@@ -3,14 +3,22 @@
     <div class="d-flex justify-content-between">
       <button
         class="btn btn-sm btn-outline-dark"
-        (click)="customerManagementService.sendNotification()"
+        (click)="
+          customerManagementService.sendNotification(
+            customerManagementService.selectedCustomer
+          )
+        "
       >
         📣 Notificación
       </button>
 
       <button
         class="btn btn-sm btn-outline-danger"
-        (click)="customerManagementService.disable()"
+        (click)="
+          customerManagementService.disable(
+            customerManagementService.selectedCustomer
+          )
+        "
       >
         ❌ Dar de baja
       </button>

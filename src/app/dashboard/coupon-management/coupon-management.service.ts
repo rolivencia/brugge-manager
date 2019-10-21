@@ -38,7 +38,9 @@ export class CouponManagementService {
     // this.router.navigate(['/dashboard/coupons/add']);
   }
 
-  public add() {}
+  public add() {
+    this.couponService.create();
+  }
 
   public showGrid() {
     this.showTopOutlet = false;

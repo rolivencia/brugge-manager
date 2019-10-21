@@ -19,10 +19,12 @@ export class CouponService {
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return result;
+    const codeDate = moment().format("YYYYMMDD");
+    return `BRGG-${result}-${codeDate}`;
   };
 
-  public create = (coupon: Coupon): boolean => {
+  public create = (coupon?: Coupon): boolean => {
+    const code = this.generateCode(4);
     return false;
   };
 

@@ -22,6 +22,22 @@
         [header]="column.header"
         [visible]="true"
       >
+        <ng-template
+          wjFlexGridCellTemplate
+          [cellType]="'Cell'"
+          let-cell="cell"
+          *ngIf="column.id === 'startsAt'"
+        >
+          {{ cell.item.startsAt.format("DD/MM/YYYY hh:mm") }}
+        </ng-template>
+        <ng-template
+          wjFlexGridCellTemplate
+          [cellType]="'Cell'"
+          let-cell="cell"
+          *ngIf="column.id === 'endsAt'"
+        >
+          {{ cell.item.endsAt.format("DD/MM/YYYY hh:mm") }}
+        </ng-template>
       </wj-flex-grid-column>
     </wj-flex-grid>
   </div>

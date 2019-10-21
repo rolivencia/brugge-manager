@@ -13,11 +13,11 @@ import { CouponService } from "@app/_services/coupon.service";
 })
 export class CouponGridComponent implements OnInit {
   columns: any[] = [
-    { header: "ID", binding: "id", width: 50 },
-    { header: "Título", binding: "title", width: "*" },
-    // { header: "Comienza", binding: "startsAt", width: 140 },
-    { header: "Termina", binding: "endsAt", width: 180 },
-    { header: "Código", binding: "code", width: "*" }
+    { header: "ID", binding: "id", width: 50, id: "id" },
+    { header: "Título", binding: "title", width: "*", id: "title" },
+    // { header: "Comienza", binding: "startsAt", width: 140, id: "startsAt" },
+    { header: "Termina", binding: "endsAt", width: 180, id: "endsAt" },
+    { header: "Código", binding: "code", width: "*", id: "code" }
   ];
 
   gridCollection: CollectionView;
