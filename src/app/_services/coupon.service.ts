@@ -23,9 +23,27 @@ export class CouponService {
     return `BRGG-${result}-${codeDate}`;
   };
 
-  public create = (coupon?: Coupon): boolean => {
-    const code = this.generateCode(4);
-    return false;
+  public create = (coupon?: Coupon): Observable<any> => {
+    const savedObject = {
+      title: coupon.title,
+      description: coupon.description,
+      startsAt: coupon.startsAt.toISOString(),
+      endsAt: coupon.endsAt.toISOString(),
+      idType: coupon.type.id,
+      idUser: coupon.user.id,
+      code: coupon.code,
+      imageUrl: coupon.imageUrl
+    };
+
+    return this.http
+      .post<any>(`${environment.apiUrl}/coupon/create`, {
+        ...savedObject
+      })
+      .pipe(
+        map(response => {
+          console.log(response);
+        })
+      );
   };
 
   public getAll = (): Observable<Coupon[]> => {
@@ -60,7 +78,9 @@ export class CouponService {
     return null;
   };
 
-  public delete = (coupon: Coupon): boolean => {
-    return false;
+  public remove = (coupon: Coupon): Observable<any> => {
+    return this.http.delete<any>(
+      `${environment.apiUrl}/coupon/remove/` + coupon.id
+    );
   };
 }

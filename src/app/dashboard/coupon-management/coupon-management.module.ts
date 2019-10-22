@@ -12,6 +12,7 @@ import { WjGridModule } from "wijmo/wijmo.angular2.grid";
 import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
 import { QRCodeModule } from "angularx-qrcode";
 import { FormsModule } from "@angular/forms";
+import { WjInputModule } from "wijmo/wijmo.angular2.input";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FormsModule } from "@angular/forms";
     FormsModule,
     QRCodeModule,
     WjGridModule,
-    WjGridFilterModule
+    WjGridFilterModule,
+    WjInputModule
   ],
   providers: [CouponManagementService]
 })

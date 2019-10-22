@@ -20,5 +20,5 @@ export class Coupon {
 export class CouponType {
   id: number;
   description: string;
-  audit: Audit;
+  audit?: Audit;
 }

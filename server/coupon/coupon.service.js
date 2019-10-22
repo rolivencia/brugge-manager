@@ -9,15 +9,21 @@ const User = require("../users/user.model");
 const CouponType = require("./coupon-type.model");
 
 module.exports = {
+  create,
   getAll,
-  getCurrent
+  getCurrent,
+  remove
 };
 
-async function getAll() {}
+async function remove(id) {
+  return Coupon().update({ deleted: 1 }, { where: { id: id } });
+}
 
-function getCurrent() {
+async function getCurrent() {
   return Coupon().findAll({
     where: {
+      deleted: 0,
+      enabled: 1,
       endsAt: {
         [Op.gte]: moment().toDate()
       }
@@ -27,32 +33,32 @@ function getCurrent() {
 
 async function create({
   title,
+  description,
   startsAt,
   endsAt,
-  description,
-  type,
+  idType,
+  idUser,
   code,
-  imageUrl,
-  user
+  imageUrl
 }) {
-  const newCoupon = await Coupon()
-    .create({
-      title: title,
-      startsAt: startsAt,
-      endsAt: endsAt,
-      description: description,
-      code: code,
-      imageUrl: imageUrl,
-      idUser: user.id,
-      idType: type.id
-    })
-    .then(coupon => {
-      console.log(coupon);
-    });
+  return Coupon().create({
+    title: title,
+    startsAt: startsAt,
+    endsAt: endsAt,
+    description: description,
+    code: code,
+    imageUrl: imageUrl,
+    idUser: idUser,
+    idType: idType
+  });
 }
 
 async function getAll() {
   const result = await Coupon().findAll({
+    where: {
+      deleted: 0,
+      enabled: 1
+    },
     include: [
       { as: "type", model: CouponType() },
       {

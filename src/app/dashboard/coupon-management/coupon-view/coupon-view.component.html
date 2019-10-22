@@ -17,9 +17,7 @@
       </button>
       <button
         class="btn btn-sm btn-outline-danger"
-        (click)="
-          couponManagementService.delete(couponManagementService.selectedCoupon)
-        "
+        (click)="removeCoupon(couponManagementService.selectedCoupon)"
       >
         ❌ Eliminar
       </button>
@@ -30,14 +28,20 @@
       Seleccione un cupón existente de la grilla de la izquierda
     </ng-container>
     <ng-container *ngIf="couponManagementService.selectedCoupon">
-      <p>
-        <strong>ID:</strong>
-        {{ couponManagementService.selectedCoupon.id }}
-      </p>
-      <p>
-        <strong>Título:</strong>
-        {{ couponManagementService.selectedCoupon.title }}
-      </p>
+      <div class="row">
+        <div class="col-3">
+          <p>
+            <strong>ID:</strong>
+            {{ couponManagementService.selectedCoupon.id }}
+          </p>
+        </div>
+        <div class="col-9">
+          <p>
+            <strong>Título:</strong>
+            {{ couponManagementService.selectedCoupon.title }}
+          </p>
+        </div>
+      </div>
       <p>
         <strong>Descripción:</strong>
         {{ couponManagementService.selectedCoupon.description }}

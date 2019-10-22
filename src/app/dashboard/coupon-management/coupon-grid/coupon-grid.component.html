@@ -4,15 +4,17 @@
   </div>
   <div class="card-body">
     <wj-flex-grid
-      *ngIf="gridCollection"
-      [itemsSource]="gridCollection"
+      *ngIf="couponManagementService.gridCollection"
+      [itemsSource]="couponManagementService.gridCollection"
       [selectionMode]="'Row'"
       [headersVisibility]="'Column'"
       [autoGenerateColumns]="false"
       [allowResizing]="'Columns'"
       [showSelectedHeaders]="'Row'"
       [isReadOnly]="true"
-      (selectionChanged)="getCouponDetails(gridCollection.currentItem)"
+      (selectionChanged)="
+        getCouponDetails(couponManagementService.gridCollection.currentItem)
+      "
     >
       <wj-flex-grid-filter></wj-flex-grid-filter>
       <wj-flex-grid-column

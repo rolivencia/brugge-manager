@@ -7,25 +7,29 @@
           class="btn btn-sm btn-outline-primary mr-2 mr-lg-3"
           (click)="couponManagementService.add()"
         >
-          🔄 <div class="d-none d-lg-inline">Cargar nuevo</div>
+          🔄
+          <div class="d-none d-lg-inline" (click)="load()">Cargar nuevo</div>
         </button>
         <button
           class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
           (click)="couponManagementService.showGrid()"
         >
-          ⬅️ <div class="d-none d-lg-inline">Volver</div>
+          ⬅️
+          <div class="d-none d-lg-inline">Volver</div>
         </button>
         <button
           class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
-          (click)="couponManagementService.add()"
+          (click)="save()"
         >
-          💾 <div class="d-none d-lg-inline">Guardar</div>
+          💾
+          <div class="d-none d-lg-inline">Guardar</div>
         </button>
         <button
           class="btn btn-sm btn-outline-danger"
           (click)="couponManagementService.showGrid()"
         >
-          🗑️ <div class="d-none d-lg-inline">Descartar</div>
+          🗑️
+          <div class="d-none d-lg-inline">Descartar</div>
         </button>
       </div>
     </div>
@@ -41,8 +45,10 @@
               type="text"
               class="form-control"
               id="title"
+              name="title"
               aria-describedby="title"
               placeholder="Ingrese un nombre para el cupón"
+              [(ngModel)]="coupon.title"
             />
           </div>
           <div class="form-group">
@@ -51,26 +57,26 @@
               class="form-control"
               rows="6"
               id="description"
+              name="description"
               placeholder="Introduzca una descripción explicativa de en qué consiste la promoción del cupón que se va a agregar"
+              [(ngModel)]="coupon.description"
             ></textarea>
           </div>
           <div class="form-group">
             <label for="startsAt"><strong>Fecha de inicio:</strong></label>
             <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
+              <wj-input-date-time
+                type="datetime"
+                class="form-control p-0"
                 id="startsAt"
+                name="startsAt"
                 placeholder="Fecha y hora de inicio"
                 aria-describedby="calendarFrom"
                 required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text" id="clockFrom">🕐</span>
-              </div>
-              <div class="input-group-append">
-                <span class="input-group-text" id="calendarFrom">📅</span>
-              </div>
+                [format]="'dd/MM/yyyy HH:mm'"
+                [value]="startingDate"
+                [(ngModel)]="startingDate"
+              ></wj-input-date-time>
             </div>
           </div>
         </div>
@@ -80,16 +86,21 @@
             <select
               class="form-control"
               id="type"
+              name="type"
               aria-describedby="type"
               placeholder="Ingrese un nombre para el cupón"
+              [(ngModel)]="coupon.type"
             >
-              <option>Canje por única vez</option>
-              <option>Múltiple en diferentes días</option>
+              <option
+                *ngFor="let couponType of couponTypes"
+                [ngValue]="couponType"
+                >{{ couponType.description }}</option
+              >
             </select>
           </div>
           <div class="form-group">
             <label for="code"><strong>Código QR</strong></label>
-            <qrcode [qrdata]="qrCode" [size]="96" [level]="'M'"></qrcode>
+            <qrcode [qrdata]="coupon.code" [size]="96" [level]="'M'"></qrcode>
             <div class="input-group mt-4 ">
               <input
                 id="code"
@@ -97,30 +108,33 @@
                 name="code"
                 type="text"
                 readonly
-                [(ngModel)]="qrCode"
+                [(ngModel)]="coupon.code"
               />
               <div class="input-group-append">
-                <span class="input-group-text">🔄</span>
+                <button
+                  class="input-group-text btn btm-sm btn-outline-primary"
+                  (click)="generateCode()"
+                >
+                  🔄
+                </button>
               </div>
             </div>
           </div>
           <div class="form-group">
             <label for="endsAt"><strong>Fecha de finalización:</strong></label>
             <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
+              <wj-input-date-time
                 id="endsAt"
+                type="datetime"
+                class="form-control p-0"
+                name="endsAt"
                 placeholder="Fecha y hora de finalización"
                 aria-describedby="calendarTo"
                 required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text" id="clockTo">🕐</span>
-              </div>
-              <div class="input-group-append">
-                <span class="input-group-text" id="calendarTo">📅</span>
-              </div>
+                [format]="'dd/MM/yyyy HH:mm'"
+                [value]="endingDate"
+                [(ngModel)]="endingDate"
+              ></wj-input-date-time>
             </div>
           </div>
         </div>
@@ -134,13 +148,22 @@
               class="form-control"
               id="user"
               name="user"
-              [(ngModel)]="currentUser"
+              [(ngModel)]="userInfo"
               disabled
             />
           </div>
           <div class="form-group">
-            <label><strong>Imagen:</strong></label>
-            <input type="file" class="form-control-file" id="image" />
+            <label for="image"><strong>Imagen (URL):</strong></label>
+            <!-- TODO: Reemplazar por subida de archivos-->
+            <!-- <input type="file" class="form-control-file" id="image" />-->
+            <input
+              type="text"
+              class="form-control"
+              id="image"
+              name="image"
+              placeholder="Ejemplo: http://www.abc.com/imagen.jpg"
+              [(ngModel)]="coupon.imageUrl"
+            />
           </div>
         </div>
       </div>

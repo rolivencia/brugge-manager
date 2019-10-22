@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Coupon } from "@app/_models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CouponService } from "@app/_services/coupon.service";
+import { CollectionView } from "wijmo/wijmo";
 
 @Injectable({
   providedIn: "root"
@@ -10,6 +11,8 @@ export class CouponManagementService {
   showTopOutlet: boolean = false;
   showLeftOutlet: boolean = true;
   showRightOutlet: boolean = true;
+
+  gridCollection: CollectionView;
 
   selectedCoupon: Coupon = null;
   newCoupon: Coupon = null;

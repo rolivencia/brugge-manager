@@ -20,8 +20,6 @@ export class CouponGridComponent implements OnInit {
     { header: "Código", binding: "code", width: "*", id: "code" }
   ];
 
-  gridCollection: CollectionView;
-
   constructor(
     public couponManagementService: CouponManagementService,
     private couponService: CouponService
@@ -34,7 +32,7 @@ export class CouponGridComponent implements OnInit {
   getGridData() {
     this.couponService.getAll().subscribe(coupons => {
       this.couponManagementService.coupons = coupons;
-      this.gridCollection = new CollectionView(coupons);
+      this.couponManagementService.gridCollection = new CollectionView(coupons);
     });
   }
 
