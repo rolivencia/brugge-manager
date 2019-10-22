@@ -95,4 +95,28 @@ async function getAll() {
   });
 }
 
-async function update() {}
+async function update({
+  id,
+  title,
+  description,
+  startsAt,
+  endsAt,
+  idType,
+  idUser,
+  code,
+  imageUrl
+}) {
+  return Coupon().update(
+    {
+      title: title,
+      description: description,
+      startsAt: startsAt,
+      endsAt: endsAt,
+      idType: idType,
+      idUser: idUser,
+      code: code,
+      imageUrl: imageUrl
+    },
+    { where: { id: id } }
+  );
+}
