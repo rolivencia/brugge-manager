@@ -5,7 +5,8 @@ const couponService = require("./coupon.service");
 router.delete("/remove/:id", remove);
 router.put("/update", update);
 router.post("/create", create);
-// router.get("/get", get);
+router.post("/redeem", redeem);
+router.get("/get/:id", get);
 router.get("/current", getCurrent);
 router.get("/", getAll);
 
@@ -48,18 +49,22 @@ async function create(req, res, next) {
     .create(req.body)
     .then(coupon => {
       if (coupon) {
-        console.log(coupon);
         res.json(coupon);
       } else {
         res.status(400).json({
-          message: "Bad request. Could not add coupon to the database"
+          message: "Bad request. Could not add coupon to the database."
         });
       }
     })
     .catch(err => next(err));
 }
 
-const get = () => {};
+async function get(req, res, next) {
+  couponService
+    .get(req.param("id"))
+    .then(coupons => res.json(coupons))
+    .catch(err => next(err));
+}
 
 async function getAll(req, res, next) {
   couponService
@@ -73,5 +78,11 @@ async function getCurrent(req, res, next) {
     .getCurrent()
 
     .then(coupons => res.json(coupons))
+
     .catch(err => next(err));
+}
+
+async function redeem(req, res, next) {
+  //TODO: Implement method. Must have an user and a coupon as parameters
+  console.log("Method is not yet implemented.");
 }

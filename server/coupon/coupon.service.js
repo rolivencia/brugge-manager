@@ -10,11 +10,20 @@ const CouponType = require("./coupon-type.model");
 
 module.exports = {
   create,
+  get,
   getAll,
   getCurrent,
   remove,
   update
 };
+
+async function get(id) {
+  return Coupon().findAll({
+    where: {
+      id: id
+    }
+  });
+}
 
 async function remove(id) {
   return Coupon().update({ deleted: 1 }, { where: { id: id } });
