@@ -3,7 +3,7 @@ const router = express.Router();
 const couponService = require("./coupon.service");
 
 router.delete("/remove/:id", remove);
-// router.put("/update", update);
+router.put("/update", update);
 router.post("/create", create);
 // router.get("/get", get);
 router.get("/current", getCurrent);
@@ -16,7 +16,6 @@ async function remove(req, res, next) {
     .remove(req.param("id"))
     .then(response => {
       if (response) {
-        console.log(response);
         res.json(response);
       } else {
         res.status(400).json({
@@ -28,7 +27,21 @@ async function remove(req, res, next) {
     .catch(err => next(err));
 }
 
-const update = () => {};
+async function update(req, res, next) {
+  couponService
+    .update(req.body)
+    .then(response => {
+      if (response) {
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message:
+            "Bad request. Could not update coupon with id: " + req.body.id
+        });
+      }
+    })
+    .catch(err => next(err));
+}
 
 async function create(req, res, next) {
   couponService
@@ -58,6 +71,7 @@ async function getAll(req, res, next) {
 async function getCurrent(req, res, next) {
   couponService
     .getCurrent()
+
     .then(coupons => res.json(coupons))
     .catch(err => next(err));
 }

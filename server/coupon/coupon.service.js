@@ -12,7 +12,8 @@ module.exports = {
   create,
   getAll,
   getCurrent,
-  remove
+  remove,
+  update
 };
 
 async function remove(id) {

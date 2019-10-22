@@ -74,8 +74,22 @@ export class CouponService {
     return null;
   };
 
-  public update = (coupon: Coupon): Coupon => {
-    return null;
+  public update = (coupon: Coupon): Observable<any> => {
+    const updatedCoupon = {
+      id: coupon.id,
+      title: coupon.title,
+      description: coupon.description,
+      startsAt: coupon.startsAt.toISOString(),
+      endsAt: coupon.endsAt.toISOString(),
+      idType: coupon.type.id,
+      idUser: coupon.user.id,
+      code: coupon.code,
+      imageUrl: coupon.imageUrl
+    };
+
+    return this.http.put(`${environment.apiUrl}/coupon/update/`, {
+      ...updatedCoupon
+    });
   };
 
   public remove = (coupon: Coupon): Observable<any> => {
