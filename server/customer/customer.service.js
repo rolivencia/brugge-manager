@@ -1,5 +1,7 @@
 const environment = require("server/_helpers/environment");
 const Customer = require("./customer.model");
+const Sequelize = require("Sequelize");
+const jwt = require("jsonwebtoken");
 
 module.exports = { create, getAll, getById };
 
@@ -12,15 +14,29 @@ async function getAll() {
 }
 
 async function create({ firstName, lastName, email, uidFirebase }) {
-  const newCustomer = await Customer()
-    .findOrCreate({
-      where: { uidFirebase: uidFirebase },
-      defaults: { firstName: firstName, lastName: lastName, email: email }
-    })
-    .then(([customer, created]) => {
-      console.log(customer.get({ plain: true }));
-      console.log(created);
-    });
+  const newCustomer = await Customer().findOrCreate({
+    where: Sequelize.or(
+      {
+        uidFirebase: uidFirebase
+      },
+      { email: email }
+    ),
+    defaults: { firstName: firstName, lastName: lastName, email: email }
+  });
+
+  return new Promise((resolve, reject) => {
+    const [customerData, isNewRecord] = newCustomer;
+    customerData.dataValues
+      ? resolve({
+          ...customerData.dataValues,
+          created: isNewRecord,
+          token: jwt.sign(
+            { sub: customerData.dataValues.id },
+            environment.serverConfig.secret
+          )
+        })
+      : reject({});
+  });
 }
 
 async function remove() {}
