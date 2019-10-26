@@ -18,7 +18,7 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
   alreadyExpired: boolean = false;
   notValid: boolean = false;
 
-  couponStatus: any;
+  couponStatusRetrieved: any = false;
 
   constructor() {}
 
@@ -36,13 +36,19 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
   }
 
   scanSuccessHandler(event) {
-    this.scannedCode = JSON.parse(event);
-    if (typeof this.scannedCode !== "object") {
-      alert("Código QR no válido para esta operación");
-      this.notValid = true;
+    this.notValid = !this.isValidJson(event);
+
+    if (!this.notValid) {
+      const code = JSON.parse(event);
+      this.customer = code.customer;
+      this.coupon = code.coupon;
+
+      if (!this.customer || !this.coupon) {
+        this.notValid = true;
+      }
     } else {
-      this.customer = this.scannedCode.customer;
-      this.coupon = this.scannedCode.coupon;
+      this.couponStatusRetrieved = true;
+      this.scannedCode = event;
     }
   }
 
@@ -53,9 +59,22 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
     this.customer = null;
     this.coupon = null;
 
+    this.couponStatusRetrieved = false;
     this.alreadyRedeemed = false;
     this.alreadyExpired = false;
     this.notValid = false;
+  }
+
+  isValidJson(text) {
+    return /^[\],:{}\s]*$/.test(
+      text
+        .replace(/\\["\\\/bfnrtu]/g, "@")
+        .replace(
+          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+          "]"
+        )
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+    );
   }
 }
 
