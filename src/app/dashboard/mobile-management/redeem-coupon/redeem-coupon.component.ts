@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { ZXingScannerComponent } from "@zxing/ngx-scanner";
+import { Coupon, Customer } from "@app/_models";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -9,7 +10,15 @@ import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 export class RedeemCouponComponent implements OnInit, AfterViewInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
 
-  scannedCode: string;
+  scannedCode: QrObject = null;
+  customer: Customer;
+  coupon: Coupon;
+
+  alreadyRedeemed: boolean = false;
+  alreadyExpired: boolean = false;
+  notValid: boolean = false;
+
+  couponStatus: any;
 
   constructor() {}
 
@@ -27,6 +36,30 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
   }
 
   scanSuccessHandler(event) {
-    this.scannedCode = event;
+    this.scannedCode = JSON.parse(event);
+    if (typeof this.scannedCode !== "object") {
+      alert("Código QR no válido para esta operación");
+      this.notValid = true;
+    } else {
+      this.customer = this.scannedCode.customer;
+      this.coupon = this.scannedCode.coupon;
+    }
   }
+
+  redeemCoupon() {}
+
+  cleanScannedCode() {
+    this.scannedCode = null;
+    this.customer = null;
+    this.coupon = null;
+
+    this.alreadyRedeemed = false;
+    this.alreadyExpired = false;
+    this.notValid = false;
+  }
+}
+
+export class QrObject {
+  public customer: Customer;
+  public coupon: Coupon;
 }
