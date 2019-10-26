@@ -1,2 +1,19 @@
-<p>redeem-coupon works!</p>
-<zxing-scanner #scanner></zxing-scanner>
+<div id="scanner-container">
+  <zxing-scanner
+    (scanSuccess)="scanSuccessHandler($event)"
+    #scanner
+  ></zxing-scanner>
+</div>
+
+<div id="scanned-qr-info">
+  <div class="card h-100">
+    <div class="card-header">
+      Info de código QR
+    </div>
+    <div class="card-body">
+      El código QR corresponde al cupón {{ this.scannedCode }}
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-primary">Escanear QR</button>

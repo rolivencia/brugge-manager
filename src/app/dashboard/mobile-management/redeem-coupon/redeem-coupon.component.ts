@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 
 @Component({
@@ -6,19 +6,27 @@ import { ZXingScannerComponent } from "@zxing/ngx-scanner";
   templateUrl: "./redeem-coupon.component.html",
   styleUrls: ["./redeem-coupon.component.scss"]
 })
-export class RedeemCouponComponent implements OnInit {
+export class RedeemCouponComponent implements OnInit, AfterViewInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
+
+  scannedCode: string;
 
   constructor() {}
 
   ngOnInit() {
     console.log(this.scanner);
+  }
+
+  ngAfterViewInit() {
     this.loadScanner();
   }
 
   loadScanner() {
     if (this.scanner && this.scanner.hasDevices) {
-      console.log("I have devices!");
     }
+  }
+
+  scanSuccessHandler(event) {
+    this.scannedCode = event;
   }
 }
