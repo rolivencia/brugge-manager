@@ -11,15 +11,18 @@
       Info de código QR
     </div>
     <div class="card-body">
+      <p *ngIf="!couponStatusRetrieved">
+        Proceda a leer el código QR que desea canjear el cliente
+      </p>
+
       <p *ngIf="this.coupon && this.customer">
         El código QR corresponde al cupón {{ this.coupon.title }}, intentando
         ser canjeado para el cliente
         {{ this.customer.firstName + " " + this.customer.lastName }}
       </p>
 
-      <hr />
-
-      <div *ngIf="couponStatus">
+      <div *ngIf="couponStatusRetrieved">
+        <hr *ngIf="this.coupon && this.customer" />
         <div
           class="alert alert-primary"
           role="alert"
@@ -34,7 +37,8 @@
           *ngIf="notValid || alreadyExpired || alreadyRedeemed"
         >
           <p *ngIf="notValid">
-            Este cupón no es válido.
+            Código QR no válido para esta operación. Valor del código:
+            {{ this.scannedCode }}
           </p>
 
           <p *ngIf="alreadyRedeemed">
@@ -54,8 +58,10 @@
 <div class="card mt-3">
   <div class="card-body">
     <div class="d-flex justify-content-between bg-white">
-      <button class="btn btn-outline-black">Redimir cupón</button>
-      <button class="btn btn-outline-danger">Limpiar código</button>
+      <button class="btn btn-outline-black" [disabled]="notValid || alreadyExpired || alreadyExpired">Redimir cupón</button>
+      <button class="btn btn-outline-danger" (click)="cleanScannedCode()">
+        Limpiar código
+      </button>
     </div>
   </div>
 </div>
