@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "~8.1.0",
     "@angular/router": "~8.1.0",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
+    "@zxing/ngx-scanner": "^2.0.1",
     "airtable": "^0.6.0",
     "ajv": "^6.9.1",
     "ajv-keywords": "^3.4.1",
