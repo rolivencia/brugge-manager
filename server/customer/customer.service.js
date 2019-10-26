@@ -21,7 +21,12 @@ async function create({ firstName, lastName, email, uidFirebase }) {
       },
       { email: email }
     ),
-    defaults: { firstName: firstName, lastName: lastName, email: email }
+    defaults: {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      uidFirebase: uidFirebase
+    }
   });
 
   return new Promise((resolve, reject) => {

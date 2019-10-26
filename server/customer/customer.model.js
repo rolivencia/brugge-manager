@@ -33,6 +33,12 @@ Customer.init(
       allowNull: true,
       field: "email"
     },
+    imageUrl: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: true,
+      field: "image_url"
+    },
     uidFirebase: {
       type: Sequelize.STRING,
       unique: true,
