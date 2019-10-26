@@ -29,6 +29,13 @@ const routes: Routes = [
           ).then(m => m.CustomerManagementModule)
       },
       {
+        path: "mobile",
+        loadChildren: () =>
+          import(
+            "app/dashboard/mobile-management/mobile-management.module"
+          ).then(m => m.MobileManagementModule)
+      },
+      {
         path: "notification",
         loadChildren: () =>
           import(

@@ -8,6 +8,7 @@ import {
 } from "@app/_services";
 import { Router } from "@angular/router";
 import { first } from "rxjs/operators";
+import { RoutingPanelService } from "@app/dashboard/routing-panel/routing-panel.service";
 
 @Component({
   selector: "app-routing-panel",
@@ -23,6 +24,7 @@ export class RoutingPanelComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private authenticationService: AuthenticationService,
     private router: Router,
+    public routingPanelService: RoutingPanelService,
     private userService: UserService
   ) {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe(
