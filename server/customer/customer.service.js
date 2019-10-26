@@ -1,6 +1,6 @@
 const environment = require("server/_helpers/environment");
 const Customer = require("./customer.model");
-const Sequelize = require("Sequelize");
+const Sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 
 module.exports = { create, getAll, getById };
