@@ -32,6 +32,7 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   loadScanner() {
     if (this.scanner && this.scanner.hasDevices) {
+      this.scanner.askForPermission();
     }
   }
 
