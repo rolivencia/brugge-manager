@@ -54,7 +54,7 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
-    alert(devices.toString());
+    alert(JSON.stringify(devices));
     this.hasDevices = Boolean(devices && devices.length);
   }
 

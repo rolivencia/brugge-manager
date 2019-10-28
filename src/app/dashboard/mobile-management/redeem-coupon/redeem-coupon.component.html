@@ -10,6 +10,18 @@
   </zxing-scanner>
 </div>
 
+<div class="card mt-2 ">
+  <div class="card-body p-1">
+    <select class="form-control">
+      <option
+        *ngFor="let device of availableDevices"
+        [value]="device.deviceId"
+        [selected]="currentDevice && device.deviceId === currentDevice.deviceId"
+        >{{ device.label }}</option
+      >
+    </select>
+  </div>
+</div>
 <div id="scanned-qr-info" class="mt-3">
   <div class="card h-100">
     <div class="card-header">
