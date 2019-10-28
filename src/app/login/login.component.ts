@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl: string;
 
+  passwordVisible: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -67,5 +69,9 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         }
       );
+  }
+
+  showPassword() {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

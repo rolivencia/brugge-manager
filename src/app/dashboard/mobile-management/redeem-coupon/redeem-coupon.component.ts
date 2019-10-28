@@ -10,6 +10,13 @@ import { Coupon, Customer } from "@app/_models";
 export class RedeemCouponComponent implements OnInit, AfterViewInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
 
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo = null;
+
+  hasDevices: boolean;
+  hasPermission: boolean;
+  tryHarder = true;
+
   scannedCode: QrObject = null;
   customer: Customer;
   coupon: Coupon;
@@ -22,21 +29,13 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.scanner);
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
-    this.loadScanner();
+    this.scanner.askForPermission();
   }
 
-  loadScanner() {
-    if (this.scanner && this.scanner.hasDevices) {
-      this.scanner.askForPermission();
-    }
-  }
-
-  scanSuccessHandler(event) {
+  onScanSuccess(event) {
     this.notValid = !this.isValidJson(event);
 
     if (!this.notValid) {
@@ -51,6 +50,21 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
       this.couponStatusRetrieved = true;
       this.scannedCode = event;
     }
+  }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    alert(devices.toString());
+    this.hasDevices = Boolean(devices && devices.length);
+  }
+
+  onDeviceSelectChange(selected: string) {
+    const device = this.availableDevices.find(x => x.deviceId === selected);
+    this.currentDevice = device || null;
+  }
+
+  onHasPermission(has: boolean) {
+    this.hasPermission = has;
   }
 
   redeemCoupon() {}
