@@ -10,27 +10,25 @@
   </zxing-scanner>
 </div>
 
-<div class="card mt-2 ">
-  <div class="card-body p-1">
-    <select
-      class="form-control"
-      (change)="onDeviceSelectChange($event.target.value)"
-    >
-      <option
-        *ngFor="let device of availableDevices"
-        [value]="device.deviceId"
-        [selected]="currentDevice && device.deviceId === currentDevice.deviceId"
-        >{{ device.label }}</option
-      >
-    </select>
-  </div>
-</div>
 <div id="scanned-qr-info" class="mt-3">
   <div class="card h-100">
-    <div class="card-header">
-      Info de código QR
+    <div class="card-header p-1">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="align-items-center ml-2">
+          {{ optionsVisible ? "Opciones de lector QR" : "Info de código QR" }}
+        </div>
+
+        <button
+          type="button btn-sm"
+          class="btn btn-outline-dark mr-2"
+          (click)="toggleOptions()"
+        >
+          <i class="fa fa-cog" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
-    <div class="card-body">
+
+    <div class="card-body" *ngIf="!optionsVisible">
       <p *ngIf="!couponStatusRetrieved">
         Proceda a leer el código QR que desea canjear el cliente
       </p>
@@ -71,6 +69,45 @@
           </p>
         </div>
       </div>
+    </div>
+    <div class="card-body" *ngIf="optionsVisible">
+      <label
+        >Cámara actual:
+        {{ currentDevice ? currentDevice.deviceId : "Ninguna" }}</label
+      >
+      <select
+        class="form-control"
+        (change)="onDeviceSelectChange($event.target.value)"
+      >
+        <option
+          *ngFor="let device of availableDevices"
+          [value]="device.deviceId"
+          [selected]="
+            currentDevice && device.deviceId === currentDevice.deviceId
+          "
+          >{{ device.label }}</option
+        >
+      </select>
+
+      <div class="form-check mt-2">
+        <input
+          class="form-check-input"
+          name="tryHarder"
+          type="checkbox"
+          [(ngModel)]="tryHarder"
+          id="tryHarder"
+        />
+        <label class="form-check-label" for="tryHarder">
+          Forzar
+        </label>
+      </div>
+
+      <button
+        class="btn btn-sm btn-outline-dark mt-2"
+        (click)="askForPermissions()"
+      >
+        Pedir permisos
+      </button>
     </div>
   </div>
 </div>

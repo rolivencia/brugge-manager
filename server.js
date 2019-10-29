@@ -16,7 +16,7 @@ app.use(errorHandler);
 // Serve only the static files form the dist directory
 app.use(express.static("./dist"));
 
-const rutasAccesibles = ["/", "/dashboard", "/login", "/home"];
+const rutasAccesibles = ["/", "/dashboard", "/login", "/home", "/mobile"];
 const rutasApi = [
   { path: "/users", controller: "./server/users/users.controller" },
   { path: "/customer", controller: "./server/customer/customer.controller" },

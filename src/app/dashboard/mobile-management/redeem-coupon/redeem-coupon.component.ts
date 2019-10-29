@@ -7,7 +7,7 @@ import { Coupon, Customer } from "@app/_models";
   templateUrl: "./redeem-coupon.component.html",
   styleUrls: ["./redeem-coupon.component.scss"]
 })
-export class RedeemCouponComponent implements OnInit, AfterViewInit {
+export class RedeemCouponComponent implements OnInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
 
   availableDevices: MediaDeviceInfo[];
@@ -15,7 +15,7 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   hasDevices: boolean;
   hasPermission: boolean;
-  tryHarder = true;
+  tryHarder = false;
 
   scannedCode: QrObject = null;
   customer: Customer;
@@ -27,13 +27,11 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   couponStatusRetrieved: any = false;
 
+  optionsVisible = false;
+
   constructor() {}
 
   ngOnInit() {}
-
-  ngAfterViewInit() {
-    this.scanner.askForPermission();
-  }
 
   onScanSuccess(event) {
     this.notValid = !this.isValidJson(event);
@@ -54,8 +52,10 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
-    alert(JSON.stringify(devices));
     this.hasDevices = Boolean(devices && devices.length);
+    if (this.availableDevices.length) {
+      this.currentDevice = this.availableDevices[0];
+    }
   }
 
   onDeviceSelectChange(selected: string) {
@@ -65,6 +65,10 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
 
   onHasPermission(has: boolean) {
     this.hasPermission = has;
+  }
+
+  askForPermissions() {
+    this.scanner.askForPermission();
   }
 
   redeemCoupon() {}
@@ -90,6 +94,11 @@ export class RedeemCouponComponent implements OnInit, AfterViewInit {
         )
         .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
     );
+  }
+
+
+  toggleOptions() {
+    this.optionsVisible = !this.optionsVisible;
   }
 }
 
