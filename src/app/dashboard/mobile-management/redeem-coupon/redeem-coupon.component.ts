@@ -46,7 +46,8 @@ export class RedeemCouponComponent implements OnInit {
       }
     } else {
       this.couponStatusRetrieved = true;
-      this.scannedCode = event;
+      alert(event);
+      this.parseCode(event);
     }
   }
 
@@ -84,6 +85,11 @@ export class RedeemCouponComponent implements OnInit {
     this.notValid = false;
   }
 
+  parseCode(code: string) {
+    const object = JSON.parse(code);
+    return { idCustomer: object.idCustomer, idCoupon: object.idCoupon };
+  }
+
   isValidJson(text) {
     return /^[\],:{}\s]*$/.test(
       text
@@ -95,7 +101,6 @@ export class RedeemCouponComponent implements OnInit {
         .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
     );
   }
-
 
   toggleOptions() {
     this.optionsVisible = !this.optionsVisible;
