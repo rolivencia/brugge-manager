@@ -35,7 +35,7 @@ export class RedeemCouponComponent implements OnInit {
 
   onScanSuccess(event) {
     this.notValid = !this.isValidJson(event);
-
+    alert(event);
     if (!this.notValid) {
       const code = JSON.parse(event);
       this.customer = code.customer;
