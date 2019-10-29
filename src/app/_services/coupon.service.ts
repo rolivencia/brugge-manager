@@ -84,6 +84,17 @@ export class CouponService {
       );
   };
 
+  public getCouponStatus = (
+    idCoupon: number,
+    idCustomer: number
+  ): Observable<{ Coupon; Customer }> => {
+    return this.http
+      .get<{ Coupon; Customer }>(
+        `${environment.apiUrl}/coupon/status/${idCoupon}/${idCustomer}`
+      )
+      .pipe(first());
+  };
+
   public getByCode = (code: string): Coupon => {
     return null;
   };

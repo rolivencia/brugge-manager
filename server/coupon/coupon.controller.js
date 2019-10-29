@@ -8,9 +8,29 @@ router.post("/create", create);
 router.post("/redeem", redeem);
 router.get("/get/:id", get);
 router.get("/current", getCurrent);
+router.get("/status/:idCoupon/:idCustomer", status);
 router.get("/", getAll);
 
 module.exports = router;
+
+async function status(req, res, next) {
+  couponService
+    .status(req.param("idCoupon"), req.param("idCustomer"))
+    .then(response => {
+      if (response) {
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message:
+            "Bad request. Could not get coupon status data for coupon with id: " +
+            req.param("idCoupon") +
+            " in relation to user with id: " +
+            req.param("idCustomer")
+        });
+      }
+    })
+    .catch(err => next(err));
+}
 
 async function remove(req, res, next) {
   couponService

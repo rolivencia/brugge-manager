@@ -3,6 +3,8 @@ import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 import { Coupon, Customer } from "@app/_models";
 import { GlobalService } from "@app/_services/global.service";
 import { CouponService } from "@app/_services/coupon.service";
+import { CustomerService } from "@app/_services/customer.service";
+import { forkJoin, Observable, zip } from "rxjs";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -33,6 +35,7 @@ export class RedeemCouponComponent implements OnInit {
 
   constructor(
     public couponService: CouponService,
+    public customerService: CustomerService,
     public globalService: GlobalService
   ) {}
 
@@ -52,6 +55,10 @@ export class RedeemCouponComponent implements OnInit {
     } else {
       this.couponStatusRetrieved = true;
       const codeData = this.globalService.parseCode(event);
+      const subscription = this.couponService.getCouponStatus(
+        codeData.idCoupon,
+        codeData.idCoupon
+      );
     }
   }
 

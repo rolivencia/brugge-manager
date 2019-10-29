@@ -7,6 +7,8 @@ const moment = require("moment");
 const Coupon = require("./coupon.model");
 const User = require("../users/user.model");
 const CouponType = require("./coupon-type.model");
+const Customer = require("../customer/customer.model");
+const CustomerCoupon = require("../customer/customer-coupon.model");
 
 module.exports = {
   create,
@@ -14,8 +16,54 @@ module.exports = {
   getAll,
   getCurrent,
   remove,
+  status,
   update
 };
+
+async function status(idCoupon, idCustomer) {
+  const couponData = await Coupon().findOne({
+    where: {
+      id: idCoupon
+    },
+    include: [
+      { as: "type", model: CouponType() },
+      {
+        as: "user",
+        model: User()
+      }
+    ]
+  });
+
+  const customerData = await Customer().findOne({ where: { id: idCustomer } });
+
+  const redeemedCoupons = await CustomerCoupon().findAndCountAll({
+    where: { idCoupon: idCoupon, idCustomer: idCustomer }
+  });
+
+  return new Promise((resolve, reject) => {
+    const coupon = {
+      ...couponData,
+      audit: {
+        createdAt: couponData.createdAt,
+        updatedAt: couponData.updatedAt,
+        enabled: couponData.enabled,
+        deleted: couponData.deleted
+      }
+    };
+
+    const customer = {
+      ...customerData,
+      audit: {
+        createdAt: customerData.createdAt,
+        updatedAt: customerData.updatedAt,
+        enabled: customerData.enabled,
+        deleted: customerData.deleted
+      }
+    };
+  });
+}
+
+function canRedeem(coupon, redeemedCoupons) {}
 
 async function get(id) {
   return Coupon().findAll({
