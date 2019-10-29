@@ -1,6 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 import { Coupon, Customer } from "@app/_models";
+import { GlobalService } from "@app/_services/global.service";
+import { CouponService } from "@app/_services/coupon.service";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -29,13 +31,16 @@ export class RedeemCouponComponent implements OnInit {
 
   optionsVisible = false;
 
-  constructor() {}
+  constructor(
+    public couponService: CouponService,
+    public globalService: GlobalService
+  ) {}
 
   ngOnInit() {}
 
   onScanSuccess(event) {
-    this.notValid = !this.isValidJson(event);
-    alert(event);
+    this.notValid = !this.globalService.isValidJson(event);
+
     if (!this.notValid) {
       const code = JSON.parse(event);
       this.customer = code.customer;
@@ -46,8 +51,7 @@ export class RedeemCouponComponent implements OnInit {
       }
     } else {
       this.couponStatusRetrieved = true;
-      alert(event);
-      this.parseCode(event);
+      const codeData = this.globalService.parseCode(event);
     }
   }
 
@@ -85,29 +89,12 @@ export class RedeemCouponComponent implements OnInit {
     this.notValid = false;
   }
 
-  parseCode(code: string) {
-    const object = JSON.parse(code);
-    return { idCustomer: object.idCustomer, idCoupon: object.idCoupon };
-  }
-
-  isValidJson(text) {
-    return /^[\],:{}\s]*$/.test(
-      text
-        .replace(/\\["\\\/bfnrtu]/g, "@")
-        .replace(
-          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
-          "]"
-        )
-        .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
-    );
-  }
-
   toggleOptions() {
     this.optionsVisible = !this.optionsVisible;
   }
 }
 
 export class QrObject {
-  public customer: Customer;
-  public coupon: Coupon;
+  public idCustomer: Customer;
+  public idCoupon: Coupon;
 }

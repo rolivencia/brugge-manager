@@ -34,4 +34,21 @@ export class GlobalService {
   shuffleOrder(): number {
     return 0.5 - Math.random();
   }
+
+  parseCode(code: string) {
+    const object = JSON.parse(code);
+    return { idCustomer: object.idCustomer, idCoupon: object.idCoupon };
+  }
+
+  isValidJson(text) {
+    return /^[\],:{}\s]*$/.test(
+      text
+        .replace(/\\["\\\/bfnrtu]/g, "@")
+        .replace(
+          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+          "]"
+        )
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+    );
+  }
 }

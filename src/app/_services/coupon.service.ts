@@ -66,8 +66,22 @@ export class CouponService {
       );
   };
 
-  public getById = (idCoupon: number): Coupon => {
-    return null;
+  public getById = (idCoupon: number): Observable<Coupon> => {
+    return this.http
+      .get<Coupon>(`${environment.apiUrl}/coupon/${idCoupon}`)
+      .pipe(first())
+      .pipe(
+        map(coupon => ({
+          ...coupon,
+          audit: {
+            ...coupon.audit,
+            createdAt: moment(coupon.audit.createdAt),
+            updatedAt: moment(coupon.audit.updatedAt)
+          },
+          startsAt: moment(coupon.startsAt),
+          endsAt: moment(coupon.endsAt)
+        }))
+      );
   };
 
   public getByCode = (code: string): Coupon => {
