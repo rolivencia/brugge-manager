@@ -49,6 +49,7 @@
               aria-describedby="title"
               placeholder="Ingrese un nombre para el cupón"
               [(ngModel)]="coupon.title"
+              [disabled]="disableInputs"
             />
           </div>
           <div class="form-group">
@@ -60,6 +61,7 @@
               name="description"
               placeholder="Introduzca una descripción explicativa de en qué consiste la promoción del cupón que se va a agregar"
               [(ngModel)]="coupon.description"
+              [disabled]="disableInputs"
             ></textarea>
           </div>
           <div class="form-group">
@@ -76,6 +78,7 @@
                 [format]="'dd/MM/yyyy HH:mm'"
                 [value]="startingDate"
                 [(ngModel)]="startingDate"
+                [isDisabled]="disableInputs"
               ></wj-input-date-time>
             </div>
           </div>
@@ -90,6 +93,7 @@
               aria-describedby="type"
               placeholder="Ingrese un nombre para el cupón"
               [(ngModel)]="coupon.type"
+              [disabled]="disableInputs"
             >
               <option
                 *ngFor="let couponType of couponTypes"
@@ -134,6 +138,7 @@
                 [format]="'dd/MM/yyyy HH:mm'"
                 [value]="endingDate"
                 [(ngModel)]="endingDate"
+                [isDisabled]="disableInputs"
               ></wj-input-date-time>
             </div>
           </div>
@@ -163,6 +168,7 @@
               name="image"
               placeholder="Ejemplo: http://www.abc.com/imagen.jpg"
               [(ngModel)]="coupon.imageUrl"
+              [disabled]="disableInputs"
             />
           </div>
         </div>

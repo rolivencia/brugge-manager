@@ -25,6 +25,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   currentUser: User;
   userInfo: string;
   coupon: Coupon;
+  disableInputs: boolean = false;
 
   // TODO: Mover a consulta de base de datos
   couponTypes: CouponType[] = [
@@ -73,6 +74,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
     this.coupon.title = "";
     this.coupon.description = "";
     this.coupon.imageUrl = "";
+    this.disableInputs = false;
   }
 
   public generateCode() {
@@ -81,6 +83,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
 
   public save() {
     this.couponService.create(this.coupon).subscribe(response => {
+      this.disableInputs = true;
       this.toastr.success(
         `Cupón id ${response.id} agregado correctamente`,
         "¡Éxito!"
