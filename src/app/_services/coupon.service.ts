@@ -35,15 +35,9 @@ export class CouponService {
       imageUrl: coupon.imageUrl
     };
 
-    return this.http
-      .post<any>(`${environment.apiUrl}/coupon/create`, {
-        ...savedObject
-      })
-      .pipe(
-        map(response => {
-          console.log(response);
-        })
-      );
+    return this.http.post<any>(`${environment.apiUrl}/coupon/create`, {
+      ...savedObject
+    });
   };
 
   public getAll = (): Observable<Coupon[]> => {

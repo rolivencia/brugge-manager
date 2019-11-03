@@ -10,6 +10,7 @@ import * as wjcCore from "wijmo/wijmo";
 import { Coupon, CouponType, User } from "@app/_models";
 import * as moment from "moment";
 import { CouponService } from "@app/_services/coupon.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-coupon-add",
@@ -41,9 +42,10 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   private _endingDate: Date;
 
   constructor(
+    public authenticationService: AuthenticationService,
     public couponManagementService: CouponManagementService,
     private couponService: CouponService,
-    public authenticationService: AuthenticationService
+    private toastr: ToastrService
   ) {
     this.authenticationService.currentUser.subscribe(x => {
       this.userInfo = `${x.firstName} ${x.lastName} (${x.userName})`;
@@ -78,9 +80,12 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   }
 
   public save() {
-    this.couponService
-      .create(this.coupon)
-      .subscribe(response => console.log(response));
+    this.couponService.create(this.coupon).subscribe(response => {
+      this.toastr.success(
+        `Cupón id ${response.id} agregado correctamente`,
+        "¡Éxito!"
+      );
+    });
   }
 
   get startingDate(): Date {

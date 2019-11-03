@@ -8,14 +8,22 @@ import { LoginComponent } from "./login";
 import { NgModule } from "@angular/core";
 import { routing } from "./app.routing";
 import { MainHeaderComponent } from "./_components/main-header/main-header.component";
+import { ToastrModule } from "ngx-toastr";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    routing
+    routing,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: "toast-top-right",
+      preventDuplicates: true
+    })
   ],
   declarations: [
     AlertComponent,
