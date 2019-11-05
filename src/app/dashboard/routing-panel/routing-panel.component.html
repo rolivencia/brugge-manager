@@ -1,15 +1,17 @@
 <div class="card-deck pt-2">
-  <div
-    *ngFor="let route of routingPanelService.routes"
-    class="card mb-3"
-    (click)="goTo(route.route)"
-    [ngClass]="route.visibility"
-  >
-    <div class="card-body">
-      <h5 class="card-title">{{ route.title }}</h5>
-      <p class="card-text">{{ route.text }}</p>
+  <ng-container *ngFor="let route of routingPanelService.routes">
+    <div
+      *ngIf="authenticationService.hasRole(currentUser, route.roles)"
+      class="card mb-3"
+      (click)="goTo(route.route)"
+      [ngClass]="route.visibility"
+    >
+      <div class="card-body">
+        <h5 class="card-title">{{ route.title }}</h5>
+        <p class="card-text">{{ route.text }}</p>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <hr />

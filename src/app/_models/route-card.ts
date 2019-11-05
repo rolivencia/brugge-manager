@@ -3,4 +3,5 @@ export class RouteCard {
   public text: string;
   public title: string;
   public visibility: string;
+  public roles: number[];
 }

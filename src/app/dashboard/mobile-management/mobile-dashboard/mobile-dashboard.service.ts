@@ -8,9 +8,10 @@ export class MobileDashboardService {
   private _routes: RouteCard[] = [
     {
       route: "redeem-coupon",
-      text: "Escaneo y canje de cupones de clientes",
+      text: "Canje de cupones con scanner QR",
       title: "📷 Escaner QR",
-      visibility: "d-inline d-lg-none"
+      visibility: "d-inline d-lg-none",
+      roles: [1, 2]
     }
   ];
 

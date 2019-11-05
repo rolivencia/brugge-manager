@@ -10,25 +10,29 @@ export class RoutingPanelService {
       route: "dashboard/mobile",
       text: "Ingresar para tareas de gestión desde el móvil",
       title: "📱 Gestión Móvil",
-      visibility: "d-inline d-lg-none"
+      visibility: "d-inline d-lg-none",
+      roles: [1, 2]
     },
     {
       route: "dashboard/coupons",
       text: "Ingresar al menú de gestión de cupones de Brugge",
       title: "🎫 Gestión de Cupones",
-      visibility: "d-inline"
+      visibility: "d-inline",
+      roles: [1]
     },
     {
       route: "dashboard/customer",
       text: "Ingresar al menú de gestión de Clientes",
       title: "👥 Gestión de Clientes",
-      visibility: "d-inline"
+      visibility: "d-inline",
+      roles: [1]
     },
     {
       route: "dashboard/notification",
       text: "Ingresar al menú de envío de Notificaciones",
       title: "📣 Envío de Notificaciones",
-      visibility: "d-inline"
+      visibility: "d-inline",
+      roles: [1]
     }
   ];
 

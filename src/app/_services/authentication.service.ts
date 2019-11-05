@@ -56,4 +56,9 @@ export class AuthenticationService {
       params
     });
   }
+
+  hasRole(user: User, roles: number[]) {
+    const intersection = user.roles.filter(role => roles.includes(role.id));
+    return intersection.length > 0;
+  }
 }
