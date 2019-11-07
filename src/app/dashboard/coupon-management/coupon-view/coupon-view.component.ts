@@ -52,6 +52,7 @@ export class CouponViewComponent implements OnInit {
           this.couponManagementService.gridCollection = new CollectionView(
             coupons
           );
+          this.couponManagementService.gridCollection.currentItem = null;
           this.couponManagementService.selectedCoupon = null;
         })
       );

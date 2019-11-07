@@ -33,12 +33,13 @@ export class CouponGridComponent implements OnInit {
     this.couponService.getAll().subscribe(coupons => {
       this.couponManagementService.coupons = coupons;
       this.couponManagementService.gridCollection = new CollectionView(coupons);
+      this.couponManagementService.gridCollection.currentItem = null;
     });
   }
 
   getCouponDetails(currentItem) {
-    this.couponManagementService.selectedCoupon = this.couponManagementService.getCouponById(
-      currentItem.id
-    );
+    this.couponManagementService.selectedCoupon = currentItem
+      ? this.couponManagementService.getCouponById(currentItem.id)
+      : null;
   }
 }
