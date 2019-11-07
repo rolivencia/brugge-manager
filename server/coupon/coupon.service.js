@@ -118,7 +118,7 @@ async function getAll() {
       enabled: 1
     },
     include: [
-      { as: "type", model: CouponType() },
+      { as: "type", model: CouponType(), attributes: ["id", "description"] },
       {
         as: "user",
         model: User()

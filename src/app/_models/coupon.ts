@@ -20,5 +20,10 @@ export class Coupon {
 export class CouponType {
   id: number;
   description: string;
-  audit?: Audit;
+  // deleted: boolean;
+  // enabled: boolean;
+  // createdAt: string;
+  // updatedAt: string;
+  //TODO: Adjust how audit is used in this class, retrieving data correctly from server
+  // audit?: Audit;
 }

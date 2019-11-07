@@ -88,22 +88,21 @@
         </div>
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <label for="title"><strong>Tipo de Cupón:</strong></label>
-            <select
-              class="form-control"
+            <label for="type"><strong>Tipo de Cupón:</strong></label>
+            <wj-combo-box
+              class="form-control p-0"
               id="type"
               name="type"
               aria-describedby="type"
-              placeholder="Ingrese un nombre para el cupón"
+              [placeholder]="'Ingrese un nombre para el cupón'"
               [(ngModel)]="coupon.type"
-              [disabled]="disableInputs"
-            >
-              <option
-                *ngFor="let couponType of couponTypes"
-                [ngValue]="couponType"
-                >{{ couponType.description }}</option
-              >
-            </select>
+              [isDisabled]="disableInputs"
+              [isEditable]="false"
+              [itemsSource]="couponTypes"
+              [selectedItem]="coupon.type"
+              [selectedIndex]="coupon.type.id - 1"
+              [displayMemberPath]="'description'"
+            ></wj-combo-box>
           </div>
           <div class="form-group">
             <label for="code"><strong>Código QR</strong></label>

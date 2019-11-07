@@ -31,7 +31,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   disableInputs: boolean = false;
   edit: boolean = false;
 
-  // TODO: Mover a consulta de base de datos
+  // TODO: Grab this data from database
   couponTypes: CouponType[] = [
     {
       id: 1,
@@ -139,5 +139,9 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
         this.couponManagementService.selectedCoupon = null;
         this.couponManagementService.showGrid();
       });
+  }
+
+  onTypeChange(type) {
+    console.log(type);
   }
 }
