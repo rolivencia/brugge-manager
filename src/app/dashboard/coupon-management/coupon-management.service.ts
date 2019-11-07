@@ -3,6 +3,7 @@ import { Coupon } from "@app/_models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CouponService } from "@app/_services/coupon.service";
 import { CollectionView } from "wijmo/wijmo";
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: "root"
@@ -37,6 +38,7 @@ export class CouponManagementService {
     this.showTopOutlet = true;
     this.showLeftOutlet = false;
     this.showRightOutlet = false;
+    this.selectedCoupon = null;
 
     // this.router.navigate(['/dashboard/coupons/add']);
   }
@@ -56,8 +58,11 @@ export class CouponManagementService {
   }
 
   //TODO: Implement method - It should clone the object passed as parameter and then serve it for update
-  public update(coupon: Coupon): Coupon {
-    return coupon;
+  public update(coupon: Coupon) {
+    this.selectedCoupon = _.cloneDeep(coupon);
+    this.showTopOutlet = true;
+    this.showLeftOutlet = false;
+    this.showRightOutlet = false;
   }
 
   public delete(coupon: Coupon): boolean {

@@ -6,11 +6,12 @@ import {
 } from "@angular/core";
 import { CouponManagementService } from "@app/dashboard/coupon-management/coupon-management.service";
 import { AuthenticationService } from "@app/_services";
-import * as wjcCore from "wijmo/wijmo";
 import { Coupon, CouponType, User } from "@app/_models";
-import * as moment from "moment";
 import { CouponService } from "@app/_services/coupon.service";
 import { ToastrService } from "ngx-toastr";
+import * as _ from "lodash";
+import * as moment from "moment";
+import * as wjcCore from "wijmo/wijmo";
 
 @Component({
   selector: "app-coupon-add",
@@ -26,6 +27,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   userInfo: string;
   coupon: Coupon;
   disableInputs: boolean = false;
+  mode: string = "Agregar nuevo cupón";
 
   // TODO: Mover a consulta de base de datos
   couponTypes: CouponType[] = [
@@ -64,17 +66,22 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {}
 
   public load() {
-    this.coupon = new Coupon();
-    this.startingDate = moment().toDate();
-    this.endingDate = moment()
-      .add(7, "days")
-      .toDate();
-    this.coupon.code = this.couponService.generateCode(4);
-    this.coupon.user = this.currentUser;
-    this.coupon.title = "";
-    this.coupon.description = "";
-    this.coupon.imageUrl = "";
-    this.disableInputs = false;
+    if (this.couponManagementService.selectedCoupon) {
+      this.coupon = _.cloneDeep(this.couponManagementService.selectedCoupon);
+      this.mode = "Editar cupón";
+    } else {
+      this.coupon = new Coupon();
+      this.startingDate = moment().toDate();
+      this.endingDate = moment()
+        .add(7, "days")
+        .toDate();
+      this.coupon.code = this.couponService.generateCode(4);
+      this.coupon.user = this.currentUser;
+      this.coupon.title = "";
+      this.coupon.description = "";
+      this.coupon.imageUrl = "";
+      this.disableInputs = false;
+    }
   }
 
   public generateCode() {

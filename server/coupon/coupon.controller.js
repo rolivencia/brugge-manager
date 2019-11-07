@@ -37,7 +37,7 @@ async function remove(req, res, next) {
     .remove(req.param("id"))
     .then(response => {
       if (response) {
-        res.json(response);
+        res.json([...response, req.param("id")]);
       } else {
         res.status(400).json({
           message:
