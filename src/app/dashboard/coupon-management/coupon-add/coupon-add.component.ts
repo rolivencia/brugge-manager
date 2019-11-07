@@ -12,6 +12,8 @@ import { ToastrService } from "ngx-toastr";
 import * as _ from "lodash";
 import * as moment from "moment";
 import * as wjcCore from "wijmo/wijmo";
+import { take, tap } from "rxjs/operators";
+import { CollectionView } from "wijmo/wijmo";
 
 @Component({
   selector: "app-coupon-add",
@@ -27,7 +29,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   userInfo: string;
   coupon: Coupon;
   disableInputs: boolean = false;
-  mode: string = "Agregar nuevo cupón";
+  edit: boolean = false;
 
   // TODO: Mover a consulta de base de datos
   couponTypes: CouponType[] = [
@@ -68,7 +70,9 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   public load() {
     if (this.couponManagementService.selectedCoupon) {
       this.coupon = _.cloneDeep(this.couponManagementService.selectedCoupon);
-      this.mode = "Editar cupón";
+      this.startingDate = this.coupon.startsAt.toDate();
+      this.endingDate = this.coupon.endsAt.toDate();
+      this.edit = true;
     } else {
       this.coupon = new Coupon();
       this.startingDate = moment().toDate();
@@ -89,13 +93,20 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   }
 
   public save() {
-    this.couponService.create(this.coupon).subscribe(response => {
-      this.disableInputs = true;
-      this.toastr.success(
-        `Cupón id ${response.id} agregado correctamente`,
-        "¡Éxito!"
-      );
-    });
+    if (this.edit) {
+      this.couponService.update(this.coupon).subscribe(([response, id]) => {
+        this.disableInputs = true;
+        this.toastr.info(`Cupón id ${id} actualizado correctamente`, "¡Éxito!");
+      });
+    } else {
+      this.couponService.create(this.coupon).subscribe(response => {
+        this.disableInputs = true;
+        this.toastr.success(
+          `Cupón id ${response.id} agregado correctamente`,
+          "¡Éxito!"
+        );
+      });
+    }
   }
 
   get startingDate(): Date {
@@ -114,5 +125,19 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   set endingDate(value: Date) {
     this._endingDate = value;
     this.coupon.endsAt = moment(value);
+  }
+
+  goBack() {
+    this.couponService
+      .getAll()
+      .pipe(take(1))
+      .subscribe(coupons => {
+        this.couponManagementService.coupons = coupons;
+        this.couponManagementService.gridCollection = new CollectionView(
+          coupons
+        );
+        this.couponManagementService.selectedCoupon = null;
+        this.couponManagementService.showGrid();
+      });
   }
 }

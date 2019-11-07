@@ -53,7 +53,7 @@ async function update(req, res, next) {
     .update(req.body)
     .then(response => {
       if (response) {
-        res.json(response);
+        res.json([...response, req.param("id")]);
       } else {
         res.status(400).json({
           message:

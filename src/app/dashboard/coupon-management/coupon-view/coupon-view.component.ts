@@ -42,6 +42,7 @@ export class CouponViewComponent implements OnInit {
           }
         })
       );
+
     const getCoupons = this.couponService
       .getAll()
       .pipe(take(1))
