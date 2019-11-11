@@ -16,8 +16,6 @@ function remove() {}
 function update() {}
 
 function create(req, res, next) {
-  console.log("Objeto:");
-  console.log(req.body);
   customerService
     .create(req.body)
     .then(customer => {

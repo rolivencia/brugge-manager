@@ -21,6 +21,13 @@ export class RoutingPanelService {
       roles: [1]
     },
     {
+      route: "dashboard/recommended",
+      text: "Ingresar al menú de gestión de recomendados",
+      title: "🍕 Gestión de Recomendados",
+      visibility: "d-inline",
+      roles: [1]
+    },
+    {
       route: "dashboard/customer",
       text: "Ingresar al menú de gestión de Clientes",
       title: "👥 Gestión de Clientes",

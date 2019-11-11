@@ -1,0 +1,17 @@
+<div class="row mt-3 mt-lg-0">
+  <div class="col-12" *ngIf="recommendedManagementService.showTopOutlet">
+    <router-outlet name="top-outlet"></router-outlet>
+  </div>
+  <div
+    class="col-12 col-lg-8 pr-lg-2 mb-3 mb-lg-0"
+    *ngIf="recommendedManagementService.showLeftOutlet"
+  >
+    <router-outlet name="left-outlet"></router-outlet>
+  </div>
+  <div
+    class="col-12 col-lg-4 pl-lg-2 mb-3 mb-lg-0"
+    *ngIf="recommendedManagementService.showRightOutlet"
+  >
+    <router-outlet name="right-outlet"></router-outlet>
+  </div>
+</div>

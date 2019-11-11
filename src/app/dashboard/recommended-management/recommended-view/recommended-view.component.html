@@ -1,0 +1,30 @@
+<div class="card dashboard-card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <button
+        class="btn btn-sm btn-outline-dark"
+        (click)="recommendedManagementService.toggleAdd()"
+      >
+        ➕ Agregar
+      </button>
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="!recommendedManagementService.selectedRecommended"
+        (click)="
+          recommendedManagementService.update(
+            recommendedManagementService.selectedRecommended
+          )
+        "
+      >
+        🔄 Modificar
+      </button>
+      <button
+        class="btn btn-sm btn-outline-danger"
+        [disabled]="!recommendedManagementService.selectedRecommended"
+        (click)="remove(recommendedManagementService.selectedRecommended)"
+      >
+        ❌ Eliminar
+      </button>
+    </div>
+  </div>
+</div>

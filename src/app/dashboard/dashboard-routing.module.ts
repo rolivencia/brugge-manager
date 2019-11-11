@@ -41,6 +41,13 @@ const routes: Routes = [
           import(
             "app/dashboard/notification-management/notification-management.module"
           ).then(m => m.NotificationManagementModule)
+      },
+      {
+        path: "recommended",
+        loadChildren: () =>
+          import(
+            "app/dashboard/recommended-management/recommended-management.module"
+          ).then(m => m.RecommendedManagementModule)
       }
     ]
   }
