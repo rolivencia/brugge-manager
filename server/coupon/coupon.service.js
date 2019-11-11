@@ -92,9 +92,22 @@ async function redeem(idCoupon, idCustomer) {
   return new Promise((resolve, reject) => {
     const [redeemedCouponData, isNewRecord] = redeemed;
     redeemedCouponData.dataValues
-      ? resolve({ ...redeemedCouponData.dataValues, created: isNewRecord })
+      ? resolve({
+          ...redeemedCouponData.dataValues,
+          created: isNewRecord,
+          status: isNewRecord ? "success" : "error",
+          message: isNewRecord
+            ? "Cupón canjeado con éxito."
+            : "Error. Este cupón ya ha sido canjeado con anterioridad."
+        })
       : reject({});
   });
+}
+
+function canRedeem() {
+  // Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
+  const CANJE_UNICA_VEZ = 0;
+  const CANJE_MULTIPLES_VECES_DISTINTOS_DIAS = 1;
 }
 
 async function canRedeem(idCoupon, idCustomer) {
