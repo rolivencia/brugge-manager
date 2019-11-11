@@ -35,6 +35,8 @@ export class RedeemCouponComponent implements OnInit {
   couponStatus: any = null;
 
   optionsVisible = false;
+  redeemingInProcess: boolean = false;
+  redemptionStatus = { status: "", message: "" };
 
   constructor(
     public couponService: CouponService,
@@ -45,6 +47,7 @@ export class RedeemCouponComponent implements OnInit {
   ngOnInit() {}
 
   onScanSuccess(event) {
+    this.cleanScannedCode();
     if (this.debugMode) {
       alert("Is valid?: " + this.globalService.isValidJson(event));
     }
@@ -121,6 +124,7 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   onScanTest() {
+    this.cleanScannedCode();
     const codeData = { idCoupon: 7, idCustomer: 7 };
     const subscription = this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
@@ -155,9 +159,14 @@ export class RedeemCouponComponent implements OnInit {
     this.scanner.askForPermission();
   }
 
-  redeemCoupon() {
-    this.couponService.redeem(this.coupon).subscribe(response => {
-      console.log(response);
+  redeemCoupon(idCoupon: number, idCustomer: number) {
+    this.redeemingInProcess = true;
+    this.couponService.redeem(idCoupon, idCustomer).subscribe(response => {
+      this.redeemingInProcess = false;
+      this.redemptionStatus = {
+        message: response.message,
+        status: response.status
+      };
     });
   }
 
@@ -170,6 +179,8 @@ export class RedeemCouponComponent implements OnInit {
     this.alreadyRedeemed = false;
     this.alreadyExpired = false;
     this.notValid = false;
+
+    this.redemptionStatus = { status: "", message: "" };
   }
 
   toggleOptions() {

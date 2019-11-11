@@ -104,5 +104,17 @@ async function getCurrent(req, res, next) {
 
 async function redeem(req, res, next) {
   //TODO: Implement method. Must have an user and a coupon as parameters
-  console.log("Method is not yet implemented.");
+  couponService
+    .redeem(req.body)
+    .then(response => {
+      if (response) {
+        console.log(response);
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message: "Bad request. Could not add coupon to the database."
+        });
+      }
+    })
+    .catch(err => next(err));
 }

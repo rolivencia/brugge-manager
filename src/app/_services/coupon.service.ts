@@ -96,8 +96,11 @@ export class CouponService {
     return null;
   };
 
-  public redeem = (coupon: Coupon): Observable<any> => {
-    return of(1);
+  public redeem = (idCoupon: number, idCustomer: number): Observable<any> => {
+    return this.http.post<any>(`${environment.apiUrl}/coupon/redeem`, {
+      idCoupon: idCoupon,
+      idCustomer: idCustomer
+    });
   };
 
   public update = (coupon: Coupon): Observable<any> => {

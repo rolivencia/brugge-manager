@@ -52,8 +52,37 @@
         {{ this.customer.firstName + " " + this.customer.lastName }}
       </p>
 
-      <div *ngIf="couponStatusRetrieved">
+      <div
+        *ngIf="
+          couponStatusRetrieved ||
+          (redemptionStatus.status && redemptionStatus.message)
+        "
+      >
         <hr class="mt-1 mb-1" *ngIf="this.coupon && this.customer" />
+
+        <div
+          class="p-1 alert alert-primary"
+          role="alert"
+          *ngIf="redeemingInProcess"
+        >
+          <p class="m-0 text-center">El cupón está siendo canjeado...</p>
+        </div>
+
+        <div
+          class="p-1 alert"
+          [ngClass]="{
+            'alert-success': redemptionStatus.status === 'success',
+            'alert-danger': redemptionStatus.status === 'error'
+          }"
+          role="alert"
+          *ngIf="
+            !redeemingInProcess &&
+            redemptionStatus.status &&
+            redemptionStatus.message
+          "
+        >
+          <p class="m-0 text-center">{{ redemptionStatus.message }}</p>
+        </div>
 
         <div
           class="p-1 alert alert-primary"
@@ -62,7 +91,10 @@
             !notValid &&
             !alreadyExpired &&
             !alreadyRedeemed &&
-            couponStatus.canRedeem
+            couponStatus.canRedeem &&
+            !redeemingInProcess &&
+            !redemptionStatus.status &&
+            !redemptionStatus.message
           "
         >
           <p class="m-0 text-center">El cupón puede ser canjeado</p>
@@ -71,18 +103,24 @@
         <div
           class="p-1 alert alert-danger"
           role="alert"
-          *ngIf="!couponStatus.canRedeem"
+          *ngIf="!couponStatus.canRedeem && !redeemingInProcess"
         >
           <p class="m-0 text-center" class="m-0 text-center" *ngIf="notValid">
             Código QR no válido para esta operación. Valor del código:
             {{ this.scannedCode }}
           </p>
 
-          <p class="m-0 text-center" *ngIf="alreadyRedeemed">
+          <p
+            class="m-0 text-center"
+            *ngIf="alreadyRedeemed && !redeemingInProcess"
+          >
             Este cupón ya fue canjeado por el cliente.
           </p>
 
-          <p class="m-0 text-center" *ngIf="alreadyExpired">
+          <p
+            class="m-0 text-center"
+            *ngIf="alreadyExpired && !redeemingInProcess"
+          >
             Este cupón ya expiró.
           </p>
         </div>
@@ -150,8 +188,15 @@
     <div class="d-flex justify-content-between bg-white">
       <button
         class="btn btn-outline-black"
-        [disabled]="notValid || alreadyExpired || alreadyExpired"
-        (click)="redeemCoupon()"
+        [disabled]="
+          notValid ||
+          alreadyExpired ||
+          alreadyRedeemed ||
+          !coupon ||
+          !customer ||
+          redeemingInProcess
+        "
+        (click)="redeemCoupon(coupon.id, customer.id)"
       >
         Redimir cupón
       </button>

@@ -11,7 +11,7 @@ CustomerCoupon.init(
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      allowNull: false,
+      autoIncrement: true,
       field: "id"
     },
     idCustomer: {
@@ -36,22 +36,22 @@ CustomerCoupon.init(
     },
     createdAt: {
       type: Sequelize.DATE,
-      allowNull: false,
       field: "created_at"
     },
     updatedAt: {
       type: Sequelize.DATE,
-      allowNull: false,
       field: "updated_at"
     },
     enabled: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: 1,
       field: "enabled"
     },
     deleted: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
+      defaultValue: 0,
       field: "deleted"
     }
   },

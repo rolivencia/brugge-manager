@@ -77,32 +77,22 @@ async function status(idCoupon, idCustomer) {
   });
 }
 
-async function redeem(idCoupon, idCustomer) {
-  const redeemed = CustomerCoupon().findOrCreate({
-    where: Sequelize.or(
-      {
-        idCoupon: idCoupon
-      },
-      { idCustomer: idCustomer }
-    ),
-    defaults: {
-      idCoupon: idCoupon,
-      idCustomer: idCustomer
-    }
+async function redeem({ idCoupon, idCustomer }) {
+  const redeemed = await CustomerCoupon().create({
+    idCoupon: idCoupon,
+    idCustomer: idCustomer
   });
 
   return new Promise((resolve, reject) => {
-    const [redeemedCouponData, isNewRecord] = redeemed;
-    redeemedCouponData.dataValues
+    redeemed.dataValues
       ? resolve({
-          ...redeemedCouponData.dataValues,
-          created: isNewRecord,
-          status: isNewRecord ? "success" : "error",
-          message: isNewRecord
+          ...redeemed.dataValues,
+          status: redeemed.dataValues.id ? "success" : "error",
+          message: redeemed.dataValues.id
             ? "Cupón canjeado con éxito."
-            : "Error. Este cupón ya ha sido canjeado con anterioridad."
+            : "Error. No pudo canjearse el cupón."
         })
-      : reject({});
+      : reject(error);
   });
 }
 
@@ -124,7 +114,7 @@ function canRedeem(coupon, redeemedCoupons) {
 
   // Canje único - Cupón ya canjeado
   if (coupon.type.id === ONE_TIME && redeemedCoupons.count !== 0) {
-    return { canRedeem: true, status: "redeemed" };
+    return { canRedeem: false, status: "redeemed" };
   }
 
   // Canje múltiple - distintos días
