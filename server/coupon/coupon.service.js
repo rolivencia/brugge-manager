@@ -142,7 +142,7 @@ function canRedeem(coupon, redeemedCoupons) {
 function isExpired(coupon) {
   const currentDate = moment();
   const expirationDate = moment(coupon.endsAt);
-  return currentDate.isSameOrBefore(expirationDate);
+  return currentDate.isAfter(expirationDate);
 }
 
 function redeemedToday(coupon, redeemedCoupons) {
