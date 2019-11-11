@@ -21,13 +21,14 @@
         </div>
 
         <div>
-          <!--          <button-->
-          <!--            type="button btn-sm"-->
-          <!--            class="btn btn-outline-dark mr-2"-->
-          <!--            (click)="onScanTest()"-->
-          <!--          >-->
-          <!--            <i class="fa fa-search" aria-hidden="true"></i>-->
-          <!--          </button>-->
+          <button
+            *ngIf="debugMode"
+            type="button btn-sm"
+            class="btn btn-outline-dark mr-2"
+            (click)="onScanTest()"
+          >
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </button>
 
           <button
             type="button btn-sm"

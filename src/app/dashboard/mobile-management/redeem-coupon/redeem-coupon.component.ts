@@ -65,44 +65,51 @@ export class RedeemCouponComponent implements OnInit {
         );
       }
 
-      const subscription = this.couponService
-        .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
-        .subscribe(response => {
-          this.couponStatusRetrieved = true;
-          this.coupon = response["coupon"];
-          this.customer = response["customer"];
-          this.couponStatus = response["status"];
-
-          switch (this.couponStatus.status) {
-            case "redeemed":
-              this.alreadyExpired = false;
-              this.alreadyRedeemed = true;
-              this.notValid = false;
-              break;
-            case "expired":
-              this.alreadyExpired = true;
-              this.alreadyRedeemed = false;
-              this.notValid = false;
-              break;
-            case "can-redeem":
-              this.alreadyExpired = false;
-              this.alreadyRedeemed = false;
-              this.notValid = false;
-              break;
-            default:
-              this.alreadyExpired = false;
-              this.alreadyRedeemed = false;
-              this.notValid = true;
-              break;
-          }
-        });
-
       if (!codeData.idCoupon || !codeData.idCustomer) {
         this.alreadyExpired = false;
         this.alreadyRedeemed = false;
         this.notValid = true;
       } else {
-        this.couponStatusRetrieved = true;
+        const subscription = this.couponService
+          .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+          .subscribe(response => {
+            this.couponStatusRetrieved = true;
+            this.coupon = response["coupon"];
+            this.customer = response["customer"];
+            this.couponStatus = response["status"];
+
+            switch (this.couponStatus.status) {
+              case "redeemed":
+                this.alreadyExpired = false;
+                this.alreadyRedeemed = true;
+                this.notValid = false;
+                break;
+              case "expired":
+                this.alreadyExpired = true;
+                this.alreadyRedeemed = false;
+                this.notValid = false;
+                break;
+              case "can-redeem":
+                this.alreadyExpired = false;
+                this.alreadyRedeemed = false;
+                this.notValid = false;
+                break;
+              default:
+                this.alreadyExpired = false;
+                this.alreadyRedeemed = false;
+                this.notValid = true;
+                break;
+            }
+            if (this.debugMode) {
+              alert(
+                JSON.stringify({
+                  expired: this.alreadyExpired,
+                  redeemed: this.alreadyRedeemed,
+                  valid: this.notValid
+                })
+              );
+            }
+          });
       }
     } else {
       this.notValid = true;
@@ -110,7 +117,7 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   onScanTest() {
-    const codeData = { idCoupon: 14, idCustomer: 7 };
+    const codeData = { idCoupon: 7, idCustomer: 7 };
     const subscription = this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
       .subscribe(response => {
