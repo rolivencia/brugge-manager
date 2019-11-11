@@ -128,7 +128,7 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   redeemCoupon() {
-    this.couponService.redeem().subscribe(response => {
+    this.couponService.redeem(this.coupon).subscribe(response => {
       console.log(response);
     });
   }

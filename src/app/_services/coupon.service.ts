@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Coupon } from "@app/_models";
 import { environment } from "@environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { first, map } from "rxjs/operators";
 import * as moment from "moment";
 
@@ -94,6 +94,10 @@ export class CouponService {
 
   public getByCode = (code: string): Coupon => {
     return null;
+  };
+
+  public redeem = (coupon: Coupon): Observable<any> => {
+    return of(1);
   };
 
   public update = (coupon: Coupon): Observable<any> => {
