@@ -11,10 +11,12 @@ const Customer = require("../customer/customer.model");
 const CustomerCoupon = require("../customer/customer-coupon.model");
 
 module.exports = {
+  canRedeem,
   create,
   get,
   getAll,
   getCurrent,
+  redeem,
   remove,
   status,
   update
@@ -60,10 +62,66 @@ async function status(idCoupon, idCustomer) {
         deleted: customerData.deleted
       }
     };
+
+    if (coupon && customer && redeemedCoupons) {
+      resolve({
+        coupon: coupon,
+        customer: customer,
+        redeemedCoupons: redeemedCoupons
+      });
+    } else {
+      reject(error);
+    }
   });
 }
 
-function canRedeem(coupon, redeemedCoupons) {}
+async function redeem(idCoupon, idCustomer) {
+  const redeemed = CustomerCoupon().findOrCreate({
+    where: Sequelize.or(
+      {
+        idCoupon: idCoupon
+      },
+      { idCustomer: idCustomer }
+    ),
+    defaults: {
+      idCoupon: idCoupon,
+      idCustomer: idCustomer
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+    const [redeemedCouponData, isNewRecord] = redeemed;
+    redeemedCouponData.dataValues
+      ? resolve({ ...redeemedCouponData.dataValues, created: isNewRecord })
+      : reject({});
+  });
+}
+
+async function canRedeem(idCoupon, idCustomer) {
+  //We check if the coupon is valid for redemption
+  const coupon = Coupon().findOne({
+    where: { id: idCoupon }
+  });
+
+  //We check if the coupon has already bee redeemed
+  const redeemedCoupons = await CustomerCoupon().findAndCountAll({
+    where: { idCoupon: idCoupon, idCustomer: idCustomer }
+  });
+
+  return new Promise((resolve, reject) => {
+    if (redeemedCoupons) {
+      resolve({
+        canRedeem: redeemedCoupons.count === 0,
+        message:
+          redeemedCoupons.count === 0
+            ? "El cliente puede redimir este cupón"
+            : "El cliente ya ha redimido este cupón"
+      });
+    } else {
+      reject(error);
+    }
+  });
+}
 
 async function get(id) {
   return Coupon().findAll({
