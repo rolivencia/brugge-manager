@@ -14,6 +14,7 @@ export class RedeemCouponComponent implements OnInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
 
   readMode: string = "qr";
+  debugMode: boolean = false;
 
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
@@ -44,7 +45,11 @@ export class RedeemCouponComponent implements OnInit {
   ngOnInit() {}
 
   onScanSuccess(event) {
-    alert("Scanned!: " + event);
+    if (this.debugMode) {
+      alert("Scanned!: " + event);
+      alert("Is valid?: " + this.globalService.isValidJson(event));
+    }
+
     this.notValid = !this.globalService.isValidJson(event);
 
     if (!this.notValid) {
