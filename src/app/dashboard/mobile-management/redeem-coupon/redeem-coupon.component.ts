@@ -44,6 +44,7 @@ export class RedeemCouponComponent implements OnInit {
   ngOnInit() {}
 
   onScanSuccess(event) {
+    alert("Scanned!: " + event);
     this.notValid = !this.globalService.isValidJson(event);
 
     if (!this.notValid) {
@@ -126,7 +127,11 @@ export class RedeemCouponComponent implements OnInit {
     this.scanner.askForPermission();
   }
 
-  redeemCoupon() {}
+  redeemCoupon() {
+    this.couponService.redeem().subscribe(response => {
+      console.log(response);
+    });
+  }
 
   cleanScannedCode() {
     this.scannedCode = null;

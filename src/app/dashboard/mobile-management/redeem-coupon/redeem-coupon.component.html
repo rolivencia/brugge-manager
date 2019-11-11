@@ -1,3 +1,5 @@
+<!--TODO: Agregar modo de input por escrito (cupón e id de usuario)-->
+
 <div id="scanner-container" class="bg-white" *ngIf="readMode === 'qr'">
   <zxing-scanner
     #scanner
@@ -133,6 +135,7 @@
       <button
         class="btn btn-outline-black"
         [disabled]="notValid || alreadyExpired || alreadyExpired"
+        (click)="redeemCoupon()"
       >
         Redimir cupón
       </button>

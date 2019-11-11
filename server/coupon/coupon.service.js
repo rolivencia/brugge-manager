@@ -156,32 +156,6 @@ function redeemedToday(coupon, redeemedCoupons) {
   );
 }
 
-// async function canRedeem(idCoupon, idCustomer) {
-//   //We check if the coupon is valid for redemption
-//   const coupon = Coupon().findOne({
-//     where: { id: idCoupon }
-//   });
-//
-//   //We check if the coupon has already bee redeemed
-//   const redeemedCoupons = await CustomerCoupon().findAndCountAll({
-//     where: { idCoupon: idCoupon, idCustomer: idCustomer }
-//   });
-//
-//   return new Promise((resolve, reject) => {
-//     if (redeemedCoupons) {
-//       resolve({
-//         canRedeem: redeemedCoupons.count === 0,
-//         message:
-//           redeemedCoupons.count === 0
-//             ? "El cliente puede redimir este cupón"
-//             : "El cliente ya ha redimido este cupón"
-//       });
-//     } else {
-//       reject(error);
-//     }
-//   });
-// }
-
 async function get(id) {
   return Coupon().findAll({
     where: {
