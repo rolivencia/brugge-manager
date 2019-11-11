@@ -12,4 +12,6 @@ export class RecommendedViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  remove(selected: any) {}
 }
