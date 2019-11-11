@@ -96,7 +96,7 @@
               aria-describedby="type"
               [placeholder]="'Ingrese un nombre para el cupón'"
               [(ngModel)]="coupon.type"
-              [isDisabled]="disableInputs"
+              [isDisabled]="disableInputs || edit"
               [isEditable]="false"
               [itemsSource]="couponTypes"
               [selectedItem]="coupon.type"

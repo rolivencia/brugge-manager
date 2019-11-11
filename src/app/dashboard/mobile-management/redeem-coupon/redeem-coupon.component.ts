@@ -4,7 +4,6 @@ import { Coupon, Customer } from "@app/_models";
 import { GlobalService } from "@app/_services/global.service";
 import { CouponService } from "@app/_services/coupon.service";
 import { CustomerService } from "@app/_services/customer.service";
-import { forkJoin, Observable, zip } from "rxjs";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -13,6 +12,8 @@ import { forkJoin, Observable, zip } from "rxjs";
 })
 export class RedeemCouponComponent implements OnInit {
   @ViewChild("scanner", { static: false }) scanner: ZXingScannerComponent;
+
+  readMode: string = "qr";
 
   availableDevices: MediaDeviceInfo[];
   currentDevice: MediaDeviceInfo = null;
@@ -30,6 +31,7 @@ export class RedeemCouponComponent implements OnInit {
   notValid: boolean = false;
 
   couponStatusRetrieved: any = false;
+  couponStatus: any = null;
 
   optionsVisible = false;
 
@@ -55,11 +57,52 @@ export class RedeemCouponComponent implements OnInit {
     } else {
       this.couponStatusRetrieved = true;
       const codeData = this.globalService.parseCode(event);
-      const subscription = this.couponService.getCouponStatus(
-        codeData.idCoupon,
-        codeData.idCoupon
+      alert(
+        JSON.stringify({
+          coupon: codeData.idCoupon,
+          customer: codeData.idCustomer
+        })
       );
+
+      const subscription = this.couponService
+        .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+        .subscribe(response => {
+          console.log(response);
+        });
     }
+  }
+
+  onScanTest() {
+    const codeData = { idCoupon: 14, idCustomer: 7 };
+    const subscription = this.couponService
+      .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+      .subscribe(response => {
+        this.couponStatusRetrieved = true;
+        this.coupon = response["coupon"];
+        this.customer = response["customer"];
+        this.couponStatus = response["status"];
+
+        switch (this.couponStatus.status) {
+          case "redeemed":
+            this.alreadyExpired = false;
+            this.alreadyRedeemed = true;
+            break;
+          case "expired":
+            this.alreadyExpired = true;
+            this.alreadyRedeemed = false;
+            break;
+          case "can-redeem":
+            this.alreadyExpired = false;
+            this.alreadyRedeemed = false;
+            this.notValid = false;
+            break;
+          default:
+            this.alreadyExpired = false;
+            this.alreadyRedeemed = false;
+            this.notValid = true;
+            break;
+        }
+      });
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {

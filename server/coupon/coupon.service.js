@@ -44,7 +44,7 @@ async function status(idCoupon, idCustomer) {
 
   return new Promise((resolve, reject) => {
     const coupon = {
-      ...couponData,
+      ...couponData.dataValues,
       audit: {
         createdAt: couponData.createdAt,
         updatedAt: couponData.updatedAt,
@@ -54,7 +54,7 @@ async function status(idCoupon, idCustomer) {
     };
 
     const customer = {
-      ...customerData,
+      ...customerData.dataValues,
       audit: {
         createdAt: customerData.createdAt,
         updatedAt: customerData.updatedAt,
@@ -64,10 +64,12 @@ async function status(idCoupon, idCustomer) {
     };
 
     if (coupon && customer && redeemedCoupons) {
+      const status = canRedeem(coupon, redeemedCoupons);
       resolve({
         coupon: coupon,
         customer: customer,
-        redeemedCoupons: redeemedCoupons
+        redeemedCoupons: redeemedCoupons,
+        status: status
       });
     } else {
       reject(error);
@@ -104,37 +106,81 @@ async function redeem(idCoupon, idCustomer) {
   });
 }
 
-function canRedeem() {
+function canRedeem(coupon, redeemedCoupons) {
+  //Strings de status posibles: 'can-redeem', 'redeemed', 'expired'
+
   // Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
-  const CANJE_UNICA_VEZ = 0;
-  const CANJE_MULTIPLES_VECES_DISTINTOS_DIAS = 1;
+  const ONE_TIME = 1;
+  const MULTIPLE_DIFFERENT_DAYS = 2;
+
+  if (isExpired(coupon) || coupon.audit.deleted) {
+    return { canRedeem: false, status: "expired" };
+  }
+
+  // Primer canje de cualquier tipo
+  if (redeemedCoupons.count === 0) {
+    return { canRedeem: true, status: "can-redeem" };
+  }
+
+  // Canje único - Cupón ya canjeado
+  if (coupon.type.id === ONE_TIME && redeemedCoupons.count !== 0) {
+    return { canRedeem: true, status: "redeemed" };
+  }
+
+  // Canje múltiple - distintos días
+  if (
+    coupon.type.id === MULTIPLE_DIFFERENT_DAYS &&
+    !redeemedToday(coupon, redeemedCoupons)
+  ) {
+    return { canRedeem: true, status: "can-redeem" };
+  }
+
+  // Default -> Ya canjeado
+  return { canRedeem: false, status: "redeemed" };
 }
 
-async function canRedeem(idCoupon, idCustomer) {
-  //We check if the coupon is valid for redemption
-  const coupon = Coupon().findOne({
-    where: { id: idCoupon }
-  });
-
-  //We check if the coupon has already bee redeemed
-  const redeemedCoupons = await CustomerCoupon().findAndCountAll({
-    where: { idCoupon: idCoupon, idCustomer: idCustomer }
-  });
-
-  return new Promise((resolve, reject) => {
-    if (redeemedCoupons) {
-      resolve({
-        canRedeem: redeemedCoupons.count === 0,
-        message:
-          redeemedCoupons.count === 0
-            ? "El cliente puede redimir este cupón"
-            : "El cliente ya ha redimido este cupón"
-      });
-    } else {
-      reject(error);
-    }
-  });
+function isExpired(coupon) {
+  const currentDate = moment();
+  const expirationDate = moment(coupon.endsAt);
+  return currentDate.isSameOrBefore(expirationDate);
 }
+
+function redeemedToday(coupon, redeemedCoupons) {
+  const today = moment();
+  const redeemedDates = redeemedCoupons.rows.map(redemption =>
+    moment(redemption.createdAt)
+  );
+  return (
+    redeemedDates.filter(redeemedDate => today.isSame(redeemedDate, "day"))
+      .length !== 0
+  );
+}
+
+// async function canRedeem(idCoupon, idCustomer) {
+//   //We check if the coupon is valid for redemption
+//   const coupon = Coupon().findOne({
+//     where: { id: idCoupon }
+//   });
+//
+//   //We check if the coupon has already bee redeemed
+//   const redeemedCoupons = await CustomerCoupon().findAndCountAll({
+//     where: { idCoupon: idCoupon, idCustomer: idCustomer }
+//   });
+//
+//   return new Promise((resolve, reject) => {
+//     if (redeemedCoupons) {
+//       resolve({
+//         canRedeem: redeemedCoupons.count === 0,
+//         message:
+//           redeemedCoupons.count === 0
+//             ? "El cliente puede redimir este cupón"
+//             : "El cliente ya ha redimido este cupón"
+//       });
+//     } else {
+//       reject(error);
+//     }
+//   });
+// }
 
 async function get(id) {
   return Coupon().findAll({

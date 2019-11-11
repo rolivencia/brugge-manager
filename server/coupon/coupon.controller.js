@@ -15,7 +15,7 @@ module.exports = router;
 
 async function status(req, res, next) {
   couponService
-    .status(req.param("idCoupon"), req.param("idCustomer"))
+    .status(req.params.idCoupon, req.params.idCustomer)
     .then(response => {
       if (response) {
         res.json(response);

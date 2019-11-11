@@ -1,4 +1,4 @@
-<div id="scanner-container" class="bg-white">
+<div id="scanner-container" class="bg-white" *ngIf="readMode === 'qr'">
   <zxing-scanner
     #scanner
     [(device)]="currentDevice"
@@ -18,13 +18,23 @@
           {{ optionsVisible ? "Opciones de lector QR" : "Info de código QR" }}
         </div>
 
-        <button
-          type="button btn-sm"
-          class="btn btn-outline-dark mr-2"
-          (click)="toggleOptions()"
-        >
-          <i class="fa fa-cog" aria-hidden="true"></i>
-        </button>
+        <div>
+          <!--          <button-->
+          <!--            type="button btn-sm"-->
+          <!--            class="btn btn-outline-dark mr-2"-->
+          <!--            (click)="onScanTest()"-->
+          <!--          >-->
+          <!--            <i class="fa fa-search" aria-hidden="true"></i>-->
+          <!--          </button>-->
+
+          <button
+            type="button btn-sm"
+            class="btn btn-outline-dark mr-2"
+            (click)="toggleOptions()"
+          >
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -34,38 +44,43 @@
       </p>
 
       <p *ngIf="this.coupon && this.customer">
-        El código QR corresponde al cupón {{ this.coupon.title }}, intentando
-        ser canjeado para el cliente
+        Cupón: {{ this.coupon.title }} <br />
+        Cliente:
         {{ this.customer.firstName + " " + this.customer.lastName }}
       </p>
 
       <div *ngIf="couponStatusRetrieved">
-        <hr *ngIf="this.coupon && this.customer" />
+        <hr class="mt-1 mb-1" *ngIf="this.coupon && this.customer" />
+
         <div
-          class="alert alert-primary"
+          class="p-1 alert alert-primary"
           role="alert"
-          *ngIf="!notValid && !alreadyExpired && !alreadyRedeemed"
+          *ngIf="
+            !notValid &&
+            !alreadyExpired &&
+            !alreadyRedeemed &&
+            couponStatus.canRedeem
+          "
         >
-          <p>El cupón puede ser canjeado</p>
+          <p class="m-0 text-center">El cupón puede ser canjeado</p>
         </div>
 
         <div
-          class="alert alert-danger"
+          class="p-1 alert alert-danger"
           role="alert"
-          *ngIf="notValid || alreadyExpired || alreadyRedeemed"
+          *ngIf="!couponStatus.canRedeem"
         >
-          <p *ngIf="notValid">
+          <p class="m-0 text-center" class="m-0 text-center" *ngIf="notValid">
             Código QR no válido para esta operación. Valor del código:
             {{ this.scannedCode }}
           </p>
 
-          <p *ngIf="alreadyRedeemed">
-            Este cupón ya fue canjeado por el cliente el día {{ "" }} a las
-            {{ "" }}.
+          <p class="m-0 text-center" *ngIf="alreadyRedeemed">
+            Este cupón ya fue canjeado por el cliente.
           </p>
 
-          <p *ngIf="alreadyExpired">
-            Este cupón expiró. Fue válido hasta el día {{ "" }} a las {{ "" }}.
+          <p class="m-0 text-center" *ngIf="alreadyExpired">
+            Este cupón ya expiró.
           </p>
         </div>
       </div>
