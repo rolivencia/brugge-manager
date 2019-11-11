@@ -40,9 +40,12 @@ export class CouponService {
     });
   };
 
-  public getAll = (): Observable<Coupon[]> => {
+  public getAll = (
+    expired?: boolean,
+    deleted?: boolean
+  ): Observable<Coupon[]> => {
     return this.http
-      .get<Coupon[]>(`${environment.apiUrl}/coupon`)
+      .get<Coupon[]>(`${environment.apiUrl}/coupon/all/${expired}/${deleted}`)
       .pipe(first())
       .pipe(
         map(coupons =>

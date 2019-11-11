@@ -9,7 +9,7 @@ router.post("/redeem", redeem);
 router.get("/get/:id", get);
 router.get("/current", getCurrent);
 router.get("/status/:idCoupon/:idCustomer", status);
-router.get("/", getAll);
+router.get("/all/:expired/:deleted", getAll);
 
 module.exports = router;
 
@@ -53,7 +53,7 @@ async function update(req, res, next) {
     .update(req.body)
     .then(response => {
       if (response) {
-        res.json([...response, req.param("id")]);
+        res.json([...response, req.body.id]);
       } else {
         res.status(400).json({
           message:
@@ -81,14 +81,14 @@ async function create(req, res, next) {
 
 async function get(req, res, next) {
   couponService
-    .get(req.param("id"))
+    .get(req.params.id)
     .then(coupons => res.json(coupons))
     .catch(err => next(err));
 }
 
 async function getAll(req, res, next) {
   couponService
-    .getAll()
+    .getAll(req.params.expired, req.params.deleted)
     .then(coupons => res.json(coupons))
     .catch(err => next(err));
 }

@@ -1,6 +1,35 @@
 <div class="card dashboard-card">
-  <div class="card-header">
+  <div class="card-header d-flex justify-content-between">
     <h5>Cupones</h5>
+    <button class="btn btn-sm btn-outline-primary" (click)="getGridData()">
+      🔄 Refrescar
+    </button>
+    <div class="form-inline">
+      <div class="form-check mr-3">
+        <input
+          type="checkbox"
+          [(ngModel)]="showExpired"
+          (ngModelChange)="getGridData()"
+          class="form-check-input"
+          id="show-expired"
+        />
+        <label class="form-check-label" for="show-expired"
+          >Mostrar cupones expirados</label
+        >
+      </div>
+      <div class="form-check">
+        <input
+          type="checkbox"
+          [(ngModel)]="showDeleted"
+          (ngModelChange)="getGridData()"
+          class="form-check-input"
+          id="show-deleted"
+        />
+        <label class="form-check-label" for="show-deleted"
+          >Mostrar cupones eliminados</label
+        >
+      </div>
+    </div>
   </div>
   <div class="card-body">
     <wj-flex-grid

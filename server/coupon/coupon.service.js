@@ -182,11 +182,19 @@ async function create({
   });
 }
 
-async function getAll() {
+async function getAll(expired, deleted) {
   const result = await Coupon().findAll({
     where: {
-      deleted: 0,
-      enabled: 1
+      deleted: deleted === "true" ? 1 : 0,
+      enabled: 1,
+      endsAt:
+        expired === "true"
+          ? {
+              [Op.ne]: null
+            }
+          : {
+              [Op.gte]: moment().toDate()
+            }
     },
     include: [
       { as: "type", model: CouponType(), attributes: ["id", "description"] },

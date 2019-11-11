@@ -12,6 +12,9 @@ import { CouponService } from "@app/_services/coupon.service";
   ]
 })
 export class CouponGridComponent implements OnInit {
+  showExpired: boolean = false;
+  showDeleted: boolean = false;
+
   columns: any[] = [
     { header: "ID", binding: "id", width: 50, id: "id" },
     { header: "Título", binding: "title", width: "*", id: "title" },
@@ -30,11 +33,15 @@ export class CouponGridComponent implements OnInit {
   }
 
   getGridData() {
-    this.couponService.getAll().subscribe(coupons => {
-      this.couponManagementService.coupons = coupons;
-      this.couponManagementService.gridCollection = new CollectionView(coupons);
-      this.couponManagementService.gridCollection.currentItem = null;
-    });
+    this.couponService
+      .getAll(this.showExpired, this.showDeleted)
+      .subscribe(coupons => {
+        this.couponManagementService.coupons = coupons;
+        this.couponManagementService.gridCollection = new CollectionView(
+          coupons
+        );
+        this.couponManagementService.gridCollection.currentItem = null;
+      });
   }
 
   getCouponDetails(currentItem) {
