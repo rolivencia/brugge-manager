@@ -59,17 +59,13 @@ export class RedeemCouponComponent implements OnInit {
       if (this.debugMode) {
         alert(
           JSON.stringify({
-            coupon: codeData.idCoupon,
-            customer: codeData.idCustomer
+            idCoupon: codeData.idCoupon,
+            idCustomer: codeData.idCustomer
           })
         );
       }
 
-      if (!codeData.idCoupon || !codeData.idCustomer) {
-        this.alreadyExpired = false;
-        this.alreadyRedeemed = false;
-        this.notValid = true;
-      } else {
+      if (codeData.idCoupon && codeData.idCustomer) {
         const subscription = this.couponService
           .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
           .subscribe(response => {
@@ -110,9 +106,15 @@ export class RedeemCouponComponent implements OnInit {
               );
             }
           });
+      } else {
+        this.notValid = true;
+        this.alreadyExpired = false;
+        this.alreadyRedeemed = false;
       }
     } else {
       this.notValid = true;
+      this.alreadyExpired = false;
+      this.alreadyRedeemed = false;
     }
   }
 
