@@ -39,3 +39,7 @@ body {
 #footer-container {
   flex-shrink: 0;
 }
+
+.btn[disabled]{
+  cursor: not-allowed !important;
+}

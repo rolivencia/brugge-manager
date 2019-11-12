@@ -133,4 +133,16 @@ export class CouponService {
 
     return this.http.post<File>(`${environment.apiUrl}/upload`, formData);
   };
+
+  /**
+   * Retrieves last 5 redeemed coupons, sorted starting from the latest, for a given customer
+   * @param idCustomer
+   */
+  public getRedeemed = (idCustomer: number) => {
+    return this.http
+      .get<any>(
+        `${environment.apiUrl}/coupon/getRedeemed/${idCustomer}/${3}/${0}`
+      )
+      .pipe(first());
+  };
 }

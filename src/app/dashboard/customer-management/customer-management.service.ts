@@ -11,6 +11,7 @@ export class CustomerManagementService {
   showRightOutlet: boolean = true;
 
   selectedCustomer: Customer;
+  redeemedCoupons: [] = [];
 
   constructor(public customerService: CustomerService) {}
 

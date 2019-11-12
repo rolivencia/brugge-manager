@@ -1,9 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { CustomerService } from "@app/_services/customer.service";
+import * as moment from "moment";
 import { CollectionView } from "wijmo/wijmo";
-import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
-import { first } from "rxjs/operators";
+import { Component, OnInit } from "@angular/core";
+import { CouponService } from "@app/_services/coupon.service";
 import { Customer } from "@app/_models";
+import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
+import { CustomerService } from "@app/_services/customer.service";
+import { first, flatMap, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-customer-grid",
@@ -24,6 +26,7 @@ export class CustomerGridComponent implements OnInit {
   ];
 
   constructor(
+    private couponService: CouponService,
     private customerService: CustomerService,
     private customerManagementService: CustomerManagementService
   ) {}
@@ -42,13 +45,35 @@ export class CustomerGridComponent implements OnInit {
   }
 
   getCustomerDetails(currentItem) {
-    this.customerService
+    const customerO = this.customerService
       .getById(currentItem.id)
       .pipe(first())
-      .subscribe(customerData => {
-        this.customerManagementService.selectedCustomer = new Customer(
-          customerData
-        );
-      });
+      .pipe(
+        tap(customerData => {
+          this.customerManagementService.selectedCustomer = new Customer(
+            customerData
+          );
+        })
+      );
+
+    const redeemedCouponsO = this.couponService
+      .getRedeemed(currentItem.id)
+      .pipe(first())
+      .pipe(
+        tap(redeemedCoupons => {
+          this.customerManagementService.redeemedCoupons = redeemedCoupons.map(
+            redemption => ({
+              title: redemption.coupon.title,
+              redeemedAt: moment(redemption.createdAt).format(
+                "DD/MM/YYYY - HH:mm"
+              )
+            })
+          );
+        })
+      );
+
+    customerO.pipe(flatMap(() => redeemedCouponsO)).subscribe(response => {
+      console.log(response);
+    });
   }
 }
