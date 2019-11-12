@@ -222,7 +222,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   }
 
   public previewImage() {
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.fileData);
     reader.onload = _event => {
       this.previewUrl = reader.result;
