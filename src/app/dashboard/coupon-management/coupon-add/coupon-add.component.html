@@ -12,7 +12,6 @@
           <div class="d-none d-lg-inline" (click)="load()">Cargar nuevo</div>
         </button>
         <button
-          *ngIf="edit"
           class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
           (click)="goBack()"
         >
@@ -39,7 +38,7 @@
   </div>
 
   <div class="card-body">
-    <form>
+    <form [formGroup]="couponForm" (ngSubmit)="save()">
       <div class="row">
         <div class="col-12 col-lg-4">
           <div class="form-group">
@@ -51,9 +50,17 @@
               name="title"
               aria-describedby="title"
               placeholder="Ingrese un nombre para el cupón"
-              [(ngModel)]="coupon.title"
+              formControlName="title"
               [disabled]="disableInputs"
             />
+            <div
+              *ngIf="submitted && formControl.title.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.title.errors.required">
+                Se requiere ingresar un título
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="description"><strong>Descripción:</strong></label>
@@ -63,39 +70,57 @@
               id="description"
               name="description"
               placeholder="Introduzca una descripción explicativa de en qué consiste la promoción del cupón que se va a agregar"
-              [(ngModel)]="coupon.description"
+              formControlName="description"
               [disabled]="disableInputs"
             ></textarea>
+            <div
+              *ngIf="submitted && formControl.description.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.description.errors.required">
+                Se requiere ingresar una descripción
+              </div>
+            </div>
           </div>
           <div class="form-group">
-            <label for="startsAt"><strong>Fecha de inicio:</strong></label>
+            <label><strong>Fecha de inicio:</strong></label>
             <div class="input-group">
               <wj-input-date-time
-                type="datetime"
                 class="form-control p-0"
-                id="startsAt"
-                name="startsAt"
+                id="startingDate"
                 placeholder="Fecha y hora de inicio"
-                aria-describedby="calendarFrom"
-                required
+                aria-describedby="startingDate"
                 [format]="'dd/MM/yyyy HH:mm'"
-                [value]="startingDate"
-                [(ngModel)]="startingDate"
+                formControlName="startingDate"
                 [isDisabled]="disableInputs"
               ></wj-input-date-time>
             </div>
           </div>
+          <hr />
+          <div class="form-group" *ngIf="coupon.id && edit">
+            <label for="title"><strong>ID:</strong></label>
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              name="id"
+              aria-describedby="id"
+              placeholder="Ingrese un nombre para el cupón"
+              formControlName="id"
+              disabled
+            />
+          </div>
         </div>
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <label for="type"><strong>Tipo de Cupón:</strong></label>
+            <label><strong>Tipo de Cupón:</strong></label>
             <wj-combo-box
               class="form-control p-0"
               id="type"
               name="type"
               aria-describedby="type"
               [placeholder]="'Ingrese un nombre para el cupón'"
-              [(ngModel)]="coupon.type"
+              formControlName="type"
               [isDisabled]="disableInputs || edit"
               [isEditable]="false"
               [itemsSource]="couponTypes"
@@ -114,7 +139,7 @@
                 name="code"
                 type="text"
                 readonly
-                [(ngModel)]="coupon.code"
+                formControlName="code"
               />
               <div class="input-group-append">
                 <button
@@ -127,38 +152,20 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="endsAt"><strong>Fecha de finalización:</strong></label>
+            <label><strong>Fecha de finalización:</strong></label>
             <div class="input-group">
               <wj-input-date-time
-                id="endsAt"
-                type="datetime"
+                id="endingDate"
                 class="form-control p-0"
-                name="endsAt"
                 placeholder="Fecha y hora de finalización"
-                aria-describedby="calendarTo"
-                required
+                aria-describedby="endingDate"
                 [format]="'dd/MM/yyyy HH:mm'"
-                [value]="endingDate"
-                [(ngModel)]="endingDate"
+                formControlName="endingDate"
                 [isDisabled]="disableInputs"
               ></wj-input-date-time>
             </div>
           </div>
-        </div>
-        <div class="col-12 col-lg-4">
-          <div class="form-group" *ngIf="coupon.id">
-            <label for="title"><strong>ID:</strong></label>
-            <input
-              type="text"
-              class="form-control"
-              id="id"
-              name="id"
-              aria-describedby="id"
-              placeholder="Ingrese un nombre para el cupón"
-              [(ngModel)]="coupon.id"
-              disabled
-            />
-          </div>
+          <hr />
           <div class="form-group">
             <label for="user"
               ><strong>Usuario responsable de carga:</strong></label
@@ -169,22 +176,74 @@
               id="user"
               name="user"
               [(ngModel)]="userInfo"
+              [ngModelOptions]="{ standalone: true }"
               disabled
             />
           </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="alert alert-info p-3 m-0">
+            Las imágenes deben tener idealmente un tamaño de 340x160 píxeles
+          </div>
+          <hr />
           <div class="form-group">
-            <label for="image"><strong>Imagen (URL):</strong></label>
-            <!-- TODO: Reemplazar por subida de archivos-->
-            <!-- <input type="file" class="form-control-file" id="image" />-->
+            <label for="imageUrl"><strong>Imagen (URL):</strong></label>
+
             <input
               type="text"
-              class="form-control"
-              id="image"
+              class="form-control mb-2"
+              id="imageUrl"
               name="image"
               placeholder="Ejemplo: http://www.abc.com/imagen.jpg"
-              [(ngModel)]="coupon.imageUrl"
+              formControlName="imageUrl"
               [disabled]="disableInputs"
+              (ngModelChange)="onImageUrlChange($event)"
             />
+
+            <div
+              *ngIf="submitted && formControl.imageUrl.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.imageUrl.errors.required">
+                Se requiere agregar una imagen vía URL o subiendo un archivo
+              </div>
+            </div>
+
+            <label for="uploaded-image"><strong>Imagen (Subir):</strong></label>
+
+            <!-- TODO: Reemplazar por subida de archivos-->
+            <input
+              type="file"
+              class="form-control-file"
+              id="uploaded-image"
+              name="uploaded-image"
+              accept="image/*"
+              (change)="fileProgress($event)"
+            />
+
+            <div class="mt-2" *ngIf="previewUrl">
+              <hr />
+              <label><strong>Vista previa:</strong></label>
+              <div class="w-100">
+                <img height="120" [src]="previewUrl" />
+              </div>
+
+              <button
+                class="btn btn-sm btn-outline-dark mt-2"
+                (click)="onUploadImage()"
+                [disabled]="imageUploaded"
+              >
+                <label class="mb-0" *ngIf="!imageUploaded && !imageUploading"
+                  >Subir Imagen ️</label
+                >
+                <label class="mb-0" *ngIf="imageUploaded"
+                  >Imagen subida ✔️</label
+                >
+                <label class="mb-0" *ngIf="imageUploading"
+                  >Subiendo imagen... 🔄️</label
+                >
+              </button>
+            </div>
           </div>
         </div>
       </div>

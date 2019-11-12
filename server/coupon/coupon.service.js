@@ -16,11 +16,26 @@ module.exports = {
   get,
   getAll,
   getCurrent,
+  getRedeemed,
   redeem,
   remove,
   status,
   update
 };
+
+async function getRedeemed(idCustomer, limit, offset) {
+  limit = limit ? parseInt(limit) : 25;
+  offset = offset ? parseInt(offset) : 0;
+
+  return await CustomerCoupon().findAll({
+    limit: limit,
+    offset: offset,
+    include: [{ as: "coupon", model: Coupon() }],
+    where: { idCustomer: idCustomer },
+
+    order: [["createdAt", "DESC"]]
+  });
+}
 
 async function status(idCoupon, idCustomer) {
   const couponData = await Coupon().findOne({

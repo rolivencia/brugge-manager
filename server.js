@@ -28,7 +28,8 @@ const rutasApi = [
   { path: "/users", controller: "./server/users/users.controller" },
   { path: "/customer", controller: "./server/customer/customer.controller" },
   { path: "/coupon", controller: "./server/coupon/coupon.controller" },
-  { path: "/api/keys", controller: "server/keys/keys.controller" }
+  { path: "/api/keys", controller: "./server/keys/keys.controller" },
+  { path: "/upload", controller: "./server/_helpers/cloudcube-connector" }
 ];
 
 app.get(rutasAccesibles, function(req, res) {

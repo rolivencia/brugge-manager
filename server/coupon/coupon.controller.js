@@ -7,11 +7,29 @@ router.put("/update", update);
 router.post("/create", create);
 router.post("/redeem", redeem);
 router.get("/get/:id", get);
+router.get("/getRedeemed/:idCustomer/:limit/:offset", getRedeemed);
 router.get("/current", getCurrent);
 router.get("/status/:idCoupon/:idCustomer", status);
 router.get("/all/:expired/:deleted", getAll);
 
 module.exports = router;
+
+async function getRedeemed(req, res, next) {
+  couponService
+    .getRedeemed(req.params.idCustomer, req.params.limit, req.params.offset)
+    .then(response => {
+      if (response) {
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message:
+            "Bad request. Could not get retrieved coupons from customer with id: " +
+            req.params.idCustomer
+        });
+      }
+    })
+    .catch(err => next(err));
+}
 
 async function status(req, res, next) {
   couponService

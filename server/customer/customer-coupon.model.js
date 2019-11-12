@@ -4,6 +4,8 @@ const sequelizeConnector = connector.sequelizeConnector();
 
 module.exports = () => CustomerCoupon;
 
+const Coupon = require("../coupon/coupon.model");
+
 class CustomerCoupon extends Sequelize.Model {}
 
 CustomerCoupon.init(
@@ -60,3 +62,8 @@ CustomerCoupon.init(
     modelName: "customer_coupon"
   }
 );
+
+CustomerCoupon.belongsTo(Coupon(), {
+  foreignKey: "id_coupon",
+  as: "coupon"
+});

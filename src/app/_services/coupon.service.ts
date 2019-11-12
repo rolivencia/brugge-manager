@@ -126,4 +126,11 @@ export class CouponService {
       `${environment.apiUrl}/coupon/remove/` + coupon.id
     );
   };
+
+  public uploadImage = (fileData): Observable<any> => {
+    const formData = new FormData();
+    formData.append("uploaded-image", fileData);
+
+    return this.http.post<File>(`${environment.apiUrl}/upload`, formData);
+  };
 }
