@@ -14,6 +14,8 @@ wjcCore.setLicenseKey(
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
+  currentUser;
+
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService
@@ -23,5 +25,6 @@ export class AppComponent implements OnInit {
     this.authenticationService
       .getKeys("wijmo")
       .subscribe(Key => wjcCore.setLicenseKey(Key));
+    this.currentUser = this.authenticationService.currentUserValue;
   }
 }

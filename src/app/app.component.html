@@ -1,12 +1,14 @@
 ﻿<div id="main-container" class="container">
-  <div id="header-container">
+  <!--  <div id="header-container" class="d-none d-md-block">-->
+  <div id="header-container" *ngIf="authenticationService.currentUserValue">
     <app-main-header></app-main-header>
   </div>
-  <!-- TODO: Deshacer y volver a justify-content-between -->
 
+  <!-- TODO: Deshacer y volver a justify-content-between -->
   <div
     id="outlet-container"
     class="d-flex justify-content-center align-items-center"
+    [ngClass]="{ 'has-header': authenticationService.currentUserValue }"
   >
     <div id="inner-container" class="d-block w-100">
       <router-outlet></router-outlet>

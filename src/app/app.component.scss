@@ -28,8 +28,10 @@ body {
 }
 
 #outlet-container {
-  margin-top: 74px;
   flex-grow: 1;
+  &.has-header {
+    margin-top: 74px;
+  }
 }
 
 #header-container,
