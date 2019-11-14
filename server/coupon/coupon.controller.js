@@ -6,6 +6,7 @@ router.delete("/remove/:id", remove);
 router.put("/update", update);
 router.post("/create", create);
 router.post("/redeem", redeem);
+router.get("/redeemable/:idCustomer", getRedeemable);
 router.get("/get/:id", get);
 router.get("/getRedeemed/:idCustomer/:limit/:offset", getRedeemed);
 router.get("/current", getCurrent);
@@ -13,6 +14,23 @@ router.get("/status/:idCoupon/:idCustomer", status);
 router.get("/all/:expired/:deleted", getAll);
 
 module.exports = router;
+
+async function getRedeemable(req, res, next) {
+  couponService
+    .getRedeemable(req.params.idCustomer)
+    .then(response => {
+      if (response) {
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message:
+            "Bad request. Could not get redeemable coupons from customer with id: " +
+            req.params.idCustomer
+        });
+      }
+    })
+    .catch(err => next(err));
+}
 
 async function getRedeemed(req, res, next) {
   couponService

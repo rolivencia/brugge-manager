@@ -10,6 +10,10 @@ const CouponType = require("./coupon-type.model");
 const Customer = require("../customer/customer.model");
 const CustomerCoupon = require("../customer/customer-coupon.model");
 
+// Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
+const ONE_TIME = 1;
+const MULTIPLE_DIFFERENT_DAYS = 2;
+
 module.exports = {
   canRedeem,
   create,
@@ -17,6 +21,7 @@ module.exports = {
   getAll,
   getCurrent,
   getRedeemed,
+  getRedeemable,
   redeem,
   remove,
   status,
@@ -31,6 +36,34 @@ async function getRedeemed(idCustomer, limit, offset) {
     limit: limit,
     offset: offset,
     include: [{ as: "coupon", model: Coupon() }],
+    where: { idCustomer: idCustomer },
+
+    order: [["createdAt", "DESC"]]
+  });
+}
+
+/**
+ * Obtiene los cupones vigentes (que aún no han expirado) y que el cliente puede canjear
+ * @param idCustomer
+ * @param limit
+ * @param offset
+ * @returns {Promise<CustomerCoupon[]>}
+ */
+async function getCurrentRedeemed(idCustomer) {
+  return await CustomerCoupon().findAll({
+    include: [
+      {
+        as: "coupon",
+        model: Coupon(),
+        where: {
+          deleted: 0,
+          enabled: 1,
+          endsAt: {
+            [Op.gte]: moment().toDate()
+          }
+        }
+      }
+    ],
     where: { idCustomer: idCustomer },
 
     order: [["createdAt", "DESC"]]
@@ -114,10 +147,6 @@ async function redeem({ idCoupon, idCustomer }) {
 function canRedeem(coupon, redeemedCoupons) {
   //Strings de status posibles: 'can-redeem', 'redeemed', 'expired'
 
-  // Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
-  const ONE_TIME = 1;
-  const MULTIPLE_DIFFERENT_DAYS = 2;
-
   if (isExpired(coupon) || coupon.audit.deleted) {
     return { canRedeem: false, status: "expired" };
   }
@@ -135,7 +164,7 @@ function canRedeem(coupon, redeemedCoupons) {
   // Canje múltiple - distintos días
   if (
     coupon.type.id === MULTIPLE_DIFFERENT_DAYS &&
-    !redeemedToday(coupon, redeemedCoupons)
+    !redeemedTodayList(coupon, redeemedCoupons)
   ) {
     return { canRedeem: true, status: "can-redeem" };
   }
@@ -144,22 +173,71 @@ function canRedeem(coupon, redeemedCoupons) {
   return { canRedeem: false, status: "redeemed" };
 }
 
+/**
+ * Gets the redeemable coupons for a given customer
+ * @param idCustomer
+ * @returns {Promise}
+ */
+async function getRedeemable(idCustomer) {
+  const currentCoupons = await getCurrent();
+  const currentRedeemed = await getCurrentRedeemed(idCustomer, 1000, 0);
+
+  // Discrimino qué cupones vigentes de única vez fueron canjeados
+  const redeemedOneTime = currentRedeemed.filter(
+    redemption => redemption.coupon.idType === ONE_TIME
+  );
+
+  // Discrimino qué cupones vigentes de múltiples veces fueron canjeados
+  const redeemedMultipleTimes = currentRedeemed.filter(
+    redemption =>
+      redemption.coupon.idType === MULTIPLE_DIFFERENT_DAYS &&
+      redeemedToday(redemption)
+  );
+
+  let redeemableCoupons = [];
+  const validRedemptions = redeemedOneTime.concat(redeemedMultipleTimes);
+
+  // Calculo la intersección entre los cupones redimidos y los disponibles para canje
+  currentCoupons.forEach(coupon => {
+    const intersection = validRedemptions
+      .filter(redeemed => redeemed.idCoupon === coupon.id)
+      .map(redeemed => redeemed.coupon);
+
+    if (!intersection.length) {
+      redeemableCoupons.push(coupon);
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+    currentCoupons && currentRedeemed
+      ? resolve(redeemableCoupons)
+      : reject(error);
+  });
+}
+
 function isExpired(coupon) {
   const currentDate = moment();
   const expirationDate = moment(coupon.endsAt);
   return currentDate.isAfter(expirationDate);
 }
 
-function redeemedToday(coupon, redeemedCoupons) {
+function redeemedTodayList(coupon, redeemedCoupons) {
   const today = moment();
-  const redeemedDates = redeemedCoupons.rows.map(redemption =>
-    moment(redemption.createdAt)
-  );
+  const redeemedDates = redeemedCoupons.rows
+    ? redeemedCoupons.rows.map(redemption => moment(redemption.createdAt))
+    : redeemedCoupons.map(redemption => moment(redemption.createdAt));
+  console.log(redeemedDates);
   return (
     redeemedDates.filter(redeemedDate => today.isSame(redeemedDate, "day"))
       .length !== 0
   );
 }
+
+const redeemedToday = redemption => {
+  const today = moment();
+  const redeemedDate = moment(redemption.createdAt);
+  return today.isSame(redeemedDate, "day");
+};
 
 async function get(id) {
   return Coupon().findAll({
@@ -261,9 +339,12 @@ async function getAll(expired, deleted) {
 
 async function update({
   id,
+
   title,
+
   description,
   startsAt,
+
   endsAt,
   idType,
   idUser,
