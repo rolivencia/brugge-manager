@@ -1,11 +1,12 @@
-@media (min-width: 992px){
-.card.dashboard-card{
-    .card-header{
+@media (min-width: 992px) {
+  .card.dashboard-card {
+    height: 100%;
+    .card-header {
       height: 56px;
     }
 
     .card-body {
-      height: 568px;
+      //height: 568px;
       .card-body {
         height: unset;
       }
@@ -13,11 +14,12 @@
   }
 }
 
-@media (min-height: 992px){
-  .card.dashboard-card{
-
+@media (min-height: 992px) {
+  .card.dashboard-card {
+    height: 100%;
+    max-height: 800px;
     .card-body {
-      height: 768px;
+      max-height: 768px;
       .card-body {
         height: unset;
       }

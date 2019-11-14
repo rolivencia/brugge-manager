@@ -181,7 +181,8 @@ async function getCurrent() {
       endsAt: {
         [Op.gte]: moment().toDate()
       }
-    }
+    },
+    order: [["updatedAt", "DESC"]]
   });
 }
 
@@ -221,6 +222,7 @@ async function getAll(expired, deleted) {
               [Op.gte]: moment().toDate()
             }
     },
+    order: [["updatedAt", "DESC"]],
     include: [
       { as: "type", model: CouponType(), attributes: ["id", "description"] },
       {

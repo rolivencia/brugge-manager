@@ -1,11 +1,17 @@
-<div class="row mt-3 mt-lg-0">
-  <div class="col-12" *ngIf="couponManagementService.showTopOutlet" >
+<div class="row mt-3 mt-lg-0 h-100">
+  <div class="col-12" *ngIf="couponManagementService.showTopOutlet">
     <router-outlet name="top-outlet"></router-outlet>
   </div>
-  <div class="col-12 col-lg-8 pr-lg-2 mb-3 mb-lg-0" *ngIf="couponManagementService.showLeftOutlet">
+  <div
+    class="col-12 col-lg-8 pr-lg-2 mb-3 mb-lg-0"
+    *ngIf="couponManagementService.showLeftOutlet"
+  >
     <router-outlet name="left-outlet"></router-outlet>
   </div>
-  <div class="col-12 col-lg-4 pl-lg-2 mb-3 mb-lg-0" *ngIf="couponManagementService.showRightOutlet">
+  <div
+    class="col-12 col-lg-4 pl-lg-2 mb-3 mb-lg-0"
+    *ngIf="couponManagementService.showRightOutlet"
+  >
     <router-outlet name="right-outlet"></router-outlet>
   </div>
 </div>

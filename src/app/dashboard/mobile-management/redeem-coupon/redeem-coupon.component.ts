@@ -38,6 +38,8 @@ export class RedeemCouponComponent implements OnInit {
   redeemingInProcess: boolean = false;
   redemptionStatus = { status: "", message: "" };
 
+  scannerIsActive: boolean = false;
+
   constructor(
     public couponService: CouponService,
     public customerService: CustomerService,
@@ -45,6 +47,10 @@ export class RedeemCouponComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
+
+  beginScanning() {
+    this.scannerIsActive = true;
+  }
 
   onScanSuccess(event) {
     this.cleanScannedCode();
@@ -85,6 +91,8 @@ export class RedeemCouponComponent implements OnInit {
                 })
               );
             }
+
+            this.scannerIsActive = false;
           });
       } else {
         this.notValid = true;

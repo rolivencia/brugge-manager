@@ -7,12 +7,20 @@ import { RouteCard } from "@app/_models";
 export class RoutingPanelService {
   private _routes: RouteCard[] = [
     {
-      route: "dashboard/mobile",
-      text: "Ingresar para tareas de gestión desde el móvil",
-      title: "📱 Gestión Móvil",
+      route: "dashboard/mobile/redeem-coupon",
+      text: "Canje de cupones con scanner QR",
+      title: "📷 Escaner QR",
       visibility: "d-inline d-lg-none",
       roles: [1, 2]
     },
+    //  TODO: Descomentar y corregir cuando haya más módulos disponibles para gestión mobile.
+    // {
+    //   route: "dashboard/mobile",
+    //   text: "Ingresar para tareas de gestión desde el móvil",
+    //   title: "📱 Gestión Móvil",
+    //   visibility: "d-inline d-lg-none",
+    //   roles: [1, 2]
+    // },
     {
       route: "dashboard/coupons",
       text: "Ingresar al menú de gestión de cupones de Brugge",

@@ -136,7 +136,7 @@ export class CouponService {
 
   /**
    * Retrieves last 5 redeemed coupons, sorted starting from the latest, for a given customer
-   * @param idCustomer
+   * @param idCustomer - ID of a given customer
    */
   public getRedeemed = (idCustomer: number) => {
     return this.http

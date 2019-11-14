@@ -31,7 +31,15 @@ body {
   flex-grow: 1;
   &.has-header {
     margin-top: 74px;
+    height: calc(100vh - 74px);
   }
+}
+
+#inner-container {
+  //TODO: Usar algoritmo para establecer tamaño de tarjetas de forma similar a lo hecho en Visual MESA - PA.
+  height: calc(100% - 74px);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #header-container,
@@ -40,6 +48,6 @@ body {
   flex-shrink: 0;
 }
 
-.btn[disabled]{
+.btn[disabled] {
   cursor: not-allowed !important;
 }
