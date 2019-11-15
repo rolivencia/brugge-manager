@@ -208,9 +208,27 @@ async function getRedeemable(idCustomer) {
     }
   });
 
+  const returnedCoupons = currentCoupons.map(coupon => ({
+    id: coupon.id,
+    title: coupon.title,
+    code: coupon.code,
+    description: coupon.description,
+    startsAt: coupon.startsAt,
+    endsAt: coupon.endsAt,
+    imageUrl: coupon.imageUrl,
+    type: coupon.type,
+    user: coupon.user,
+    audit: {
+      createdAt: coupon.createdAt,
+      updatedAt: coupon.updatedAt,
+      enabled: coupon.enabled,
+      deleted: coupon.deleted
+    }
+  }));
+
   return new Promise((resolve, reject) => {
-    currentCoupons && currentRedeemed
-      ? resolve(redeemableCoupons)
+    returnedCoupons && currentRedeemed
+      ? resolve(returnedCoupons)
       : reject(error);
   });
 }
