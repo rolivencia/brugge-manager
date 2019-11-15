@@ -258,9 +258,40 @@ const redeemedToday = redemption => {
 };
 
 async function get(id) {
-  return Coupon().findAll({
+  const retrievedCoupon = await Coupon().findOne({
+    include: [
+      { as: "type", model: CouponType(), attributes: ["id", "description"] },
+      {
+        as: "user",
+        model: User()
+      }
+    ],
     where: {
       id: id
+    }
+  });
+
+  return new Promise((resolve, reject) => {
+    if (retrievedCoupon) {
+      resolve({
+        id: retrievedCoupon.id,
+        title: retrievedCoupon.title,
+        code: retrievedCoupon.code,
+        description: retrievedCoupon.description,
+        startsAt: retrievedCoupon.startsAt,
+        endsAt: retrievedCoupon.endsAt,
+        imageUrl: retrievedCoupon.imageUrl,
+        type: retrievedCoupon.type,
+        user: retrievedCoupon.user,
+        audit: {
+          createdAt: retrievedCoupon.createdAt,
+          updatedAt: retrievedCoupon.updatedAt,
+          enabled: retrievedCoupon.enabled,
+          deleted: retrievedCoupon.deleted
+        }
+      });
+    } else {
+      reject(error);
     }
   });
 }

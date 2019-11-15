@@ -118,7 +118,9 @@ async function create(req, res, next) {
 async function get(req, res, next) {
   couponService
     .get(req.params.id)
-    .then(coupons => res.json(coupons))
+    .then(coupons => {
+      res.json(coupons);
+    })
     .catch(err => next(err));
 }
 
