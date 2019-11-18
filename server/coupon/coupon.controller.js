@@ -141,12 +141,10 @@ async function getCurrent(req, res, next) {
 }
 
 async function redeem(req, res, next) {
-  //TODO: Implement method. Must have an user and a coupon as parameters
   couponService
     .redeem(req.body)
     .then(response => {
       if (response) {
-        console.log(response);
         res.json(response);
       } else {
         res.status(400).json({
