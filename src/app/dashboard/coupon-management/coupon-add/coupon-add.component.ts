@@ -35,8 +35,6 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
   submitted: boolean = false;
   fileData: File = null;
   previewUrl: any = null;
-  fileUploadProgress: string = null;
-  uploadedFilePath: string = null;
   imageUploaded: boolean = false;
   imageUploading: boolean = false;
 

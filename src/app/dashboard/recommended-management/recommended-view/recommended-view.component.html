@@ -27,4 +27,46 @@
       </button>
     </div>
   </div>
+  <div class="card-body">
+    <ng-container *ngIf="recommendedManagementService.selectedRecommended">
+      <p>
+        <strong>ID: </strong
+        >{{ recommendedManagementService.selectedRecommended.id }}
+      </p>
+      <p>
+        <strong>Título: </strong
+        >{{ recommendedManagementService.selectedRecommended.title }}
+      </p>
+      <p class="mb-0"><strong>Descripción: </strong></p>
+      <p>{{ recommendedManagementService.selectedRecommended.description }}</p>
+
+      <hr />
+
+      <p><strong>Imagen adjunta:</strong></p>
+      <div class="w-100">
+        <img
+          [height]="96"
+          [src]="recommendedManagementService.selectedRecommended.imageUrl"
+        />
+      </div>
+
+      <hr />
+      <p class="mb-0">
+        <strong>Creado: </strong
+        >{{
+          recommendedManagementService.selectedRecommended.audit.createdAt.format(
+            "DD/MM/YYYY - HH:mm"
+          )
+        }}
+      </p>
+      <p>
+        <strong>Actualizado: </strong
+        >{{
+          recommendedManagementService.selectedRecommended.audit.updatedAt.format(
+            "DD/MM/YYYY - HH:mm"
+          )
+        }}
+      </p>
+    </ng-container>
+  </div>
 </div>

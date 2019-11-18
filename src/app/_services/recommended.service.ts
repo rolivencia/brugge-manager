@@ -52,7 +52,7 @@ export class RecommendedService {
       );
   };
 
-  public update = (recommended: Recommended): Observable<Recommended> => {
+  public update = (recommended: Recommended): Observable<any> => {
     const updatedRecommendation = {
       id: recommended.id,
       title: recommended.title,
@@ -60,25 +60,24 @@ export class RecommendedService {
       imageUrl: recommended.imageUrl
     };
 
-    return this.http
-      .put<Recommended>(`${environment.apiUrl}/recommended/update`, {
+    return this.http.put<Recommended>(
+      `${environment.apiUrl}/recommended/update`,
+      {
         ...updatedRecommendation
-      })
-      .pipe(
-        map(recommendation => ({
-          ...recommendation,
-          audit: {
-            ...recommendation.audit,
-            createdAt: moment(recommendation.audit.createdAt),
-            updatedAt: moment(recommendation.audit.updatedAt)
-          }
-        }))
-      );
+      }
+    );
   };
 
   public remove = (recommended: Recommended): Observable<any> => {
     return this.http.delete<Recommended[]>(
       `${environment.apiUrl}/recommended/remove/${recommended.id}`
     );
+  };
+
+  public uploadImage = (fileData): Observable<any> => {
+    const formData = new FormData();
+    formData.append("uploaded-image", fileData);
+
+    return this.http.post<File>(`${environment.apiUrl}/upload`, formData);
   };
 }

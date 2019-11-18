@@ -1,4 +1,7 @@
 import { Injectable } from "@angular/core";
+import { CollectionView } from "wijmo/wijmo";
+import { Recommended } from "@app/_models/recommended";
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: "root"
@@ -9,6 +12,8 @@ export class RecommendedManagementService {
   showRightOutlet: boolean = true;
 
   selectedRecommended: Recommended = null;
+  recommendations: Recommended[] = [];
+  gridCollection: CollectionView;
 
   constructor() {}
 
@@ -21,12 +26,18 @@ export class RecommendedManagementService {
     // this.router.navigate(['/dashboard/coupons/add']);
   }
 
+  public showGrid() {
+    this.showTopOutlet = false;
+    this.showLeftOutlet = true;
+    this.showRightOutlet = true;
+  }
+
   remove(recommended: Recommended) {}
 
-  update(recommended: Recommended) {}
-}
-
-export class Recommended {
-  public id: number;
-  public name: string;
+  update(recommendation: Recommended) {
+    this.selectedRecommended = _.cloneDeep(recommendation);
+    this.showTopOutlet = true;
+    this.showLeftOutlet = false;
+    this.showRightOutlet = false;
+  }
 }

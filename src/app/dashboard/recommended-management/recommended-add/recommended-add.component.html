@@ -1,5 +1,151 @@
 <div class="card dashboard-card">
   <div class="card-header d-flex justify-content-between">
     <h5>Agregar Recomendado</h5>
+    <div>
+      <button
+        *ngIf="!edit"
+        class="btn btn-sm btn-outline-primary mr-2 mr-lg-3"
+        (click)="load()"
+      >
+        🔄
+        <div class="d-none d-lg-inline" (click)="load()">Cargar nuevo</div>
+      </button>
+      <button
+        class="btn btn-sm btn-outline-dark mr-2 mr-lg-3"
+        (click)="goBack()"
+      >
+        ⬅️
+        <div class="d-none d-lg-inline">Volver</div>
+      </button>
+      <button class="btn btn-sm btn-outline-dark mr-2 mr-lg-3" (click)="save()">
+        💾
+        <div class="d-none d-lg-inline">Guardar</div>
+      </button>
+      <button
+        *ngIf="!edit"
+        class="btn btn-sm btn-outline-danger"
+        (click)="goBack()"
+      >
+        🗑️
+        <div class="d-none d-lg-inline">Descartar</div>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="recommendationForm" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col">
+          <div *ngIf="edit" class="form-group">
+            <label id="id" for="id"><strong>ID:</strong></label>
+            <input
+              class="form-control"
+              type="text"
+              name="id"
+              aria-labelledby="id"
+              readonly
+              formControlName="id"
+            />
+          </div>
+          <div class="form-group">
+            <label id="title" for="title"><strong>Título:</strong></label>
+            <input
+              class="form-control"
+              type="text"
+              name="title"
+              aria-labelledby="title"
+              formControlName="title"
+            />
+            <div
+              *ngIf="submitted && formControl.title.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.title.errors.required">
+                Se requiere ingresar un título.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label id="description" for="description"
+              ><strong>Descripción:</strong></label
+            >
+            <textarea
+              class="form-control"
+              type="text"
+              name="description"
+              aria-labelledby="description"
+              formControlName="description"
+            ></textarea>
+            <div
+              *ngIf="submitted && formControl.description.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.description.errors.required">
+                Se requiere ingresar una descripción.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label id="user" for="user"
+              ><strong>Responsable de carga:</strong></label
+            >
+            <input
+              class="form-control"
+              type="text"
+              name="user"
+              aria-labelledby="user"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="col">
+          <div class="alert alert-info p-3 m-0">
+            Las imágenes deben tener idealmente un tamaño de 340x160 píxeles
+          </div>
+          <hr />
+          <div class="form-group">
+            <label id="imageUrl" for="imageUrl"
+              ><strong>Imagen seleccionada:</strong></label
+            >
+            <input
+              type="file"
+              class="form-control-file"
+              id="uploaded-image"
+              name="uploaded-image"
+              accept="image/*"
+              (change)="fileProgress($event)"
+            />
+            <div
+              *ngIf="submitted && formControl.imageUrl.errors"
+              class="alert alert-danger p-1 mt-1"
+            >
+              <div *ngIf="formControl.imageUrl.errors.required">
+                Se requiere agregar una imagen subiendo un archivo.
+              </div>
+            </div>
+          </div>
+          <div class="mt-2" *ngIf="previewUrl">
+            <hr />
+            <label><strong>Vista previa:</strong></label>
+            <div class="w-100">
+              <img height="120" [src]="previewUrl" />
+            </div>
+
+            <button
+              class="btn btn-sm btn-outline-dark mt-2"
+              (click)="onUploadImage()"
+              [disabled]="imageUploaded"
+            >
+              <label class="mb-0" *ngIf="!imageUploaded && !imageUploading"
+                >Subir Imagen ️</label
+              >
+              <label class="mb-0" *ngIf="imageUploaded">Imagen subida ✔️</label>
+              <label class="mb-0" *ngIf="imageUploading"
+                >Subiendo imagen... 🔄️</label
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

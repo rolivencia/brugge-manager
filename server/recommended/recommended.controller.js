@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const recommendedService = require("./recommended.service");
 
-router.get("/getAll", getAll);
+router.get("/get", getAll);
 router.put("/update", update);
 router.delete("/remove/:id", remove);
 router.post("/create", create);
@@ -27,9 +27,9 @@ async function getAll(req, res, next) {
 async function update(req, res, next) {
   recommendedService
     .update(req.body)
-    .then(recommendation => {
-      if (recommendation) {
-        res.json(recommendation);
+    .then(response => {
+      if (response) {
+        res.json([...response, req.body.id]);
       } else {
         res.status(400).json({
           message:
@@ -44,9 +44,9 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
   recommendedService
     .remove(req.params.id)
-    .then(respose => {
+    .then(response => {
       if (response) {
-        res.json(respose);
+        res.json([...response, req.params.id]);
       } else {
         res.status(400).json({
           message:
