@@ -1,4 +1,5 @@
 const Recommended = require("./recommended.model");
+const Sequelize = require("sequelize");
 
 module.exports = {
   create,
@@ -53,9 +54,12 @@ async function remove(id) {
   return Recommended().update({ deleted: 1 }, { where: { id: id } });
 }
 
-async function getAll() {
+async function getAll(disabled, deleted) {
   const recommendations = await Recommended().findAll({
-    where: { enabled: 1, deleted: 0 },
+    where: Sequelize.and(
+      Sequelize.or({ deleted: 0 }, { deleted: deleted === "true" ? 1 : 0 }),
+      Sequelize.or({ enabled: 1 }, { enabled: disabled === "true" ? 0 : 1 })
+    ),
     order: [["createdAt", "DESC"]]
   });
 

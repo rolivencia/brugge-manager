@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const recommendedService = require("./recommended.service");
 
-router.get("/get", getAll);
+router.get("/get/:disabled/:deleted", getAll);
 router.put("/update", update);
 router.delete("/remove/:id", remove);
 router.post("/create", create);
@@ -11,7 +11,7 @@ module.exports = router;
 
 async function getAll(req, res, next) {
   recommendedService
-    .getAll()
+    .getAll(req.params.disabled, req.params.deleted)
     .then(recommendations => {
       if (recommendations) {
         res.json(recommendations);

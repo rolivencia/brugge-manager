@@ -33,13 +33,15 @@ export class RecommendedGridComponent implements OnInit {
   }
 
   getGridData() {
-    this.recommendedService.get().subscribe(coupons => {
-      this.recommendedManagementService.recommendations = coupons;
-      this.recommendedManagementService.gridCollection = new CollectionView(
-        coupons
-      );
-      this.recommendedManagementService.gridCollection.currentItem = null;
-    });
+    this.recommendedService
+      .get(this.showDisabled, this.showDeleted)
+      .subscribe(coupons => {
+        this.recommendedManagementService.recommendations = coupons;
+        this.recommendedManagementService.gridCollection = new CollectionView(
+          coupons
+        );
+        this.recommendedManagementService.gridCollection.currentItem = null;
+      });
   }
 
   getRecommendedDetails(currentItem) {
