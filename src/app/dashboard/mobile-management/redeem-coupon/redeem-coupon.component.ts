@@ -171,10 +171,19 @@ export class RedeemCouponComponent implements OnInit {
     this.redeemingInProcess = true;
     this.couponService.redeem(idCoupon, idCustomer).subscribe(response => {
       this.redeemingInProcess = false;
+
       this.redemptionStatus = {
         message: response.message,
         status: response.status
       };
+
+      // TODO: Arreglar y hacer programático. Mover a alertService.
+      if (this.redemptionStatus.status === "error") {
+        document.getElementById("main-container").style.backgroundColor = "red";
+      } else if (this.redemptionStatus.status === "success") {
+        document.getElementById("main-container").style.backgroundColor =
+          "green";
+      }
     });
   }
 
@@ -187,6 +196,8 @@ export class RedeemCouponComponent implements OnInit {
     this.alreadyRedeemed = false;
     this.alreadyExpired = false;
     this.notValid = false;
+    // TODO: Arreglar y hacer programático. Mover a alertService.
+    document.getElementById("main-container").style.backgroundColor = "#7b6655";
 
     this.redemptionStatus = { status: "", message: "" };
   }
