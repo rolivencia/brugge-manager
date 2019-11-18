@@ -11,6 +11,9 @@ export class RecommendedManagementService {
   showLeftOutlet: boolean = true;
   showRightOutlet: boolean = true;
 
+  showDisabled: boolean = false;
+  showDeleted: boolean = false;
+
   selectedRecommended: Recommended = null;
   recommendations: Recommended[] = [];
   gridCollection: CollectionView;

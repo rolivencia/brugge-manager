@@ -9,9 +9,6 @@ import { RecommendedService } from "@app/_services/recommended.service";
   styleUrls: ["./recommended-grid.component.scss"]
 })
 export class RecommendedGridComponent implements OnInit {
-  showDisabled: boolean = false;
-  showDeleted: boolean = false;
-
   columns: any[] = [
     { header: "ID", binding: "id", width: 50, id: "id" },
     { header: "Título", binding: "title", width: "*", id: "title" },
@@ -34,7 +31,10 @@ export class RecommendedGridComponent implements OnInit {
 
   getGridData() {
     this.recommendedService
-      .get(this.showDisabled, this.showDeleted)
+      .get(
+        this.recommendedManagementService.showDisabled,
+        this.recommendedManagementService.showDeleted
+      )
       .subscribe(coupons => {
         this.recommendedManagementService.recommendations = coupons;
         this.recommendedManagementService.gridCollection = new CollectionView(

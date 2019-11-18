@@ -131,13 +131,18 @@ export class RecommendedAddComponent implements OnInit {
 
   public goBack() {
     this.recommendedManagementService.showGrid();
-    this.recommendedService.get().subscribe(recommendations => {
-      this.recommendedManagementService.recommendations = recommendations;
-      this.recommendedManagementService.gridCollection = new CollectionView(
-        recommendations
-      );
-      this.recommendedManagementService.gridCollection.currentItem = null;
-    });
+    this.recommendedService
+      .get(
+        this.recommendedManagementService.showDisabled,
+        this.recommendedManagementService.showDeleted
+      )
+      .subscribe(recommendations => {
+        this.recommendedManagementService.recommendations = recommendations;
+        this.recommendedManagementService.gridCollection = new CollectionView(
+          recommendations
+        );
+        this.recommendedManagementService.gridCollection.currentItem = null;
+      });
   }
 
   fileProgress(fileInput: any) {

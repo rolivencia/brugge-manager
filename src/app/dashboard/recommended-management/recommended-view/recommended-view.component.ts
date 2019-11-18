@@ -40,7 +40,10 @@ export class RecommendedViewComponent implements OnInit {
       );
 
     const getRecommendations = this.recommendedService
-      .get()
+      .get(
+        this.recommendedManagementService.showDisabled,
+        this.recommendedManagementService.showDeleted
+      )
       .pipe(take(1))
       .pipe(
         tap(recommendations => {
