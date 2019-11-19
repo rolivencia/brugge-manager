@@ -208,7 +208,7 @@ async function getRedeemable(idCustomer) {
     }
   });
 
-  const returnedCoupons = currentCoupons.map(coupon => ({
+  const returnedCoupons = redeemableCoupons.map(coupon => ({
     id: coupon.id,
     title: coupon.title,
     code: coupon.code,
