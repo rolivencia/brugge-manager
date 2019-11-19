@@ -104,6 +104,11 @@ export class RedeemCouponComponent implements OnInit {
       this.alreadyExpired = false;
       this.alreadyRedeemed = false;
     }
+
+    // TODO: Arreglar y hacer programático. Mover a alertService.
+    if (this.notValid || this.alreadyExpired || this.alreadyRedeemed) {
+      document.getElementById("main-container").style.backgroundColor = "red";
+    }
   }
 
   pickStatusMessage(couponStatus) {
