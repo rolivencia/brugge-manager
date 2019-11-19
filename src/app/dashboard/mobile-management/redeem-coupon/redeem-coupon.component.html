@@ -1,8 +1,11 @@
 <!--TODO: Agregar modo de input por escrito (cupón e id de usuario)-->
 
-<div id="scanner-container" class="bg-white" *ngIf="readMode === 'qr'">
+<div
+  id="scanner-container"
+  class="bg-white"
+  *ngIf="readMode === 'qr' && scannerIsActive"
+>
   <zxing-scanner
-    *ngIf="scannerIsActive"
     #scanner
     [(device)]="currentDevice"
     [tryHarder]="tryHarder"
