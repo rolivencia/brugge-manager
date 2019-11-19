@@ -92,6 +92,16 @@ export class RedeemCouponComponent implements OnInit {
               );
             }
 
+            // TODO: Arreglar y hacer programático. Mover a alertService.
+            if (
+              this.couponStatus.status === "error" ||
+              this.couponStatus.status === "expired" ||
+              this.notValid
+            ) {
+              document.getElementById("main-container").style.backgroundColor =
+                "red";
+            }
+
             this.scannerIsActive = false;
           });
       } else {
@@ -103,11 +113,6 @@ export class RedeemCouponComponent implements OnInit {
       this.notValid = true;
       this.alreadyExpired = false;
       this.alreadyRedeemed = false;
-    }
-
-    // TODO: Arreglar y hacer programático. Mover a alertService.
-    if (this.notValid || this.alreadyExpired || this.alreadyRedeemed) {
-      document.getElementById("main-container").style.backgroundColor = "red";
     }
   }
 
@@ -148,6 +153,13 @@ export class RedeemCouponComponent implements OnInit {
         this.couponStatus = response["status"];
 
         this.pickStatusMessage(this.couponStatus);
+        if (
+          this.couponStatus.status === "error" ||
+          this.couponStatus.status === "expired"
+        ) {
+          document.getElementById("main-container").style.backgroundColor =
+            "red";
+        }
       });
   }
 
