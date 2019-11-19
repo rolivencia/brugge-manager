@@ -96,6 +96,7 @@ export class RedeemCouponComponent implements OnInit {
             if (
               this.couponStatus.status === "error" ||
               this.couponStatus.status === "expired" ||
+              this.couponStatus.status === "redeemed" ||
               this.notValid
             ) {
               document.getElementById("main-container").style.backgroundColor =
