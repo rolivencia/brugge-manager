@@ -122,42 +122,6 @@
       </div>
 
       <div
-        class="p-1 alert"
-        [ngClass]="{
-          'alert-success':
-            redeemCouponService.redemptionStatus.status === 'success',
-          'alert-danger':
-            redeemCouponService.redemptionStatus.status === 'error'
-        }"
-        role="alert"
-        *ngIf="
-          !redeemCouponService.redeemingInProcess &&
-          redeemCouponService.redemptionStatus.status &&
-          redeemCouponService.redemptionStatus.message
-        "
-      >
-        <p class="m-0 text-center">
-          {{ redeemCouponService.redemptionStatus.message }}
-        </p>
-      </div>
-
-      <div
-        class="p-1 alert alert-primary"
-        role="alert"
-        *ngIf="
-          !redeemCouponService.notValid &&
-          !redeemCouponService.alreadyExpired &&
-          !redeemCouponService.alreadyRedeemed &&
-          redeemCouponService.couponStatus.canRedeem &&
-          !redeemCouponService.redeemingInProcess &&
-          !redeemCouponService.redemptionStatus.status &&
-          !redeemCouponService.redemptionStatus.message
-        "
-      >
-        <p class="m-0 text-center">El cupón puede ser canjeado</p>
-      </div>
-
-      <div
         class="p-1 alert alert-danger"
         role="alert"
         *ngIf="
@@ -170,26 +134,14 @@
           class="m-0 text-center"
           *ngIf="redeemCouponService.notValid"
         >
-          Código QR no válido para esta operación. Valor del código:
+          Código QR no válido para esta operación.
         </p>
 
-        <p
-          class="m-0 text-center"
-          *ngIf="
-            redeemCouponService.alreadyRedeemed &&
-            !redeemCouponService.redeemingInProcess
-          "
-        >
+        <p class="m-0 text-center" *ngIf="redeemCouponService.alreadyRedeemed">
           Este cupón ya fue canjeado por el cliente.
         </p>
 
-        <p
-          class="m-0 text-center"
-          *ngIf="
-            redeemCouponService.alreadyExpired &&
-            !redeemCouponService.redeemingInProcess
-          "
-        >
+        <p class="m-0 text-center" *ngIf="redeemCouponService.alreadyExpired">
           Este cupón ya expiró.
         </p>
       </div>

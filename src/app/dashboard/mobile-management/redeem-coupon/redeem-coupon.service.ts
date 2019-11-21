@@ -24,7 +24,7 @@ export class RedeemCouponService {
   constructor() {}
 
   pickStatusMessage(couponStatus) {
-    switch (couponStatus) {
+    switch (couponStatus.status) {
       case "redeemed":
         this.setRedeemedStatus();
         break;
@@ -63,6 +63,10 @@ export class RedeemCouponService {
     this.alreadyExpired = false;
     this.alreadyRedeemed = false;
     this.notValid = true;
+  }
+
+  canRedeem(): boolean {
+    return !this.alreadyExpired && !this.alreadyRedeemed && !this.notValid;
   }
 
   cleanScannedCode() {

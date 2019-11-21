@@ -60,7 +60,7 @@ export class RedeemCouponComponent implements OnInit {
 
   onScanTest() {
     this.redeemCouponService.cleanScannedCode();
-    const codeData = { idCoupon: 7, idCustomer: 7 };
+    const codeData = { idCoupon: 41, idCustomer: 7 };
     const subscription = this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
       .subscribe(response => {
@@ -72,9 +72,10 @@ export class RedeemCouponComponent implements OnInit {
         this.redeemCouponService.pickStatusMessage(
           this.redeemCouponService.couponStatus
         );
-        this.redeemCouponService.retrieveStatus(
-          this.redeemCouponService.redemptionStatus
-        );
+
+        if (this.redeemCouponService.canRedeem()) {
+          this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+        }
       });
   }
 
@@ -86,17 +87,14 @@ export class RedeemCouponComponent implements OnInit {
         this.redeemCouponService.coupon = response["coupon"];
         this.redeemCouponService.customer = response["customer"];
         this.redeemCouponService.couponStatus = response["status"];
+
         this.redeemCouponService.pickStatusMessage(
           this.redeemCouponService.couponStatus
         );
 
         this.scannerIsActive = false;
 
-        const canRedeem = this.redeemCouponService.retrieveStatus(
-          this.redeemCouponService.redemptionStatus
-        );
-
-        if (canRedeem) {
+        if (this.redeemCouponService.canRedeem()) {
           this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
         }
       });
