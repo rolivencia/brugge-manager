@@ -97,18 +97,9 @@ export class RedeemCouponComponent implements OnInit {
 
         this.scannerIsActive = false;
 
-        // TODO: Arreglar y hacer programático. Mover a alertService.
-        if (
-          this.redeemCouponService.invalidStatuses.includes(
-            this.redeemCouponService.couponStatus.status
-          ) ||
-          this.redeemCouponService.notValid === true
-        ) {
-          document.getElementById("main-container").style.backgroundColor =
-            "red";
-          return;
-        }
-
+        this.redeemCouponService.showAlert(
+          this.redeemCouponService.redemptionStatus
+        );
         this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
       });
   }
@@ -144,15 +135,9 @@ export class RedeemCouponComponent implements OnInit {
         status: response.status
       };
 
-      // TODO: Arreglar y hacer programático. Mover a alertService.
-      if (this.redeemCouponService.redemptionStatus.status === "error") {
-        document.getElementById("main-container").style.backgroundColor = "red";
-      } else if (
-        this.redeemCouponService.redemptionStatus.status === "success"
-      ) {
-        document.getElementById("main-container").style.backgroundColor =
-          "green";
-      }
+      this.redeemCouponService.showAlert(
+        this.redeemCouponService.redemptionStatus
+      );
     });
   }
 

@@ -78,4 +78,16 @@ export class RedeemCouponService {
 
     this.redemptionStatus = { status: "", message: "" };
   }
+
+  showAlert(redemptionStatus) {
+    // TODO: Arreglar y hacer programático. Mover a alertService.
+    if (
+      this.invalidStatuses.includes(redemptionStatus.status) ||
+      this.notValid === true
+    ) {
+      document.getElementById("main-container").style.backgroundColor = "red";
+    } else if (redemptionStatus.status === "success") {
+      document.getElementById("main-container").style.backgroundColor = "green";
+    }
+  }
 }
