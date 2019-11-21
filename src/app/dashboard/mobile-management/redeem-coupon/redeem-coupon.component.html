@@ -61,7 +61,7 @@
     </div>
 
     <div class="card-body" *ngIf="!optionsVisible">
-      <p *ngIf="!couponStatusRetrieved">
+      <p *ngIf="!redeemCouponService.couponStatusRetrieved">
         Proceda a leer el código QR que desea canjear el cliente
       </p>
 
@@ -81,8 +81,9 @@
 
       <div
         *ngIf="
-          couponStatusRetrieved ||
-          (redemptionStatus.status && redemptionStatus.message)
+          redeemCouponService.couponStatusRetrieved ||
+          (redeemCouponService.redemptionStatus.status &&
+            redeemCouponService.redemptionStatus.message)
         "
       >
         <hr
@@ -95,7 +96,7 @@
         <div
           class="p-1 alert alert-primary"
           role="alert"
-          *ngIf="redeemingInProcess"
+          *ngIf="redeemCouponService.redeemingInProcess"
         >
           <p class="m-0 text-center">El cupón está siendo canjeado...</p>
         </div>
@@ -103,17 +104,21 @@
         <div
           class="p-1 alert"
           [ngClass]="{
-            'alert-success': redemptionStatus.status === 'success',
-            'alert-danger': redemptionStatus.status === 'error'
+            'alert-success':
+              redeemCouponService.redemptionStatus.status === 'success',
+            'alert-danger':
+              redeemCouponService.redemptionStatus.status === 'error'
           }"
           role="alert"
           *ngIf="
-            !redeemingInProcess &&
-            redemptionStatus.status &&
-            redemptionStatus.message
+            !redeemCouponService.redeemingInProcess &&
+            redeemCouponService.redemptionStatus.status &&
+            redeemCouponService.redemptionStatus.message
           "
         >
-          <p class="m-0 text-center">{{ redemptionStatus.message }}</p>
+          <p class="m-0 text-center">
+            {{ redeemCouponService.redemptionStatus.message }}
+          </p>
         </div>
 
         <div
@@ -123,10 +128,10 @@
             !redeemCouponService.notValid &&
             !redeemCouponService.alreadyExpired &&
             !redeemCouponService.alreadyRedeemed &&
-            couponStatus.canRedeem &&
-            !redeemingInProcess &&
-            !redemptionStatus.status &&
-            !redemptionStatus.message
+            redeemCouponService.couponStatus.canRedeem &&
+            !redeemCouponService.redeemingInProcess &&
+            !redeemCouponService.redemptionStatus.status &&
+            !redeemCouponService.redemptionStatus.message
           "
         >
           <p class="m-0 text-center">El cupón puede ser canjeado</p>
@@ -135,7 +140,10 @@
         <div
           class="p-1 alert alert-danger"
           role="alert"
-          *ngIf="!couponStatus.canRedeem && !redeemingInProcess"
+          *ngIf="
+            !redeemCouponService.couponStatus.canRedeem &&
+            !redeemCouponService.redeemingInProcess
+          "
         >
           <p
             class="m-0 text-center"
@@ -147,14 +155,20 @@
 
           <p
             class="m-0 text-center"
-            *ngIf="redeemCouponService.alreadyRedeemed && !redeemingInProcess"
+            *ngIf="
+              redeemCouponService.alreadyRedeemed &&
+              !redeemCouponService.redeemingInProcess
+            "
           >
             Este cupón ya fue canjeado por el cliente.
           </p>
 
           <p
             class="m-0 text-center"
-            *ngIf="redeemCouponService.alreadyExpired && !redeemingInProcess"
+            *ngIf="
+              redeemCouponService.alreadyExpired &&
+              !redeemCouponService.redeemingInProcess
+            "
           >
             Este cupón ya expiró.
           </p>
@@ -208,7 +222,10 @@
 <div class="card mt-3">
   <div class="card-body">
     <div class="d-flex justify-content-between bg-white">
-      <button class="btn btn-outline-danger w-100" (click)="cleanScannedCode()">
+      <button
+        class="btn btn-outline-danger w-100"
+        (click)="redeemCouponService.cleanScannedCode()"
+      >
         Limpiar código
       </button>
     </div>
