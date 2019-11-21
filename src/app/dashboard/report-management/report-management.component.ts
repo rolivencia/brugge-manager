@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { ReportManagementService } from "@app/dashboard/report-management/report-management.service";
 
 @Component({
   selector: "app-report-management",
@@ -6,7 +7,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./report-management.component.scss"]
 })
 export class ReportManagementComponent implements OnInit {
-  constructor() {}
+  columns = [];
+
+  constructor(public reportManagementService: ReportManagementService) {}
 
   ngOnInit() {}
+
+  getReportDetails(selectedItem: any) {}
 }
