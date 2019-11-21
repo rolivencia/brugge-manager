@@ -79,8 +79,8 @@ export class RedeemCouponService {
     this.redemptionStatus = { status: "", message: "" };
   }
 
-  showAlert(redemptionStatus) {
-    // TODO: Arreglar y hacer programático. Mover a alertService.
+  retrieveStatus(redemptionStatus) {
+    let canRedeem = false;
     if (
       this.invalidStatuses.includes(redemptionStatus.status) ||
       this.notValid === true
@@ -88,6 +88,8 @@ export class RedeemCouponService {
       document.getElementById("main-container").style.backgroundColor = "red";
     } else if (redemptionStatus.status === "success") {
       document.getElementById("main-container").style.backgroundColor = "green";
+      canRedeem = true;
     }
+    return canRedeem;
   }
 }

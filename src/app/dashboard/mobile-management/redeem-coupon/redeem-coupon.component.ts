@@ -72,14 +72,9 @@ export class RedeemCouponComponent implements OnInit {
         this.redeemCouponService.pickStatusMessage(
           this.redeemCouponService.couponStatus
         );
-        if (
-          this.redeemCouponService.invalidStatuses.includes(
-            this.redeemCouponService.couponStatus.status
-          )
-        ) {
-          document.getElementById("main-container").style.backgroundColor =
-            "red";
-        }
+        this.redeemCouponService.retrieveStatus(
+          this.redeemCouponService.redemptionStatus
+        );
       });
   }
 
@@ -97,10 +92,13 @@ export class RedeemCouponComponent implements OnInit {
 
         this.scannerIsActive = false;
 
-        this.redeemCouponService.showAlert(
+        const canRedeem = this.redeemCouponService.retrieveStatus(
           this.redeemCouponService.redemptionStatus
         );
-        this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+
+        if (canRedeem) {
+          this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+        }
       });
   }
 
@@ -135,7 +133,7 @@ export class RedeemCouponComponent implements OnInit {
         status: response.status
       };
 
-      this.redeemCouponService.showAlert(
+      this.redeemCouponService.retrieveStatus(
         this.redeemCouponService.redemptionStatus
       );
     });
