@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ZXingScannerComponent } from "@zxing/ngx-scanner";
-import { Coupon, Customer } from "@app/_models";
 import { GlobalService } from "@app/_services/global.service";
 import { CouponService } from "@app/_services/coupon.service";
-import { CustomerService } from "@app/_services/customer.service";
+import { RedeemCouponService } from "@app/dashboard/mobile-management/redeem-coupon/redeem-coupon.service";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -21,29 +20,15 @@ export class RedeemCouponComponent implements OnInit {
 
   hasDevices: boolean;
   hasPermission: boolean;
-  tryHarder = false;
-
-  scannedCode: QrObject = null;
-  customer: Customer;
-  coupon: Coupon;
-
-  alreadyRedeemed: boolean = false;
-  alreadyExpired: boolean = false;
-  notValid: boolean = false;
-
-  couponStatusRetrieved: any = false;
-  couponStatus: any = null;
 
   optionsVisible = false;
-  redeemingInProcess: boolean = false;
-  redemptionStatus = { status: "", message: "" };
 
   scannerIsActive: boolean = false;
 
   constructor(
     public couponService: CouponService,
-    public customerService: CustomerService,
-    public globalService: GlobalService
+    public globalService: GlobalService,
+    public redeemCouponService: RedeemCouponService
   ) {}
 
   ngOnInit() {}
@@ -53,116 +38,78 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   onScanSuccess(event) {
-    this.cleanScannedCode();
-    if (this.debugMode) {
-      alert("Is valid?: " + this.globalService.isValidJson(event));
+    this.redeemCouponService.cleanScannedCode();
+
+    this.redeemCouponService.notValid = !this.globalService.isValidJson(event);
+
+    // In case the read code is not a valid JSON object, return
+    if (this.redeemCouponService.notValid) {
+      this.redeemCouponService.setInvalidStatus();
+      return;
     }
 
-    this.notValid = !this.globalService.isValidJson(event);
-
-    // In case it is a valid JSON object
-    if (!this.notValid) {
-      const codeData = this.globalService.parseCode(event);
-
-      if (this.debugMode) {
-        alert(codeData);
-      }
-
-      if (codeData.idCoupon && codeData.idCustomer) {
-        if (this.debugMode) {
-          alert("Passed!");
-        }
-
-        const subscription = this.couponService
-          .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
-          .subscribe(response => {
-            this.couponStatusRetrieved = true;
-            this.coupon = response["coupon"];
-            this.customer = response["customer"];
-            this.couponStatus = response["status"];
-            this.pickStatusMessage(this.couponStatus);
-
-            if (this.debugMode) {
-              alert(
-                JSON.stringify({
-                  expired: this.alreadyExpired,
-                  redeemed: this.alreadyRedeemed,
-                  valid: this.notValid
-                })
-              );
-            }
-
-            this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
-
-            // TODO: Arreglar y hacer programático. Mover a alertService.
-            if (
-              this.couponStatus.status === "error" ||
-              this.couponStatus.status === "expired" ||
-              this.couponStatus.status === "redeemed" ||
-              this.notValid === true
-            ) {
-              document.getElementById("main-container").style.backgroundColor =
-                "red";
-            }
-
-            this.scannerIsActive = false;
-          });
-      } else {
-        this.notValid = true;
-        this.alreadyExpired = false;
-        this.alreadyRedeemed = false;
-      }
-    } else {
-      this.notValid = true;
-      this.alreadyExpired = false;
-      this.alreadyRedeemed = false;
+    // Assign the read code. If invalid, return
+    const codeData = this.globalService.parseCode(event);
+    if (!codeData.idCoupon || !codeData.idCustomer) {
+      this.redeemCouponService.setInvalidStatus();
+      return;
     }
-  }
 
-  pickStatusMessage(couponStatus) {
-    switch (this.couponStatus.status) {
-      case "redeemed":
-        this.alreadyExpired = false;
-        this.alreadyRedeemed = true;
-        this.notValid = false;
-        break;
-      case "expired":
-        this.alreadyExpired = true;
-        this.alreadyRedeemed = false;
-        this.notValid = false;
-        break;
-      case "can-redeem":
-        this.alreadyExpired = false;
-        this.alreadyRedeemed = false;
-        this.notValid = false;
-        break;
-      default:
-        this.alreadyExpired = false;
-        this.alreadyRedeemed = false;
-        this.notValid = true;
-        break;
-    }
+    this.checkCouponStatus(codeData);
   }
 
   onScanTest() {
-    this.cleanScannedCode();
+    this.redeemCouponService.cleanScannedCode();
     const codeData = { idCoupon: 7, idCustomer: 7 };
     const subscription = this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
       .subscribe(response => {
-        this.couponStatusRetrieved = true;
-        this.coupon = response["coupon"];
-        this.customer = response["customer"];
-        this.couponStatus = response["status"];
+        this.redeemCouponService.couponStatusRetrieved = true;
+        this.redeemCouponService.coupon = response["coupon"];
+        this.redeemCouponService.customer = response["customer"];
+        this.redeemCouponService.couponStatus = response["status"];
 
-        this.pickStatusMessage(this.couponStatus);
+        this.redeemCouponService.pickStatusMessage(
+          this.redeemCouponService.couponStatus
+        );
         if (
-          this.couponStatus.status === "error" ||
-          this.couponStatus.status === "expired"
+          this.redeemCouponService.invalidStatuses.includes(
+            this.redeemCouponService.couponStatus.status
+          )
         ) {
           document.getElementById("main-container").style.backgroundColor =
             "red";
         }
+      });
+  }
+
+  checkCouponStatus(codeData) {
+    this.couponService
+      .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+      .subscribe(response => {
+        this.redeemCouponService.couponStatusRetrieved = true;
+        this.redeemCouponService.coupon = response["coupon"];
+        this.redeemCouponService.customer = response["customer"];
+        this.redeemCouponService.couponStatus = response["status"];
+        this.redeemCouponService.pickStatusMessage(
+          this.redeemCouponService.couponStatus
+        );
+
+        this.scannerIsActive = false;
+
+        // TODO: Arreglar y hacer programático. Mover a alertService.
+        if (
+          this.redeemCouponService.invalidStatuses.includes(
+            this.redeemCouponService.couponStatus.status
+          ) ||
+          this.redeemCouponService.notValid === true
+        ) {
+          document.getElementById("main-container").style.backgroundColor =
+            "red";
+          return;
+        }
+
+        this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
       });
   }
 
@@ -188,46 +135,30 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   redeemCoupon(idCoupon: number, idCustomer: number) {
-    this.redeemingInProcess = true;
+    this.redeemCouponService.redeemingInProcess = true;
     this.couponService.redeem(idCoupon, idCustomer).subscribe(response => {
-      this.redeemingInProcess = false;
+      this.redeemCouponService.redeemingInProcess = false;
 
-      this.redemptionStatus = {
+      this.redeemCouponService.redemptionStatus = {
         message: response.message,
         status: response.status
       };
 
       // TODO: Arreglar y hacer programático. Mover a alertService.
-      if (this.redemptionStatus.status === "error") {
+      if (this.redeemCouponService.redemptionStatus.status === "error") {
         document.getElementById("main-container").style.backgroundColor = "red";
-      } else if (this.redemptionStatus.status === "success") {
+      } else if (
+        this.redeemCouponService.redemptionStatus.status === "success"
+      ) {
         document.getElementById("main-container").style.backgroundColor =
           "green";
       }
     });
   }
 
-  cleanScannedCode() {
-    this.scannedCode = null;
-    this.customer = null;
-    this.coupon = null;
-
-    this.couponStatusRetrieved = false;
-    this.alreadyRedeemed = false;
-    this.alreadyExpired = false;
-    this.notValid = false;
-    // TODO: Arreglar y hacer programático. Mover a alertService.
-    document.getElementById("main-container").style.backgroundColor = "#7b6655";
-
-    this.redemptionStatus = { status: "", message: "" };
-  }
+  onEnterWithKeyboard() {}
 
   toggleOptions() {
     this.optionsVisible = !this.optionsVisible;
   }
-}
-
-export class QrObject {
-  public idCustomer: Customer;
-  public idCoupon: Coupon;
 }

@@ -8,7 +8,6 @@
   <zxing-scanner
     #scanner
     [(device)]="currentDevice"
-    [tryHarder]="tryHarder"
     (scanSuccess)="onScanSuccess($event)"
     (permissionResponse)="onHasPermission($event)"
     (camerasFound)="onCamerasFound($event)"
@@ -45,6 +44,14 @@
           <button
             type="button btn-sm"
             class="btn btn-outline-dark px-3 mr-2"
+            (click)="onEnterWithKeyboard()"
+          >
+            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+          </button>
+
+          <button
+            type="button btn-sm"
+            class="btn btn-outline-dark px-3 mr-2"
             (click)="toggleOptions()"
           >
             <i class="fa fa-cog" aria-hidden="true"></i>
@@ -58,10 +65,18 @@
         Proceda a leer el código QR que desea canjear el cliente
       </p>
 
-      <p *ngIf="this.coupon && this.customer">
-        Cupón: {{ this.coupon.title }} <br />
+      <p
+        *ngIf="
+          this.redeemCouponService.coupon && this.redeemCouponService.customer
+        "
+      >
+        Cupón: {{ this.redeemCouponService.coupon.title }} <br />
         Cliente:
-        {{ this.customer.firstName + " " + this.customer.lastName }}
+        {{
+          this.redeemCouponService.customer.firstName +
+            " " +
+            this.redeemCouponService.customer.lastName
+        }}
       </p>
 
       <div
@@ -70,7 +85,12 @@
           (redemptionStatus.status && redemptionStatus.message)
         "
       >
-        <hr class="mt-1 mb-1" *ngIf="this.coupon && this.customer" />
+        <hr
+          class="mt-1 mb-1"
+          *ngIf="
+            this.redeemCouponService.coupon && this.redeemCouponService.customer
+          "
+        />
 
         <div
           class="p-1 alert alert-primary"
@@ -100,9 +120,9 @@
           class="p-1 alert alert-primary"
           role="alert"
           *ngIf="
-            !notValid &&
-            !alreadyExpired &&
-            !alreadyRedeemed &&
+            !redeemCouponService.notValid &&
+            !redeemCouponService.alreadyExpired &&
+            !redeemCouponService.alreadyRedeemed &&
             couponStatus.canRedeem &&
             !redeemingInProcess &&
             !redemptionStatus.status &&
@@ -117,21 +137,24 @@
           role="alert"
           *ngIf="!couponStatus.canRedeem && !redeemingInProcess"
         >
-          <p class="m-0 text-center" class="m-0 text-center" *ngIf="notValid">
+          <p
+            class="m-0 text-center"
+            class="m-0 text-center"
+            *ngIf="redeemCouponService.notValid"
+          >
             Código QR no válido para esta operación. Valor del código:
-            {{ this.scannedCode }}
           </p>
 
           <p
             class="m-0 text-center"
-            *ngIf="alreadyRedeemed && !redeemingInProcess"
+            *ngIf="redeemCouponService.alreadyRedeemed && !redeemingInProcess"
           >
             Este cupón ya fue canjeado por el cliente.
           </p>
 
           <p
             class="m-0 text-center"
-            *ngIf="alreadyExpired && !redeemingInProcess"
+            *ngIf="redeemCouponService.alreadyExpired && !redeemingInProcess"
           >
             Este cupón ya expiró.
           </p>
@@ -163,19 +186,6 @@
             class="form-check-input"
             name="tryHarder"
             type="checkbox"
-            [(ngModel)]="tryHarder"
-            id="tryHarder"
-          />
-          <label class="form-check-label" for="tryHarder">
-            Forzar
-          </label>
-        </div>
-
-        <div class="form-check mt-2">
-          <input
-            class="form-check-input"
-            name="tryHarder"
-            type="checkbox"
             [(ngModel)]="debugMode"
             id="debugMode"
           />
@@ -198,20 +208,6 @@
 <div class="card mt-3">
   <div class="card-body">
     <div class="d-flex justify-content-between bg-white">
-      <!--      <button-->
-      <!--        class="btn btn-outline-black"-->
-      <!--        [disabled]="-->
-      <!--          notValid ||-->
-      <!--          alreadyExpired ||-->
-      <!--          alreadyRedeemed ||-->
-      <!--          !coupon ||-->
-      <!--          !customer ||-->
-      <!--          redeemingInProcess-->
-      <!--        "-->
-      <!--        (click)="redeemCoupon(coupon.id, customer.id)"-->
-      <!--      >-->
-      <!--        Redimir cupón-->
-      <!--      </button>-->
       <button class="btn btn-outline-danger w-100" (click)="cleanScannedCode()">
         Limpiar código
       </button>
