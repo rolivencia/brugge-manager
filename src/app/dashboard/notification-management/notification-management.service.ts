@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { NotificationService } from "@app/_services/notification.service";
+import { CollectionView } from "wijmo/wijmo";
 
 @Injectable({
   providedIn: "root"
 })
 export class NotificationManagementService {
+  gridCollection: CollectionView;
+
   showTopOutlet: boolean = false;
   showLeftOutlet: boolean = true;
   showRightOutlet: boolean = true;

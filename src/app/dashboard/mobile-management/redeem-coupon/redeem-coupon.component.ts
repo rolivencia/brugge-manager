@@ -92,6 +92,8 @@ export class RedeemCouponComponent implements OnInit {
               );
             }
 
+            this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+
             // TODO: Arreglar y hacer programático. Mover a alertService.
             if (
               this.couponStatus.status === "error" ||

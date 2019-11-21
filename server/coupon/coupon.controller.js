@@ -9,6 +9,7 @@ router.post("/redeem", redeem);
 router.get("/redeemable/:idCustomer", getRedeemable);
 router.get("/get/:id", get);
 router.get("/getRedeemed/:idCustomer/:limit/:offset", getRedeemed);
+router.get("/getRedeemedByDate/:date", getRedeemedByDate);
 router.get("/current", getCurrent);
 router.get("/status/:idCoupon/:idCustomer", status);
 router.get("/all/:expired/:deleted", getAll);
@@ -43,6 +44,22 @@ async function getRedeemed(req, res, next) {
           message:
             "Bad request. Could not get retrieved coupons from customer with id: " +
             req.params.idCustomer
+        });
+      }
+    })
+    .catch(err => next(err));
+}
+
+async function getRedeemedByDate(req, res, next) {
+  couponService
+    .getRedeemedByDate(req.params.date)
+    .then(response => {
+      if (response) {
+        res.json(response);
+      } else {
+        res.status(400).json({
+          message:
+            "Bad request. Could not get retrieved coupons for the given date"
         });
       }
     })

@@ -48,6 +48,13 @@ const routes: Routes = [
           import(
             "app/dashboard/recommended-management/recommended-management.module"
           ).then(m => m.RecommendedManagementModule)
+      },
+      {
+        path: "reports",
+        loadChildren: () =>
+          import(
+            "app/dashboard/report-management/report-management.module"
+          ).then(m => m.ReportManagementModule)
       }
     ]
   }

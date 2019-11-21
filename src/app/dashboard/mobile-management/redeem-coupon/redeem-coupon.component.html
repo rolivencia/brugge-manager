@@ -198,21 +198,21 @@
 <div class="card mt-3">
   <div class="card-body">
     <div class="d-flex justify-content-between bg-white">
-      <button
-        class="btn btn-outline-black"
-        [disabled]="
-          notValid ||
-          alreadyExpired ||
-          alreadyRedeemed ||
-          !coupon ||
-          !customer ||
-          redeemingInProcess
-        "
-        (click)="redeemCoupon(coupon.id, customer.id)"
-      >
-        Redimir cupón
-      </button>
-      <button class="btn btn-outline-danger" (click)="cleanScannedCode()">
+      <!--      <button-->
+      <!--        class="btn btn-outline-black"-->
+      <!--        [disabled]="-->
+      <!--          notValid ||-->
+      <!--          alreadyExpired ||-->
+      <!--          alreadyRedeemed ||-->
+      <!--          !coupon ||-->
+      <!--          !customer ||-->
+      <!--          redeemingInProcess-->
+      <!--        "-->
+      <!--        (click)="redeemCoupon(coupon.id, customer.id)"-->
+      <!--      >-->
+      <!--        Redimir cupón-->
+      <!--      </button>-->
+      <button class="btn btn-outline-danger w-100" (click)="cleanScannedCode()">
         Limpiar código
       </button>
     </div>

@@ -13,6 +13,7 @@ const CustomerCoupon = require("../customer/customer-coupon.model");
 // Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
 const ONE_TIME = 1;
 const MULTIPLE_DIFFERENT_DAYS = 2;
+const HAPPY_HOUR = 3;
 
 module.exports = {
   canRedeem,
@@ -21,6 +22,7 @@ module.exports = {
   getAll,
   getCurrent,
   getRedeemed,
+  getRedeemedByDate,
   getRedeemable,
   redeem,
   remove,
@@ -251,6 +253,7 @@ function redeemedTodayList(coupon, redeemedCoupons) {
   );
 }
 
+// TODO: Considerar diferencia horaria posible entre canjes al pasar la medianoche
 const redeemedToday = redemption => {
   const today = moment();
   const redeemedDate = moment(redemption.createdAt);
@@ -413,4 +416,21 @@ async function update({
     },
     { where: { id: id } }
   );
+}
+
+async function getRedeemedByDate(date) {
+  const startingDate = moment(date)
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    .toDate();
+  const endingDate = moment(date)
+    .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
+    .toDate();
+
+  return CustomerCoupon().findAll({
+    where: {
+      createdAt: {
+        [Op.between]: [startingDate, endingDate]
+      }
+    }
+  });
 }

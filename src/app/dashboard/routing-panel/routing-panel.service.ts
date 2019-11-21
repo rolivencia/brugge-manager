@@ -48,6 +48,13 @@ export class RoutingPanelService {
       title: "📣 Envío de Notificaciones",
       visibility: "d-none d-lg-inline",
       roles: [1]
+    },
+    {
+      route: "dashboard/reports",
+      text: "Consulta de reportes generados",
+      title: "📰 Reportes",
+      visibility: "d-none d-lg-inline",
+      roles: [1]
     }
   ];
 

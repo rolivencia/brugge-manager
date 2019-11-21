@@ -1,10 +1,37 @@
 <div class="card dashboard-card">
   <div class="card-header">
     <div class="d-flex justify-content-between">
-      <button disabled class="btn btn-sm btn-outline-dark" (click)="notificationManagementService.goToSend()">📣 Enviar notificación</button>
+      <button
+        disabled
+        class="btn btn-sm btn-outline-dark"
+        (click)="notificationManagementService.goToSend()"
+      >
+        📣 Enviar notificación
+      </button>
     </div>
   </div>
   <div class="card-body">
-    Seleccione un cliente de la grilla de la izquierda
+    <form>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label><strong>Título:</strong></label>
+            <input class="form-control" type="text" />
+          </div>
+          <div class="form-group">
+            <label><strong>Texto:</strong></label>
+            <input class="form-control" type="text" />
+          </div>
+          <div class="form-group">
+            <label><strong>Redireccionar a:</strong></label>
+            <input class="form-control" type="text" />
+          </div>
+          <div class="form-group">
+            <label><strong>Imagen:</strong></label>
+            <input class="form-control-file" type="file" />
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </div>

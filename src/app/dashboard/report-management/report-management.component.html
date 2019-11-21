@@ -1,11 +1,9 @@
-<div class="card dashboard-card">
-  <div class="card-header">
-    <h5>Gestión de Notificaciones</h5>
-  </div>
+<div class="card">
+  <div class="card-header"><h5>Gestión de Reportes</h5></div>
   <div class="card-body">
     <wj-flex-grid
-      *ngIf="true"
-      [itemsSource]="notificationManagementService.gridCollection"
+      *ngIf="recommendedManagementService.gridCollection"
+      [itemsSource]="recommendedManagementService.gridCollection"
       [selectionMode]="'Row'"
       [headersVisibility]="'Column'"
       [autoGenerateColumns]="false"
@@ -13,8 +11,8 @@
       [showSelectedHeaders]="'Row'"
       [isReadOnly]="true"
       (selectionChanged)="
-        getNotificationDetails(
-          notificationManagementService.gridCollection.currentItem
+        getRecommendedDetails(
+          recommendedManagementService.gridCollection.currentItem
         )
       "
     >
