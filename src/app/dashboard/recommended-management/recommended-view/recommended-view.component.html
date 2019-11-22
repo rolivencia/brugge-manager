@@ -38,7 +38,9 @@
         <strong>Título: </strong
         >{{ recommendedManagementService.selectedRecommended.title }}
       </p>
-      <ng-container>
+      <ng-container
+        *ngIf="recommendedManagementService.selectedRecommended.info"
+      >
         <p>
           <strong>Info adicional: </strong
           >{{ recommendedManagementService.selectedRecommended.info }}
