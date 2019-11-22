@@ -21,8 +21,13 @@ const rutasAccesibles = [
   "/dashboard",
   "/login",
   "/home",
+  "/dashboard/coupons",
+  "/dashboard/recommended",
+  "/dashboard/customer",
+  "/dashboard/notification",
+  "/dashboard/reports",
   "/dashboard/mobile",
-  "dashboard/mobile/redeem-coupon"
+  "/dashboard/mobile/redeem-coupon"
 ];
 const rutasApi = [
   { path: "/users", controller: "./server/users/users.controller" },
