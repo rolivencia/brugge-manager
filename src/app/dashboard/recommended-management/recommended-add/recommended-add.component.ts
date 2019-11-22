@@ -63,7 +63,8 @@ export class RecommendedAddComponent implements OnInit {
         id: [this.recommendation.id],
         title: [this.recommendation.title, Validators.required],
         description: [this.recommendation.description, Validators.required],
-        imageUrl: [this.recommendation.imageUrl, Validators.required]
+        imageUrl: [this.recommendation.imageUrl, Validators.required],
+        info: [this.recommendation.info]
       });
 
       this.previewUrl = this.recommendation.imageUrl;
@@ -78,7 +79,8 @@ export class RecommendedAddComponent implements OnInit {
         id: [null],
         title: ["", Validators.required],
         description: ["", Validators.required],
-        imageUrl: ["", Validators.required]
+        imageUrl: ["", Validators.required],
+        info: [""]
       });
       this.disableInputs = false;
     }
@@ -105,6 +107,7 @@ export class RecommendedAddComponent implements OnInit {
     this.recommendation.imageUrl = this.recommendationForm.controls[
       "imageUrl"
     ].value;
+    this.recommendation.info = this.recommendationForm.controls["info"].value;
 
     if (this.edit) {
       this.recommendedService

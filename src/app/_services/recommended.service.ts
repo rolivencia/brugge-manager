@@ -38,7 +38,8 @@ export class RecommendedService {
     const createdRecommendation = {
       title: recommended.title,
       description: recommended.description,
-      imageUrl: recommended.imageUrl
+      imageUrl: recommended.imageUrl,
+      info: recommended.info
     };
 
     return this.http
@@ -62,7 +63,8 @@ export class RecommendedService {
       id: recommended.id,
       title: recommended.title,
       description: recommended.description,
-      imageUrl: recommended.imageUrl
+      imageUrl: recommended.imageUrl,
+      info: recommended.info
     };
 
     return this.http.put<Recommended>(

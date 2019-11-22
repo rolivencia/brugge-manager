@@ -1,6 +1,7 @@
 <div class="card dashboard-card">
   <div class="card-header d-flex justify-content-between">
-    <h5>Agregar Recomendado</h5>
+    <h5 *ngIf="!edit">Agregar Recomendado</h5>
+    <h5 *ngIf="edit">Editar Recomendado</h5>
     <div>
       <button
         *ngIf="!edit"
@@ -63,6 +64,17 @@
                 Se requiere ingresar un título.
               </div>
             </div>
+          </div>
+          <div class="form-group">
+            <label id="info" for="info"><strong>Info:</strong></label>
+            <input
+              class="form-control"
+              type="text"
+              name="info"
+              aria-labelledby="info"
+              formControlName="info"
+              placeholder="Opcional. Incluye información en la parte inferior derecha de la tarjeta."
+            />
           </div>
           <div class="form-group">
             <label id="description" for="description"

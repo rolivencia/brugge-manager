@@ -14,6 +14,7 @@ const generateRecommendation = rawRecommendation => {
     title: rawRecommendation.title,
     description: rawRecommendation.description,
     imageUrl: rawRecommendation.imageUrl,
+    info: rawRecommendation.info,
     audit: {
       createdAt: rawRecommendation.createdAt,
       updatedAt: rawRecommendation.updatedAt,
@@ -23,11 +24,12 @@ const generateRecommendation = rawRecommendation => {
   };
 };
 
-async function create({ title, description, imageUrl }) {
+async function create({ title, description, imageUrl, info }) {
   const recommendation = await Recommended().create({
     title: title,
     description: description,
-    imageUrl: imageUrl
+    imageUrl: imageUrl,
+    info: info
   });
 
   return new Promise((resolve, reject) => {
@@ -39,12 +41,14 @@ async function create({ title, description, imageUrl }) {
   });
 }
 
-async function update({ id, title, description, imageUrl }) {
+async function update({ id, title, description, imageUrl, info }) {
+  console.log(info);
   return Recommended().update(
     {
       title: title,
       description: description,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      info: info
     },
     { where: { id: id } }
   );

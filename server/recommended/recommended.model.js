@@ -19,6 +19,11 @@ Recommended.init(
       allowNull: false,
       field: "title"
     },
+    info: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      field: "info"
+    },
     description: {
       type: Sequelize.TEXT,
       allowNull: false,
