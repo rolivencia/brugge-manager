@@ -22,8 +22,12 @@ export class RedeemCouponComponent implements OnInit {
   hasPermission: boolean;
 
   optionsVisible = false;
+  enterCodeVisible = false;
 
   scannerIsActive: boolean = false;
+
+  successAlertVisible: boolean = false;
+  errorAlertVisible: boolean = false;
 
   constructor(
     public couponService: CouponService,
@@ -45,6 +49,7 @@ export class RedeemCouponComponent implements OnInit {
     // In case the read code is not a valid JSON object, return
     if (this.redeemCouponService.notValid) {
       this.redeemCouponService.setInvalidStatus();
+      this.redeemCouponService.retrieveStatus();
       return;
     }
 
@@ -52,6 +57,7 @@ export class RedeemCouponComponent implements OnInit {
     const codeData = this.globalService.parseCode(event);
     if (!codeData.idCoupon || !codeData.idCustomer) {
       this.redeemCouponService.setInvalidStatus();
+      this.redeemCouponService.retrieveStatus();
       return;
     }
 
@@ -60,7 +66,7 @@ export class RedeemCouponComponent implements OnInit {
 
   onScanTest() {
     this.redeemCouponService.cleanScannedCode();
-    const codeData = { idCoupon: 41, idCustomer: 7 };
+    const codeData = { idCoupon: 44, idCustomer: 7 };
     const subscription = this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
       .subscribe(response => {
@@ -75,6 +81,10 @@ export class RedeemCouponComponent implements OnInit {
 
         if (this.redeemCouponService.canRedeem()) {
           this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+        } else {
+          this.redeemCouponService.retrieveStatus(
+            this.redeemCouponService.couponStatus
+          );
         }
       });
   }
@@ -96,6 +106,10 @@ export class RedeemCouponComponent implements OnInit {
 
         if (this.redeemCouponService.canRedeem()) {
           this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
+        } else {
+          this.redeemCouponService.retrieveStatus(
+            this.redeemCouponService.couponStatus
+          );
         }
       });
   }
@@ -137,7 +151,9 @@ export class RedeemCouponComponent implements OnInit {
     });
   }
 
-  onEnterWithKeyboard() {}
+  onEnterWithKeyboard() {
+    this.enterCodeVisible = !this.enterCodeVisible;
+  }
 
   toggleOptions() {
     this.optionsVisible = !this.optionsVisible;

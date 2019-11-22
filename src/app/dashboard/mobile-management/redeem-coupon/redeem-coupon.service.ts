@@ -83,17 +83,25 @@ export class RedeemCouponService {
     this.redemptionStatus = { status: "", message: "" };
   }
 
-  retrieveStatus(redemptionStatus) {
+  retrieveStatus(redemptionStatus?) {
     let canRedeem = false;
     if (
-      this.invalidStatuses.includes(redemptionStatus.status) ||
+      (redemptionStatus &&
+        this.invalidStatuses.includes(redemptionStatus.status)) ||
       this.notValid === true
     ) {
-      document.getElementById("main-container").style.backgroundColor = "red";
+      document.getElementById("alert-error").style.visibility = "initial";
     } else if (redemptionStatus.status === "success") {
-      document.getElementById("main-container").style.backgroundColor = "green";
+      document.getElementById("alert-success").style.visibility = "initial";
+
       canRedeem = true;
     }
+
+    setTimeout(function() {
+      document.getElementById("alert-error").style.visibility = "hidden";
+      document.getElementById("alert-success").style.visibility = "hidden";
+    }, 5000);
+
     return canRedeem;
   }
 }

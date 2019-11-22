@@ -60,17 +60,19 @@
       </div>
     </div>
 
-    <ng-container *ngTemplateOutlet="redemptionStatus"> </ng-container>
-
     <ng-container *ngTemplateOutlet="scannerOptions"> </ng-container>
+
+    <ng-container *ngTemplateOutlet="redemptionStatus"> </ng-container>
   </div>
 </div>
 
 <div class="card mt-3">
   <div class="card-body">
+    <ng-container *ngTemplateOutlet="enterCode"> </ng-container>
+
     <div class="d-flex justify-content-between bg-white">
       <button
-        class="btn btn-outline-danger w-100"
+        class="btn btn-sm btn-outline-danger w-100"
         (click)="redeemCouponService.cleanScannedCode()"
       >
         Limpiar código
@@ -90,6 +92,7 @@
         this.redeemCouponService.coupon && this.redeemCouponService.customer
       "
     >
+      <strong>Último cupón leído:</strong><br />
       Cupón: {{ this.redeemCouponService.coupon.title }} <br />
       Cliente:
       {{
@@ -119,31 +122,6 @@
         *ngIf="redeemCouponService.redeemingInProcess"
       >
         <p class="m-0 text-center">El cupón está siendo canjeado...</p>
-      </div>
-
-      <div
-        class="p-1 alert alert-danger"
-        role="alert"
-        *ngIf="
-          !redeemCouponService.couponStatus.canRedeem &&
-          !redeemCouponService.redeemingInProcess
-        "
-      >
-        <p
-          class="m-0 text-center"
-          class="m-0 text-center"
-          *ngIf="redeemCouponService.notValid"
-        >
-          Código QR no válido para esta operación.
-        </p>
-
-        <p class="m-0 text-center" *ngIf="redeemCouponService.alreadyRedeemed">
-          Este cupón ya fue canjeado por el cliente.
-        </p>
-
-        <p class="m-0 text-center" *ngIf="redeemCouponService.alreadyExpired">
-          Este cupón ya expiró.
-        </p>
       </div>
     </div>
   </div>
@@ -190,3 +168,44 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #enterCode>
+  <div *ngIf="enterCodeVisible">
+    <div class="input-group input-group-sm mb-3">
+      <label><strong>Código:</strong></label>
+      <div class="d-flex justify-content-between align-items-center">
+        <input type="text" class="form-control" placeholder="BRGG" disabled />
+        <strong class="mx-1">-</strong>
+        <input type="text" class="form-control" />
+        <strong class="mx-1">-</strong>
+        <input type="text" class="form-control" />
+        <strong class="mx-1">-</strong>
+        <input type="text" class="form-control" />
+      </div>
+    </div>
+    <button class="btn btn-sm btn-outline-dark w-100 mb-3">
+      Canjear Cupón
+    </button>
+  </div>
+</ng-template>
+
+<div id="alert-error" class="d-flex justify-content-center align-items-center">
+  <div class="p-2">
+    <h2 *ngIf="redeemCouponService.notValid">Cupón no válido.</h2>
+    <h2 *ngIf="redeemCouponService.alreadyExpired">El cupón ya expiró.</h2>
+    <h2 *ngIf="redeemCouponService.alreadyRedeemed">
+      El cliente ya ha canjeado este cupón.
+    </h2>
+    <h6>(Esta alerta desaparece en 5 segundos)</h6>
+  </div>
+</div>
+
+<div
+  id="alert-success"
+  class="d-flex justify-content-center align-items-center"
+>
+  <div class="p-2">
+    <h2>Cupón canjeado correctamente.</h2>
+    <h6>(Esta alerta desaparece en 5 segundos)</h6>
+  </div>
+</div>
