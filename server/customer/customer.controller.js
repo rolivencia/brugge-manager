@@ -57,19 +57,23 @@ function getByEmail(req, res, next) {
   customerService
     .getByEmail(req.params.email)
     .then(customerRaw => {
-      return res.json({
-        id: customerRaw.id,
-        firstName: customerRaw.firstName,
-        lastName: customerRaw.lastName,
-        email: customerRaw.email,
-        uidFirebase: customerRaw.uidFirebase,
-        audit: {
-          createdAt: customerRaw.createdAt,
-          updatedAt: customerRaw.updatedAt,
-          enabled: customerRaw.enabled,
-          deleted: customerRaw.deleted
-        }
-      });
+      if (customerRaw) {
+        res.json({
+          id: customerRaw.id,
+          firstName: customerRaw.firstName,
+          lastName: customerRaw.lastName,
+          email: customerRaw.email,
+          uidFirebase: customerRaw.uidFirebase,
+          audit: {
+            createdAt: customerRaw.createdAt,
+            updatedAt: customerRaw.updatedAt,
+            enabled: customerRaw.enabled,
+            deleted: customerRaw.deleted
+          }
+        });
+      } else {
+        res.json(null);
+      }
     })
     .catch(err => next(err));
 }

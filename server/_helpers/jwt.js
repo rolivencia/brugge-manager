@@ -11,7 +11,9 @@ function jwt() {
       "/users/authenticate",
       "/backend",
       "/customer/create",
-      "/api/keys/get"
+      "/customer/getByEmail",
+      "/api/keys/get",
+      new RegExp("/customer/getByEmail/*", "i")
     ]
   });
 }
