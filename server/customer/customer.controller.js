@@ -55,7 +55,7 @@ function getById(req, res, next) {
 
 function getByEmail(req, res, next) {
   customerService
-    .getById(req.params.email)
+    .getByEmail(req.params.email)
     .then(customerRaw => {
       return res.json({
         id: customerRaw.id,
