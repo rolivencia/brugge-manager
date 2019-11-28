@@ -1,9 +1,8 @@
 const environment = require("server/_helpers/environment");
 const Customer = require("./customer.model");
-const Sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 
-module.exports = { create, getAll, getById };
+module.exports = { create, getAll, getById, getByEmail };
 
 async function getById(id) {
   return Customer().findOne({ where: { id: id } });
@@ -11,6 +10,14 @@ async function getById(id) {
 
 async function getAll() {
   return Customer().findAll();
+}
+
+async function getByEmail(email) {
+  return Customer().findOne({
+    where: {
+      email: email
+    }
+  });
 }
 
 async function create({ firstName, lastName, email, imageUrl, uidFirebase }) {
