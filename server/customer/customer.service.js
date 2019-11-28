@@ -15,12 +15,7 @@ async function getAll() {
 
 async function create({ firstName, lastName, email, imageUrl, uidFirebase }) {
   const newCustomer = await Customer().findOrCreate({
-    where: Sequelize.or(
-      {
-        uidFirebase: uidFirebase
-      },
-      { email: email }
-    ),
+    where: { email: email },
     defaults: {
       firstName: firstName,
       lastName: lastName,
