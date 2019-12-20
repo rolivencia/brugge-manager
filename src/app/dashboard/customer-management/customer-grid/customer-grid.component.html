@@ -1,9 +1,10 @@
 <div class="card dashboard-card">
-  <div class="card-header">
+  <div id="grid-container-header" class="card-header">
     <h5>Grilla de clientes</h5>
   </div>
-  <div class="card-body">
+  <div id="grid-container" class="card-body">
     <wj-flex-grid
+      id="customer-grid"
       *ngIf="customersCollection"
       [itemsSource]="customersCollection"
       [selectionMode]="'Row'"
@@ -12,6 +13,7 @@
       [allowResizing]="'Columns'"
       [showSelectedHeaders]="'Row'"
       [isReadOnly]="true"
+      (updatedView)="adjustGridHeight()"
       (selectionChanged)="getCustomerDetails(customersCollection.currentItem)"
     >
       <wj-flex-grid-filter></wj-flex-grid-filter>

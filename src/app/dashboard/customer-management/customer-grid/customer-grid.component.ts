@@ -19,10 +19,9 @@ export class CustomerGridComponent implements OnInit {
   public customersCollection: CollectionView;
 
   columns: any[] = [
-    { header: "Nombre", binding: "firstName", width: 130 },
-    { header: "Apellido", binding: "lastName", width: 130 },
-    { header: "Email", binding: "email", width: "*" },
-    { header: "Firebase ID", binding: "uidFirebase", width: 170 }
+    { header: "Nombre", binding: "firstName", width: 160 },
+    { header: "Apellido", binding: "lastName", width: 160 },
+    { header: "Teléfono", binding: "email", width: "*" }
   ];
 
   constructor(
@@ -75,5 +74,25 @@ export class CustomerGridComponent implements OnInit {
     customerO.pipe(flatMap(() => redeemedCouponsO)).subscribe(response => {
       console.log(response);
     });
+  }
+
+  /**
+   * Ajusta la altura de la grid en base al tamaño del layout de fondo, sin contar el headerbar
+   */
+  adjustGridHeight() {
+    const layoutContainer: HTMLElement = document.getElementById(
+      "inner-container"
+    );
+    const headerContainerElement: HTMLElement = document.getElementById(
+      "grid-container-header"
+    );
+    const gridElement: HTMLElement = document.getElementById("customer-grid");
+    const padding = 20; // in pixels
+
+    gridElement.style.height =
+      layoutContainer.offsetHeight -
+      2 * padding -
+      headerContainerElement.offsetHeight +
+      "px";
   }
 }
