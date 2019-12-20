@@ -1,6 +1,16 @@
 <div class="card dashboard-card">
-  <div id="grid-container-header" class="card-header">
-    <h5>Grilla de clientes</h5>
+  <div id="grid-container-header" class="card-header d-flex align-items-center">
+    <div class="row w-100">
+      <div class="col">
+        <h5 class="mb-0">Grilla de clientes</h5>
+      </div>
+      <div class="col">
+        <div>
+          <strong>Clientes registrados:</strong>
+          {{ customersCollection.itemCount }}
+        </div>
+      </div>
+    </div>
   </div>
   <div id="grid-container" class="card-body">
     <wj-flex-grid
