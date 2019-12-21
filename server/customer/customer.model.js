@@ -74,7 +74,7 @@ Customer.init(
   }
 );
 
-// Mediante las dos llamadas siguientes, se define en Sequelize la relación N a M entre Role y User
+// Mediante las dos llamadas siguientes, se define en Sequelize la relación N a M entre Customer y Coupon
 Customer.belongsToMany(Coupon(), {
   through: CustomerCoupon(),
   foreignKey: "id_customer"
@@ -83,4 +83,9 @@ Customer.belongsToMany(Coupon(), {
 Coupon().belongsToMany(Customer, {
   through: CustomerCoupon(),
   foreignKey: "id_coupon"
+});
+
+CustomerCoupon().belongsTo(Customer, {
+  foreignKey: "id_customer",
+  as: "customer"
 });

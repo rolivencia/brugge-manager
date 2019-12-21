@@ -9,7 +9,7 @@ router.post("/redeem", redeem);
 router.get("/redeemable/:idCustomer", getRedeemable);
 router.get("/get/:id", get);
 router.get("/getRedeemed/:idCustomer/:limit/:offset", getRedeemed);
-router.get("/getRedeemedByDate/:date", getRedeemedByDate);
+router.get("/getRedeemedByDate/:dateFrom/:dateTo", getRedeemedByDate);
 router.get("/current", getCurrent);
 router.get("/status/:idCoupon/:idCustomer", status);
 router.get("/all/:expired/:deleted", getAll);

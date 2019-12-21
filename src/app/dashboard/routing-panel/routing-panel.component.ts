@@ -6,7 +6,6 @@ import {
   AuthenticationService,
   UserService
 } from "@app/_services";
-import { Router } from "@angular/router";
 import { first } from "rxjs/operators";
 import { RoutingPanelService } from "@app/dashboard/routing-panel/routing-panel.service";
 
@@ -23,7 +22,6 @@ export class RoutingPanelComponent implements OnInit, OnDestroy {
   constructor(
     private alertService: AlertService,
     private authenticationService: AuthenticationService,
-    private router: Router,
     public routingPanelService: RoutingPanelService,
     private userService: UserService
   ) {
@@ -59,10 +57,6 @@ export class RoutingPanelComponent implements OnInit, OnDestroy {
       .subscribe(users => {
         this.users = users;
       });
-  }
-
-  goTo(route: string) {
-    this.router.navigate([`/${route}`]);
   }
 
   notImplemented(route: string) {

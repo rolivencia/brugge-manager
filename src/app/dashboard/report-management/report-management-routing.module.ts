@@ -6,7 +6,22 @@ const routes: Routes = [
   {
     path: "",
     component: ReportManagementComponent,
-    pathMatch: "full"
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./report-routing-panel/report-routing-panel.module").then(
+            m => m.ReportRoutingPanelModule
+          )
+      },
+      {
+        path: "redeemed-coupons",
+        loadChildren: () =>
+          import(
+            "./report-redeemed-coupons/report-redeemed-coupons.module"
+          ).then(m => m.ReportRedeemedCouponsModule)
+      }
+    ]
   }
 ];
 

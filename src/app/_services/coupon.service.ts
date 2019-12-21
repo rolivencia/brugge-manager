@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { first, map } from "rxjs/operators";
 import * as moment from "moment";
+import { Moment } from "moment";
 
 @Injectable({
   providedIn: "root"
@@ -142,6 +143,16 @@ export class CouponService {
     return this.http
       .get<any>(
         `${environment.apiUrl}/coupon/getRedeemed/${idCustomer}/${3}/${0}`
+      )
+      .pipe(first());
+  };
+
+  public getRedeemedInterval = (dateFrom: Moment, dateTo: Moment) => {
+    const dateFromISO = dateFrom.format("YYYY-MM-DD");
+    const dateToISO = dateTo ? dateTo.format("YYYY-MM-DD") : null;
+    return this.http
+      .get<any>(
+        `${environment.apiUrl}/coupon/getRedeemedByDate/${dateFromISO}/${dateToISO}`
       )
       .pipe(first());
   };

@@ -1,0 +1,9 @@
+.card-deck {
+  column-count: 4;
+  .card {
+    width: 350px;
+  }
+  .card:not(.disabled) {
+    cursor: pointer;
+  }
+}

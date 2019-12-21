@@ -431,6 +431,33 @@ async function getRedeemedByDate(date) {
       createdAt: {
         [Op.between]: [startingDate, endingDate]
       }
-    }
+    },
+    attributes: ["id", "createdAt"],
+    include: [
+      {
+        as: "coupon",
+        model: Coupon(),
+        attributes: ["id", "title"],
+        include: [
+          { as: "type", model: CouponType(), attributes: ["id", "description"] }
+        ]
+      },
+      {
+        as: "customer",
+        model: Customer(),
+        attributes: [
+          "id",
+          [
+            Sequelize.fn(
+              "CONCAT",
+              Sequelize.col("first_name"),
+              " ",
+              Sequelize.col("last_name")
+            ),
+            "fullName"
+          ]
+        ]
+      }
+    ]
   });
 }

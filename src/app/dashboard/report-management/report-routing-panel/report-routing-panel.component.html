@@ -1,0 +1,20 @@
+<div class="card h-100">
+  <div class="card-header"><h5>Gestión de Reportes</h5></div>
+  <div class="card-body">
+    <div class="card-deck pt-2">
+      <ng-container *ngFor="let cardRoute of reportRoutingPanelService.routes">
+        <div
+          *ngIf="authenticationService.hasRole(currentUser, cardRoute.roles)"
+          class="card mb-3"
+          (click)="reportRoutingPanelService.navigate(cardRoute)"
+          [ngClass]="cardRoute.visibility"
+        >
+          <div class="card-body">
+            <h5 class="card-title">{{ cardRoute.title }}</h5>
+            <p class="card-text">{{ cardRoute.text }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

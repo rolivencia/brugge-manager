@@ -11,7 +11,9 @@ export class ReportManagementComponent implements OnInit {
 
   constructor(public reportManagementService: ReportManagementService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.reportManagementService.reportName = "Gestión de Reportes";
+  }
 
   getReportDetails(selectedItem: any) {}
 }

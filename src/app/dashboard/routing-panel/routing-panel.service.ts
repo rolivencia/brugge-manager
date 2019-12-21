@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
 import { RouteCard } from "@app/_models";
+import { RoutingPanel } from "@app/_interfaces/routing-panel.interface";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
 })
-export class RoutingPanelService {
-  private _routes: RouteCard[] = [
+export class RoutingPanelService implements RoutingPanel {
+  _routes: RouteCard[] = [
     {
       route: "dashboard/mobile/redeem-coupon",
       text: "Canje de cupones con scanner QR",
@@ -15,7 +17,7 @@ export class RoutingPanelService {
     },
     //  TODO: Descomentar y corregir cuando haya más módulos disponibles para gestión mobile.
     // {
-    //   route: "dashboard/mobile",
+    //   routeCard: "dashboard/mobile",
     //   text: "Ingresar para tareas de gestión desde el móvil",
     //   title: "📱 Gestión Móvil",
     //   visibility: "d-inline d-lg-none",
@@ -58,7 +60,7 @@ export class RoutingPanelService {
     }
   ];
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   get routes(): RouteCard[] {
     return this._routes;
@@ -66,5 +68,9 @@ export class RoutingPanelService {
 
   set routes(value: RouteCard[]) {
     this._routes = value;
+  }
+
+  navigate(routeCard: RouteCard) {
+    this.router.navigate([`/${routeCard.route}`]);
   }
 }
