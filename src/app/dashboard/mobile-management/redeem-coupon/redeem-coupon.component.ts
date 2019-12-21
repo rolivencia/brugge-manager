@@ -3,6 +3,7 @@ import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 import { GlobalService } from "@app/_services/global.service";
 import { CouponService } from "@app/_services/coupon.service";
 import { RedeemCouponService } from "@app/dashboard/mobile-management/redeem-coupon/redeem-coupon.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-redeem-coupon",
@@ -92,6 +93,7 @@ export class RedeemCouponComponent implements OnInit {
   checkCouponStatus(codeData) {
     this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+      .pipe(first())
       .subscribe(response => {
         this.redeemCouponService.couponStatusRetrieved = true;
         this.redeemCouponService.coupon = response["coupon"];
