@@ -52,7 +52,7 @@ async function getRedeemed(req, res, next) {
 
 async function getRedeemedByDate(req, res, next) {
   couponService
-    .getRedeemedByDate(req.params.date)
+    .getRedeemedByDate(req.params.dateFrom, req.params.dateTo)
     .then(response => {
       if (response) {
         res.json(response);

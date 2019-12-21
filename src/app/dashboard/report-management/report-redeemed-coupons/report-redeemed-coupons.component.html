@@ -1,6 +1,49 @@
 <div class="card h-100">
-  <div class="card-header d-flex justify-content-between">
-    <h5>Reporte: Cupones Canjeados</h5>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Reporte: Cupones Canjeados</h5>
+
+    <div class="row">
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              Desde:
+            </span>
+          </div>
+          <wj-input-date
+            class="form-control p-0"
+            format="dd/MM/yyyy"
+            [(value)]="dateFrom"
+            (valueChanged)="getGridData()"
+          >
+          </wj-input-date>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              Hasta:
+            </span>
+          </div>
+          <wj-input-date
+            class="form-control p-0"
+            format="dd/MM/yyyy"
+            [(value)]="dateTo"
+            (valueChanged)="getGridData()"
+          >
+          </wj-input-date>
+        </div>
+      </div>
+
+      <div class="col d-flex align-items-center justify-content-center">
+        <h6 class="mb-0">
+          {{ "Total canjes: " + reportRedeemedCouponsService.redeemed.length }}
+        </h6>
+      </div>
+    </div>
+
     <button
       class="btn btn-sm btn-outline-dark"
       (click)="reportRoutingPanelService.goBack()"

@@ -1,10 +1,10 @@
+import * as moment from "moment";
 import { Component, OnInit } from "@angular/core";
-import { ReportRoutingPanelService } from "@app/dashboard/report-management/report-routing-panel/report-routing-panel.service";
 import { CollectionView } from "wijmo/wijmo";
 import { CouponService } from "@app/_services/coupon.service";
-import { Moment } from "moment";
 import { ReportRedeemedCouponsService } from "@app/dashboard/report-management/report-redeemed-coupons/report-redeemed-coupons.service";
-import * as moment from "moment";
+import { ReportRoutingPanelService } from "@app/dashboard/report-management/report-routing-panel/report-routing-panel.service";
+import { first } from "rxjs/operators";
 
 @Component({
   selector: "app-report-redeemed-coupons",
@@ -34,8 +34,12 @@ export class ReportRedeemedCouponsComponent implements OnInit {
     }
   ];
 
-  dateFrom: Moment = moment();
-  dateTo: Moment = moment();
+  // Sólo usados para almacenar valores de los date input.
+  dateFrom: Date = new Date();
+  dateTo: Date = new Date();
+
+  // Variable semáforo, para evitar múltiples llamadas para traer reporte de canjes.
+  loadingGrid: boolean = false;
 
   constructor(
     public couponService: CouponService,
@@ -48,15 +52,20 @@ export class ReportRedeemedCouponsComponent implements OnInit {
   }
 
   getGridData() {
-    this.couponService
-      .getRedeemedInterval(this.dateFrom, this.dateTo)
-      .subscribe(redeemed => {
-        console.log(redeemed);
-        this.reportRedeemedCouponsService.redeemed = redeemed;
-        this.reportRedeemedCouponsService.gridCollection = new CollectionView(
-          redeemed
-        );
-        this.reportRedeemedCouponsService.gridCollection.currentItem = null;
-      });
+    if (!this.loadingGrid) {
+      this.loadingGrid = true;
+      this.couponService
+        .getRedeemedInterval(moment(this.dateFrom), moment(this.dateTo))
+        .pipe(first())
+        .subscribe(redeemed => {
+          console.log(redeemed);
+          this.loadingGrid = false;
+          this.reportRedeemedCouponsService.redeemed = redeemed;
+          this.reportRedeemedCouponsService.gridCollection = new CollectionView(
+            redeemed
+          );
+          this.reportRedeemedCouponsService.gridCollection.currentItem = null;
+        });
+    }
   }
 }

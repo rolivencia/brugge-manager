@@ -5,6 +5,7 @@ import { ReportRedeemedCouponsRoutingModule } from "@app/dashboard/report-manage
 import { ReportRedeemedCouponsService } from "@app/dashboard/report-management/report-redeemed-coupons/report-redeemed-coupons.service";
 import { WjGridModule } from "wijmo/wijmo.angular2.grid";
 import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
+import { WjInputModule } from "wijmo/wijmo.angular2.input";
 
 @NgModule({
   declarations: [ReportRedeemedCouponsComponent],
@@ -12,7 +13,8 @@ import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
     CommonModule,
     ReportRedeemedCouponsRoutingModule,
     WjGridFilterModule,
-    WjGridModule
+    WjGridModule,
+    WjInputModule
   ],
   providers: [ReportRedeemedCouponsService]
 })

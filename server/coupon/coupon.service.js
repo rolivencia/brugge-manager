@@ -418,11 +418,11 @@ async function update({
   );
 }
 
-async function getRedeemedByDate(date) {
-  const startingDate = moment(date)
+async function getRedeemedByDate(dateFrom, dateTo) {
+  const startingDate = moment(dateFrom)
     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
     .toDate();
-  const endingDate = moment(date)
+  const endingDate = moment(dateTo)
     .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
     .toDate();
 
