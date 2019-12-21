@@ -1,4 +1,4 @@
-<div class="card dashboard-card">
+<div class="card dashboard-card h-100">
   <div id="grid-container-header" class="card-header d-flex align-items-center">
     <div class="row w-100">
       <div class="col">
@@ -23,7 +23,13 @@
       [allowResizing]="'Columns'"
       [showSelectedHeaders]="'Row'"
       [isReadOnly]="true"
-      (updatedView)="adjustGridHeight()"
+      (updatedView)="
+        layoutService.adjustGridHeight(
+          'inner-container',
+          'grid-container-header',
+          'customer-grid'
+        )
+      "
       (selectionChanged)="getCustomerDetails(customersCollection.currentItem)"
     >
       <wj-flex-grid-filter></wj-flex-grid-filter>

@@ -38,7 +38,7 @@ body {
 #inner-container {
   //TODO: Usar algoritmo para establecer tamaño de tarjetas de forma similar a lo hecho en Visual MESA - PA.
   height: calc(100% - 74px);
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 

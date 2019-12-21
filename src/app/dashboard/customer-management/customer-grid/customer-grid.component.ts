@@ -6,6 +6,7 @@ import { Customer } from "@app/_models";
 import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
 import { CustomerService } from "@app/_services/customer.service";
 import { first, flatMap, tap } from "rxjs/operators";
+import { LayoutService } from "@app/_services/layout.service";
 
 @Component({
   selector: "app-customer-grid",
@@ -27,7 +28,8 @@ export class CustomerGridComponent implements OnInit {
   constructor(
     private couponService: CouponService,
     private customerService: CustomerService,
-    private customerManagementService: CustomerManagementService
+    private customerManagementService: CustomerManagementService,
+    public layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -74,25 +76,5 @@ export class CustomerGridComponent implements OnInit {
     customerO.pipe(flatMap(() => redeemedCouponsO)).subscribe(response => {
       console.log(response);
     });
-  }
-
-  /**
-   * Ajusta la altura de la grid en base al tamaño del layout de fondo, sin contar el headerbar
-   */
-  adjustGridHeight() {
-    const layoutContainer: HTMLElement = document.getElementById(
-      "inner-container"
-    );
-    const headerContainerElement: HTMLElement = document.getElementById(
-      "grid-container-header"
-    );
-    const gridElement: HTMLElement = document.getElementById("customer-grid");
-    const padding = 20; // in pixels
-
-    gridElement.style.height =
-      layoutContainer.offsetHeight -
-      2 * padding -
-      headerContainerElement.offsetHeight +
-      "px";
   }
 }

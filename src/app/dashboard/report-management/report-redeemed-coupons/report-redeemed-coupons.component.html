@@ -1,5 +1,8 @@
 <div class="card h-100">
-  <div class="card-header d-flex justify-content-between align-items-center">
+  <div
+    id="grid-container-header"
+    class="card-header d-flex justify-content-between align-items-center"
+  >
     <h5 class="mb-0">Reporte: Cupones Canjeados</h5>
 
     <div class="row">
@@ -54,6 +57,7 @@
   <div class="card-body">
     <wj-flex-grid
       *ngIf="reportRedeemedCouponsService.gridCollection"
+      id="redeemed-coupons-report-grid"
       [itemsSource]="reportRedeemedCouponsService.gridCollection"
       [selectionMode]="'Row'"
       [headersVisibility]="'Column'"
@@ -61,6 +65,13 @@
       [allowResizing]="'Columns'"
       [showSelectedHeaders]="'Row'"
       [isReadOnly]="true"
+      (updatedView)="
+        layoutService.adjustGridHeight(
+          'inner-container',
+          'grid-container-header',
+          'redeemed-coupons-report-grid'
+        )
+      "
     >
       <wj-flex-grid-filter></wj-flex-grid-filter>
       <wj-flex-grid-column

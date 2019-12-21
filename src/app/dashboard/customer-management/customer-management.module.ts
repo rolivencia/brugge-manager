@@ -8,6 +8,7 @@ import { CustomerViewComponent } from "./customer-view/customer-view.component";
 import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
 import { WjGridModule } from "wijmo/wijmo.angular2.grid";
 import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
+import { LayoutService } from "@app/_services/layout.service";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,6 @@ import { WjGridFilterModule } from "wijmo/wijmo.angular2.grid.filter";
     WjGridFilterModule,
     WjGridModule
   ],
-  providers: [CustomerManagementService]
+  providers: [CustomerManagementService, LayoutService]
 })
 export class CustomerManagementModule {}

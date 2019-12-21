@@ -5,6 +5,7 @@ import { CouponService } from "@app/_services/coupon.service";
 import { ReportRedeemedCouponsService } from "@app/dashboard/report-management/report-redeemed-coupons/report-redeemed-coupons.service";
 import { ReportRoutingPanelService } from "@app/dashboard/report-management/report-routing-panel/report-routing-panel.service";
 import { first } from "rxjs/operators";
+import { LayoutService } from "@app/_services/layout.service";
 
 @Component({
   selector: "app-report-redeemed-coupons",
@@ -27,7 +28,7 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       id: "customer"
     },
     {
-      header: "Fecha de Canje",
+      header: "Fecha y Hora de Canje",
       binding: "createdAt",
       width: 250,
       id: "createdAt"
@@ -43,6 +44,7 @@ export class ReportRedeemedCouponsComponent implements OnInit {
 
   constructor(
     public couponService: CouponService,
+    public layoutService: LayoutService,
     public reportRedeemedCouponsService: ReportRedeemedCouponsService,
     public reportRoutingPanelService: ReportRoutingPanelService
   ) {}

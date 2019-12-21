@@ -154,6 +154,14 @@ export class CouponService {
       .get<any>(
         `${environment.apiUrl}/coupon/getRedeemedByDate/${dateFromISO}/${dateToISO}`
       )
-      .pipe(first());
+      .pipe(first())
+      .pipe(
+        map(redemptions =>
+          redemptions.map(redemption => ({
+            ...redemption,
+            createdAt: moment(redemption.startsAt).format("DD-MM-YYYY - HH:mm")
+          }))
+        )
+      );
   };
 }
