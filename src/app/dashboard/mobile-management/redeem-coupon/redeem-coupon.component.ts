@@ -91,6 +91,7 @@ export class RedeemCouponComponent implements OnInit {
   }
 
   checkCouponStatus(codeData) {
+    this.scannerIsActive = false;
     this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
       .pipe(first())
@@ -103,8 +104,6 @@ export class RedeemCouponComponent implements OnInit {
         this.redeemCouponService.pickStatusMessage(
           this.redeemCouponService.couponStatus
         );
-
-        this.scannerIsActive = false;
 
         if (this.redeemCouponService.canRedeem()) {
           this.redeemCoupon(codeData.idCoupon, codeData.idCustomer);
