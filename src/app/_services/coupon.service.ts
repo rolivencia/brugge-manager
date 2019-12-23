@@ -159,7 +159,7 @@ export class CouponService {
         map(redemptions =>
           redemptions.map(redemption => ({
             ...redemption,
-            createdAt: moment(redemption.createdAt).format("DD-MM-YYYY - HH:mm")
+            createdAt: moment(redemption.createdAt).format("DD/MM/YYYY HH:mm")
           }))
         )
       );
