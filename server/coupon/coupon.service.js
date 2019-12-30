@@ -419,11 +419,14 @@ async function update({
 }
 
 async function getRedeemedByDate(dateFrom, dateTo) {
+  // Las fechas abarcan desde el mediodía del día seleccionado hasta el mediodía del día siguiente,
+  // reflejando una jornada de trabajo del bar en vez de una fecha de calendario
   const startingDate = moment(dateFrom)
-    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+    .set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
     .toDate();
   const endingDate = moment(dateTo)
-    .set({ hour: 23, minute: 59, second: 59, millisecond: 999 })
+    .set({ hour: 11, minute: 59, second: 59, millisecond: 999 })
+    .add(1, "day")
     .toDate();
 
   return CustomerCoupon().findAll({

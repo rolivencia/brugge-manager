@@ -15,7 +15,8 @@
     "paths": {
       "@app/*": ["app/*"],
       "@assets/*": ["app/assets/*"],
-      "@environments/*": ["environments/*"]
+      "@environments/*": ["environments/*"],
+      "jszip": ["../node_modules/jszip/dist/jszip.js"]
     }
   }
 }

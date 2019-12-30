@@ -47,8 +47,12 @@
       </div>
     </div>
 
+    <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
+      💾 Exportar
+    </button>
+
     <button
-      class="btn btn-sm btn-outline-dark"
+      class="ml-2 btn btn-sm btn-outline-dark"
       (click)="reportRoutingPanelService.goBack()"
     >
       ⬅️ Volver
@@ -57,6 +61,7 @@
   <div class="card-body">
     <wj-flex-grid
       *ngIf="reportRedeemedCouponsService.gridCollection"
+      #redeemedCouponsReportGrid
       id="redeemed-coupons-report-grid"
       [itemsSource]="reportRedeemedCouponsService.gridCollection"
       [selectionMode]="'Row'"
