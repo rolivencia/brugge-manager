@@ -324,7 +324,8 @@ async function create({
   idType,
   idUser,
   code,
-  imageUrl
+  imageUrl,
+  dailyCoupon
 }) {
   return Coupon().create({
     title: title,
@@ -333,6 +334,7 @@ async function create({
     description: description,
     code: code,
     imageUrl: imageUrl,
+    dailyCoupon: dailyCoupon,
     idUser: idUser,
     idType: idType
   });
@@ -371,6 +373,7 @@ async function getAll(expired, deleted) {
       startsAt: coupon.startsAt,
       endsAt: coupon.endsAt,
       imageUrl: coupon.imageUrl,
+      dailyCoupon: coupon.dailyCoupon,
       type: coupon.type,
       user: coupon.user,
       audit: {
@@ -391,17 +394,15 @@ async function getAll(expired, deleted) {
 
 async function update({
   id,
-
   title,
-
   description,
   startsAt,
-
   endsAt,
   idType,
   idUser,
   code,
-  imageUrl
+  imageUrl,
+  dailyCoupon
 }) {
   return Coupon().update(
     {
@@ -412,7 +413,8 @@ async function update({
       idType: idType,
       idUser: idUser,
       code: code,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      dailyCoupon: dailyCoupon
     },
     { where: { id: id } }
   );

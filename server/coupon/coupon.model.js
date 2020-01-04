@@ -51,6 +51,12 @@ Coupon.init(
       allowNull: false,
       field: "image_url"
     },
+    dailyCoupon: {
+      type: Sequelize.BOOLEAN,
+      unique: false,
+      allowNull: false,
+      field: "daily_coupon"
+    },
     createdAt: {
       type: Sequelize.DATE,
       field: "created_at"

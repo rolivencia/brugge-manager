@@ -115,6 +115,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
         type: [this.coupon.type, Validators.required],
         code: [this.coupon.code, Validators.required],
         imageUrl: [this.coupon.imageUrl, Validators.required],
+        dailyCoupon: [this.coupon.dailyCoupon, Validators.required],
         user: [this.coupon.user, Validators.required]
       });
 
@@ -137,6 +138,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
       this.coupon.title = "";
       this.coupon.description = "";
       this.coupon.imageUrl = "";
+      this.coupon.dailyCoupon = true;
 
       this.couponForm = this.formBuilder.group({
         id: [null],
@@ -147,6 +149,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
         type: [this.coupon.type, Validators.required],
         code: [this.coupon.code, Validators.required],
         imageUrl: [this.coupon.imageUrl, Validators.required],
+        dailyCoupon: [this.coupon.dailyCoupon, Validators.required],
         user: [this.coupon.user, Validators.required]
       });
 
@@ -179,6 +182,7 @@ export class CouponAddComponent implements OnInit, AfterViewInit {
     this.coupon.type = this.couponForm.controls["type"].value;
     this.coupon.code = this.couponForm.controls["code"].value;
     this.coupon.imageUrl = this.couponForm.controls["imageUrl"].value;
+    this.coupon.dailyCoupon = this.couponForm.controls["dailyCoupon"].value;
     this.coupon.user = this.couponForm.controls["user"].value;
 
     if (this.edit) {

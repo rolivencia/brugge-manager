@@ -11,6 +11,7 @@ export class Coupon {
   type: CouponType;
   code: string;
   imageUrl: string;
+  dailyCoupon: boolean;
   audit: Audit;
   user: User;
 

@@ -33,7 +33,8 @@ export class CouponService {
       idType: coupon.type.id,
       idUser: coupon.user.id,
       code: coupon.code,
-      imageUrl: coupon.imageUrl
+      imageUrl: coupon.imageUrl,
+      dailyCoupon: coupon.dailyCoupon
     };
 
     return this.http.post<any>(`${environment.apiUrl}/coupon/create`, {
@@ -114,7 +115,8 @@ export class CouponService {
       idType: coupon.type.id,
       idUser: coupon.user.id,
       code: coupon.code,
-      imageUrl: coupon.imageUrl
+      imageUrl: coupon.imageUrl,
+      dailyCoupon: coupon.dailyCoupon
     };
 
     return this.http.put(`${environment.apiUrl}/coupon/update/`, {
