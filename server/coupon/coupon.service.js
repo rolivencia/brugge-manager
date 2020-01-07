@@ -10,6 +10,8 @@ const CouponType = require("./coupon-type.model");
 const Customer = require("../customer/customer.model");
 const CustomerCoupon = require("../customer/customer-coupon.model");
 
+const CouponHelpers = require("./coupon.helpers");
+
 // Constantes para definir las distintas lógicas de negocio para cada tipo de cupón
 const ONE_TIME = 1;
 const MULTIPLE_DIFFERENT_DAYS = 2;
@@ -30,6 +32,13 @@ module.exports = {
   update
 };
 
+/**
+ * Obtiene todos los cupones canjeados por un cliente. Soporta paginación.
+ * @param idCustomer
+ * @param limit
+ * @param offset
+ * @returns {Promise<CustomerCoupon[]>}
+ */
 async function getRedeemed(idCustomer, limit, offset) {
   limit = limit ? parseInt(limit) : 25;
   offset = offset ? parseInt(offset) : 0;
@@ -127,6 +136,12 @@ async function status(idCoupon, idCustomer) {
   });
 }
 
+/**
+ * Redime (canjea) un cupón determinado para un cliente determinado, en base a sus respectivos ids
+ * @param idCoupon
+ * @param idCustomer
+ * @returns {Promise}
+ */
 async function redeem({ idCoupon, idCustomer }) {
   const redeemed = await CustomerCoupon().create({
     idCoupon: idCoupon,
@@ -146,6 +161,12 @@ async function redeem({ idCoupon, idCustomer }) {
   });
 }
 
+/**
+ * Devuelve información acerca de si un cupón determinado es o no canjeable para un determinado cliente
+ * @param coupon
+ * @param redeemedCoupons
+ * @returns {{canRedeem: boolean, status: string}}
+ */
 function canRedeem(coupon, redeemedCoupons) {
   //Strings de status posibles: 'can-redeem', 'redeemed', 'expired'
 
@@ -260,6 +281,11 @@ const redeemedToday = redemption => {
   return today.isSame(redeemedDate, "day");
 };
 
+/**
+ * Obtiene un cupón en base a su id
+ * @param id
+ * @returns {Promise}
+ */
 async function get(id) {
   const retrievedCoupon = await Coupon().findOne({
     include: [
@@ -299,10 +325,19 @@ async function get(id) {
   });
 }
 
+/**
+ * Elimina lógicamente un cupón en base a su id
+ * @param id
+ * @returns {Promise<Promise<[number, Coupon[]]>>}
+ */
 async function remove(id) {
   return Coupon().update({ deleted: 1 }, { where: { id: id } });
 }
 
+/**
+ * Obtiene los cupones vigentes (no expirados ni eliminados)
+ * @returns {Promise<Promise<Coupon[]>>}
+ */
 async function getCurrent() {
   return Coupon().findAll({
     where: {
@@ -316,6 +351,19 @@ async function getCurrent() {
   });
 }
 
+/**
+ * Añade un nuevo cupón al sistema
+ * @param title
+ * @param description
+ * @param startsAt
+ * @param endsAt
+ * @param idType
+ * @param idUser
+ * @param code
+ * @param imageUrl
+ * @param dailyCoupon
+ * @returns {Promise<Promise<Coupon>>}
+ */
 async function create({
   title,
   description,
@@ -340,6 +388,13 @@ async function create({
   });
 }
 
+/**
+ * Obtiene todos los cupones disponibles en el sistema. Los parámetros "expired" y "deleted" determinan si también son
+ * devueltos los cupones expirados o eliminados, respectivamente
+ * @param expired
+ * @param deleted
+ * @returns {Promise}
+ */
 async function getAll(expired, deleted) {
   const result = await Coupon().findAll({
     where: {
@@ -392,6 +447,20 @@ async function getAll(expired, deleted) {
   });
 }
 
+/**
+ * Actualiza un cupón con los datos pasados como parámetro, en base a su id
+ * @param id
+ * @param title
+ * @param description
+ * @param startsAt
+ * @param endsAt
+ * @param idType
+ * @param idUser
+ * @param code
+ * @param imageUrl
+ * @param dailyCoupon
+ * @returns {Promise<Promise<[number, Coupon[]]>>}
+ */
 async function update({
   id,
   title,
@@ -420,16 +489,16 @@ async function update({
   );
 }
 
+/**
+ * Permite obtener los datos de canje de cupones entre las fechas determinadas en los parámetros
+ * @param dateFrom - Date
+ * @param dateTo - Date
+ * @returns {Promise<Promise<CustomerCoupon[]>>}
+ */
 async function getRedeemedByDate(dateFrom, dateTo) {
-  // Las fechas abarcan desde el mediodía del día seleccionado hasta el mediodía del día siguiente,
-  // reflejando una jornada de trabajo del bar en vez de una fecha de calendario
-  const startingDate = moment(dateFrom)
-    .set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
-    .toDate();
-  const endingDate = moment(dateTo)
-    .set({ hour: 11, minute: 59, second: 59, millisecond: 999 })
-    .add(1, "day")
-    .toDate();
+  const workdayInterval = CouponHelpers.getWorkdayInterval(dateFrom, dateTo);
+  const startingDate = workdayInterval.startingDate;
+  const endingDate = workdayInterval.endingDate;
 
   return CustomerCoupon().findAll({
     where: {

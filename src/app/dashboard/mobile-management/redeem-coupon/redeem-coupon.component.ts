@@ -68,8 +68,9 @@ export class RedeemCouponComponent implements OnInit {
   onScanTest() {
     this.redeemCouponService.cleanScannedCode();
     const codeData = { idCoupon: 44, idCustomer: 7 };
-    const subscription = this.couponService
+    this.couponService
       .getCouponStatus(codeData.idCoupon, codeData.idCustomer)
+      .pipe(first())
       .subscribe(response => {
         this.redeemCouponService.couponStatusRetrieved = true;
         this.redeemCouponService.coupon = response["coupon"];
