@@ -54,10 +54,8 @@ async function getRedeemed(idCustomer, limit, offset) {
 }
 
 /**
- * Obtiene los cupones vigentes (que aún no han expirado) y que el cliente puede canjear
+ * Obtiene los cupones canjeados por el cliente que están actualmente vigentes.
  * @param idCustomer
- * @param limit
- * @param offset
  * @returns {Promise<CustomerCoupon[]>}
  */
 async function getCurrentRedeemed(idCustomer) {
