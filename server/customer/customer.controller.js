@@ -81,6 +81,24 @@ function getByEmail(req, res, next) {
 function getAll(req, res, next) {
   customerService
     .getAll()
-    .then(customers => res.json(customers))
+    .then(customers => {
+      if (customers) {
+        res.json(
+          customers.map(customer => ({
+            id: customer.id,
+            firstName: customer.firstName,
+            lastName: customer.lastName,
+            email: customer.email,
+            uidFirebase: customer.uidFirebase,
+            audit: {
+              createdAt: customer.createdAt,
+              updatedAt: customer.updatedAt,
+              enabled: customer.enabled,
+              deleted: customer.deleted
+            }
+          }))
+        );
+      }
+    })
     .catch(err => next(err));
 }
