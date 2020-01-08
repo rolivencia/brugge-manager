@@ -42,8 +42,12 @@ export class ReportRedeemedCouponsComponent implements OnInit {
   ];
 
   // Sólo usados para almacenar valores de los date input.
-  dateFrom: Date = new Date();
-  dateTo: Date = new Date();
+  dateFrom: Date = moment()
+    .subtract(1, "day")
+    .toDate();
+  dateTo: Date = moment()
+    .subtract(1, "day")
+    .toDate();
 
   // Variable semáforo, para evitar múltiples llamadas para traer reporte de canjes.
   loadingGrid: boolean = false;
