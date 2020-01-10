@@ -96,7 +96,33 @@ async function status(idCoupon, idCustomer) {
   const customerData = await Customer().findOne({ where: { id: idCustomer } });
 
   const redeemedCoupons = await CustomerCoupon().findAndCountAll({
-    where: { idCoupon: idCoupon, idCustomer: idCustomer }
+    include: [
+      {
+        as: "coupon",
+        model: Coupon(),
+        attributes: ["id", "title", "dailyCoupon"],
+        include: [
+          { as: "type", model: CouponType(), attributes: ["id", "description"] }
+        ]
+      },
+      {
+        as: "customer",
+        model: Customer(),
+        attributes: [
+          "id",
+          [
+            Sequelize.fn(
+              "CONCAT",
+              Sequelize.col("first_name"),
+              " ",
+              Sequelize.col("last_name")
+            ),
+            "fullName"
+          ]
+        ]
+      }
+    ],
+    where: { idCustomer: idCustomer }
   });
 
   return new Promise((resolve, reject) => {
@@ -166,32 +192,93 @@ async function redeem({ idCoupon, idCustomer }) {
  * @returns {{canRedeem: boolean, status: string}}
  */
 function canRedeem(coupon, redeemedCoupons) {
+  //TODO: Incluir el caso para happy hour
   //Strings de status posibles: 'can-redeem', 'redeemed', 'expired'
 
+  // Si el cupón está expirado
   if (isExpired(coupon) || coupon.audit.deleted) {
     return { canRedeem: false, status: "expired" };
   }
 
+  // Cupones de canje diario - Valida si hay otras redenciones de "cupones diarios" en la jornada de trabajo.
+  // Validación anterior al canje en distintos días y del de canje único, dado el orden de prioridad.
+  // (ambos tipos de cupones, indistintamente, pueden tener la restricción de "canje diario")
+  if (coupon.dailyCoupon) {
+    const dailyRedeemedTodayCount = redeemedTodayList(
+      redeemedCoupons.rows
+    ).filter(
+      redeemedCoupon =>
+        redeemedCoupon.coupon.dailyCoupon &&
+        coupon.id !== redeemedCoupon.coupon.id
+    ).length;
+
+    if (dailyRedeemedTodayCount > 0) {
+      return { canRedeem: false, status: "redeemed-other-daily" };
+    }
+  }
+
   // Primer canje de cualquier tipo
-  if (redeemedCoupons.count === 0) {
+  if (!_hasBeenRedeemed(coupon, redeemedCoupons)) {
     return { canRedeem: true, status: "can-redeem" };
   }
 
   // Canje único - Cupón ya canjeado
-  if (coupon.type.id === ONE_TIME && redeemedCoupons.count !== 0) {
+  if (
+    coupon.type.id === ONE_TIME &&
+    _hasBeenRedeemed(coupon, redeemedCoupons)
+  ) {
     return { canRedeem: false, status: "redeemed" };
   }
 
   // Canje múltiple - distintos días
   if (
     coupon.type.id === MULTIPLE_DIFFERENT_DAYS &&
-    !redeemedTodayList(coupon, redeemedCoupons)
+    !_hasBeenRedeemedToday(coupon, redeemedCoupons)
   ) {
     return { canRedeem: true, status: "can-redeem" };
+  } else if (
+    coupon.type.id === MULTIPLE_DIFFERENT_DAYS &&
+    !_hasBeenRedeemedToday(coupon, redeemedCoupons)
+  ) {
+    //TODO: Customizar el mensaje para el caso de canjes múltiples en distintos días
+    return { canRedeem: false, status: "redeemed" };
   }
-
   // Default -> Ya canjeado
   return { canRedeem: false, status: "redeemed" };
+}
+
+/**
+ * Determina si, en algún momento, un cupón ha sido redimido
+ * @param couponToCheck
+ * @param redeemedCoupons
+ * @returns {boolean}
+ * @private
+ */
+const _hasBeenRedeemed = (couponToCheck, redeemedCoupons) => {
+  return (
+    redeemedCoupons.rows.filter(
+      coupon => couponToCheck.id === coupon.dataValues.idCoupon
+    ).length > 0
+  );
+};
+
+/**
+ * Devuelve un boolean que especifica si una lista de redenciones de cupones
+ * tiene alguna redención durante la jornada de hoy.
+ * @param couponToCheck
+ * @param redeemedCoupons
+ * @returns {boolean}
+ */
+function _hasBeenRedeemedToday(couponToCheck, redeemedCoupons) {
+  const couponRedeemed = _hasBeenRedeemed(couponToCheck, redeemedCoupons);
+  return (
+    couponRedeemed &&
+    redeemedCoupons.rows.filter(
+      coupon =>
+        couponToCheck.id === coupon.dataValues.idCoupon &&
+        CouponHelpers.dateInCurrentWorkday(coupon.dataValues.createdAt)
+    ).length !== 0
+  );
 }
 
 /**
@@ -212,9 +299,10 @@ async function getRedeemable(idCustomer) {
   const redeemedMultipleTimes = currentRedeemed.filter(
     redemption =>
       redemption.coupon.idType === MULTIPLE_DIFFERENT_DAYS &&
-      redeemedToday(redemption)
+      CouponHelpers.redeemedToday(redemption)
   );
 
+  // TODO: Discriminar cupones diarios ya canjeados, para mostrar al cliente.
   let redeemableCoupons = [];
   const validRedemptions = redeemedOneTime.concat(redeemedMultipleTimes);
 
@@ -254,29 +342,40 @@ async function getRedeemable(idCustomer) {
   });
 }
 
+/**
+ * Determina si un cupón dado está expirado (su fecha de validez excede a la actual).
+ * @param coupon
+ * @returns {boolean}
+ */
 function isExpired(coupon) {
   const currentDate = moment();
   const expirationDate = moment(coupon.endsAt);
   return currentDate.isAfter(expirationDate);
 }
 
-function redeemedTodayList(coupon, redeemedCoupons) {
-  const today = moment();
-  const redeemedDates = redeemedCoupons.rows
-    ? redeemedCoupons.rows.map(redemption => moment(redemption.createdAt))
-    : redeemedCoupons.map(redemption => moment(redemption.createdAt));
-  console.log(redeemedDates);
-  return (
-    redeemedDates.filter(redeemedDate => today.isSame(redeemedDate, "day"))
-      .length !== 0
+/**
+ * Filtra, en base a la lista de redención de cupones pasada como parámetro,
+ * cuáles de esas redenciones fueron hechas durante la actual jornada de trabajo
+ * @param redeemedCoupons
+ * @returns {CustomerCoupon[]}
+ */
+function redeemedTodayList(redeemedCoupons) {
+  return redeemedCoupons.filter(redeemedCoupon =>
+    CouponHelpers.dateInCurrentWorkday(redeemedCoupon.dataValues.createdAt)
   );
 }
 
-// TODO: Considerar diferencia horaria posible entre canjes al pasar la medianoche
-const redeemedToday = redemption => {
-  const today = moment();
-  const redeemedDate = moment(redemption.createdAt);
-  return today.isSame(redeemedDate, "day");
+/**
+ * Mapea la lista de redenciones pasada como parámetro a una lista con sólo las fechas
+ * de estas redenciones, en formato date nativo
+ * @param redeemedCoupons
+ * @returns {Date[]}
+ * @private
+ */
+const _mapRedemptionDates = redeemedCoupons => {
+  return redeemedCoupons.rows
+    ? redeemedCoupons.rows.map(redemption => redemption.createdAt)
+    : redeemedCoupons.map(redemption => redemption.createdAt);
 };
 
 /**

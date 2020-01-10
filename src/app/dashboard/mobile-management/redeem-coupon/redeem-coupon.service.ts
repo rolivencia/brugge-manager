@@ -5,7 +5,12 @@ import { Coupon, Customer } from "@app/_models";
   providedIn: "root"
 })
 export class RedeemCouponService {
-  public invalidStatuses = ["error", "expired", "redeemed"];
+  public invalidStatuses = [
+    "error",
+    "expired",
+    "redeemed",
+    "redeemed-other-daily"
+  ];
   public customer: Customer;
   public coupon: Coupon;
 
@@ -14,6 +19,7 @@ export class RedeemCouponService {
   public alreadyRedeemed: boolean = false;
   public alreadyExpired: boolean = false;
   public notValid: boolean = false;
+  public otherDailyRedeemed: boolean = false;
 
   public couponStatusRetrieved: any = false;
 
@@ -34,6 +40,9 @@ export class RedeemCouponService {
       case "can-redeem":
         this.setRedeemableStatus();
         break;
+      case "redeemed-other-daily":
+        this.setOtherDailyRedeemedStatus();
+        break;
       case "error":
       default:
         this.setInvalidStatus();
@@ -45,28 +54,44 @@ export class RedeemCouponService {
     this.alreadyExpired = false;
     this.alreadyRedeemed = true;
     this.notValid = false;
+    this.otherDailyRedeemed = false;
   }
 
   setExpiredStatus(showAlert?) {
     this.alreadyExpired = true;
     this.alreadyRedeemed = false;
     this.notValid = false;
+    this.otherDailyRedeemed = false;
   }
 
   setRedeemableStatus(showAlert?) {
     this.alreadyExpired = false;
     this.alreadyRedeemed = false;
     this.notValid = false;
+    this.otherDailyRedeemed = false;
+  }
+
+  setOtherDailyRedeemedStatus(showAlert?) {
+    this.alreadyExpired = false;
+    this.alreadyRedeemed = false;
+    this.notValid = false;
+    this.otherDailyRedeemed = true;
   }
 
   setInvalidStatus(showAlert?) {
     this.alreadyExpired = false;
     this.alreadyRedeemed = false;
     this.notValid = true;
+    this.otherDailyRedeemed = false;
   }
 
   canRedeem(): boolean {
-    return !this.alreadyExpired && !this.alreadyRedeemed && !this.notValid;
+    return (
+      !this.alreadyExpired &&
+      !this.alreadyRedeemed &&
+      !this.notValid &&
+      !this.otherDailyRedeemed
+    );
   }
 
   cleanScannedCode() {
@@ -77,6 +102,7 @@ export class RedeemCouponService {
     this.alreadyRedeemed = false;
     this.alreadyExpired = false;
     this.notValid = false;
+    this.otherDailyRedeemed = false;
     // TODO: Arreglar y hacer programático. Mover a alertService.
     document.getElementById("main-container").style.backgroundColor = "#7b6655";
 

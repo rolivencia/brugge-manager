@@ -196,6 +196,9 @@
     <h2 *ngIf="redeemCouponService.alreadyRedeemed">
       El cliente ya ha canjeado este cupón.
     </h2>
+    <h2 *ngIf="redeemCouponService.otherDailyRedeemed">
+      Otro cupón diario ya ha sido canjeado por el cliente.
+    </h2>
     <h6>(Esta alerta desaparece en 5 segundos)</h6>
   </div>
 </div>

@@ -56,6 +56,12 @@ const getWorkdayInterval = (dateFrom, dateTo) => {
   };
 };
 
+/**
+ * Devuelve un boolean que indica si la fecha pasada como parámetro está comprendida
+ * o no en la actual jornada de trabajo
+ * @param date
+ * @returns {boolean}
+ */
 const dateInCurrentWorkday = date => {
   const dateAsMoment = moment(date);
   const today = new Date();
@@ -69,8 +75,20 @@ const dateInCurrentWorkday = date => {
   );
 };
 
+/**
+ * Valida si la fecha de redención de un cupón determinado está comprendida o no
+ * dentro de la jornada de trabajo actual.
+ * @param redemption
+ * @returns {boolean}
+ */
+const redeemedToday = redemption => {
+  const redeemedDate = moment(redemption.createdAt);
+  return dateInCurrentWorkday(redeemedDate);
+};
+
 module.exports = {
   dateInCurrentWorkday,
   getWorkday,
-  getWorkdayInterval
+  getWorkdayInterval,
+  redeemedToday
 };

@@ -5,6 +5,9 @@ const mysql = require("mysql2");
 const database = environment.serverConfig.databases.mysql.databases
   .filter(db => db.id === "brugge")
   .pop();
+// TODO: Cambiar estas sentencias en base al environment actual, usando dotenv
+// .filter(db => db.id === "brugge-dev")
+// .pop();
 
 const mySqlConnection = mysql.createConnection({
   host: database.host,
