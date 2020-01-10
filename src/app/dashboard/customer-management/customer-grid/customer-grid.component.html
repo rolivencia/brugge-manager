@@ -10,10 +10,16 @@
           {{ customersCollection.itemCount }}
         </div>
       </div>
+      <div class="col text-right">
+        <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
+          💾 Exportar
+        </button>
+      </div>
     </div>
   </div>
   <div id="grid-container" class="card-body">
     <wj-flex-grid
+      #customerGrid
       id="customer-grid"
       *ngIf="customersCollection"
       [itemsSource]="customersCollection"

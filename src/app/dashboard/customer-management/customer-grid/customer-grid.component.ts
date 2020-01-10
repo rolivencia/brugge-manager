@@ -1,12 +1,14 @@
 import * as moment from "moment";
+import * as wjcGridXlsx from "wijmo/wijmo.grid.xlsx";
 import { CollectionView, SortDescription } from "wijmo/wijmo";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CouponService } from "@app/_services/coupon.service";
 import { Customer } from "@app/_models";
 import { CustomerManagementService } from "@app/dashboard/customer-management/customer-management.service";
 import { CustomerService } from "@app/_services/customer.service";
-import { first, flatMap, map, tap } from "rxjs/operators";
+import { first, flatMap, tap } from "rxjs/operators";
 import { LayoutService } from "@app/_services/layout.service";
+import { WjFlexGrid } from "wijmo/wijmo.angular2.grid";
 
 @Component({
   selector: "app-customer-grid",
@@ -18,6 +20,8 @@ import { LayoutService } from "@app/_services/layout.service";
 })
 export class CustomerGridComponent implements OnInit {
   public customersCollection: CollectionView = new CollectionView();
+  @ViewChild("customerGrid", { static: false })
+  customerGrid: WjFlexGrid;
 
   columns: any[] = [
     { header: "Nombre", binding: "firstName", width: 160, id: "firstName" },
@@ -94,5 +98,13 @@ export class CustomerGridComponent implements OnInit {
     customerO.pipe(flatMap(() => redeemedCouponsO)).subscribe(response => {
       console.log(response);
     });
+  }
+
+  exportToXls() {
+    wjcGridXlsx.FlexGridXlsxConverter.save(
+      this.customerGrid,
+      { includeColumnHeaders: true, includeCellStyles: false },
+      "BRUGGE - Listado de clientes registrados"
+    );
   }
 }

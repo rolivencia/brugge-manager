@@ -8,7 +8,6 @@ import { first } from "rxjs/operators";
 import { LayoutService } from "@app/_services/layout.service";
 import { WjFlexGrid } from "wijmo/wijmo.angular2.grid";
 import * as wjcGridXlsx from "wijmo/wijmo.grid.xlsx";
-import * as JSZip from "jszip";
 
 @Component({
   selector: "app-report-redeemed-coupons",
