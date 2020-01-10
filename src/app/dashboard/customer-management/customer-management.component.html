@@ -1,8 +1,14 @@
 <div class="row">
-  <div class="col-12" *ngIf="customerManagementService.showTopOutlet" >
+  <div class="col-12" *ngIf="customerManagementService.showTopOutlet">
     <router-outlet name="top-outlet"></router-outlet>
   </div>
-  <div class="col-8" *ngIf="customerManagementService.showLeftOutlet">
+  <div
+    *ngIf="customerManagementService.showLeftOutlet"
+    [ngClass]="{
+      'col-12': !customerManagementService.showRightOutlet,
+      'col-8': customerManagementService.showRightOutlet
+    }"
+  >
     <router-outlet name="left-outlet"></router-outlet>
   </div>
   <div class="col-4" *ngIf="customerManagementService.showRightOutlet">

@@ -1,20 +1,21 @@
 <div class="card dashboard-card h-100">
-  <div id="grid-container-header" class="card-header d-flex align-items-center">
-    <div class="row w-100">
-      <div class="col">
-        <h5 class="mb-0">Grilla de clientes</h5>
-      </div>
-      <div class="col">
-        <div>
-          <strong>Clientes registrados:</strong>
-          {{ customersCollection.itemCount }}
-        </div>
-      </div>
-      <div class="col text-right">
-        <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
-          💾 Exportar
-        </button>
-      </div>
+  <div
+    id="grid-container-header"
+    class="card-header d-flex align-items-center justify-content-between"
+  >
+    <h5 class="mb-0">Grilla de clientes</h5>
+    <div>
+      <strong>Clientes registrados:</strong>
+      {{ customersCollection.itemCount }}
+    </div>
+    <div>
+      <button class="btn btn-sm btn-outline-dark" (click)="toggleLeftPanel()">
+        🔎 Ver canjes
+      </button>
+
+      <button class="btn btn-sm btn-outline-dark ml-3" (click)="exportToXls()">
+        💾 Exportar
+      </button>
     </div>
   </div>
   <div id="grid-container" class="card-body">

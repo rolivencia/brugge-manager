@@ -24,9 +24,9 @@ export class CustomerGridComponent implements OnInit {
   customerGrid: WjFlexGrid;
 
   columns: any[] = [
-    { header: "Nombre", binding: "firstName", width: 160, id: "firstName" },
-    { header: "Apellido", binding: "lastName", width: 160, id: "firstName" },
-    { header: "Teléfono", binding: "email", width: 130, id: "email" },
+    { header: "Nombre", binding: "firstName", width: "*", id: "firstName" },
+    { header: "Apellido", binding: "lastName", width: "*", id: "firstName" },
+    { header: "Teléfono", binding: "email", width: "*", id: "email" },
     {
       header: "Fecha de Alta",
       binding: "audit.createdAt",
@@ -106,5 +106,10 @@ export class CustomerGridComponent implements OnInit {
       { includeColumnHeaders: true, includeCellStyles: false },
       "BRUGGE - Listado de clientes registrados"
     );
+  }
+
+  toggleLeftPanel() {
+    this.customerManagementService.showRightOutlet = !this
+      .customerManagementService.showRightOutlet;
   }
 }

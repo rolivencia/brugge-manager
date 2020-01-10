@@ -8,7 +8,7 @@ import { CustomerService } from "@app/_services/customer.service";
 export class CustomerManagementService {
   showTopOutlet: boolean = false;
   showLeftOutlet: boolean = true;
-  showRightOutlet: boolean = true;
+  showRightOutlet: boolean = false;
 
   selectedCustomer: Customer;
   redeemedCoupons: [] = [];
