@@ -1,62 +1,68 @@
 <div class="card h-100">
-  <div
-    id="grid-container-header"
-    class="card-header d-flex justify-content-between align-items-center"
-  >
-    <h5 class="mb-0">Reporte: Cupones Canjeados</h5>
+  <div id="grid-container-header" class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Reporte: Cupones Canjeados</h5>
 
-    <div class="row">
-      <div class="col">
-        <div class="input-group input-group-sm">
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              Desde:
-            </span>
-          </div>
-          <wj-input-date
-            class="form-control p-0"
-            format="dd/MM/yyyy"
-            [(value)]="dateFrom"
-            (valueChanged)="getGridData()"
-          >
-          </wj-input-date>
+      <div class="input-group input-group-sm">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            Desde:
+          </span>
         </div>
+        <wj-input-date
+          class="form-control p-0"
+          format="dd/MM/yyyy"
+          [(value)]="dateFrom"
+          (valueChanged)="getGridData()"
+        >
+        </wj-input-date>
       </div>
 
-      <div class="col">
-        <div class="input-group input-group-sm">
-          <div class="input-group-prepend">
-            <span class="input-group-text">
-              Hasta:
-            </span>
-          </div>
-          <wj-input-date
-            class="form-control p-0"
-            format="dd/MM/yyyy"
-            [(value)]="dateTo"
-            (valueChanged)="getGridData()"
-          >
-          </wj-input-date>
+      <div class="input-group input-group-sm">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            Hasta:
+          </span>
         </div>
+        <wj-input-date
+          class="form-control p-0"
+          format="dd/MM/yyyy"
+          [(value)]="dateTo"
+          (valueChanged)="getGridData()"
+        >
+        </wj-input-date>
       </div>
 
-      <div class="col d-flex align-items-center justify-content-center">
-        <h6 class="mb-0">
-          {{ "Total canjes: " + reportRedeemedCouponsService.redeemed.length }}
-        </h6>
-      </div>
+      <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
+        💾 Exportar
+      </button>
+
+      <button
+        class="ml-2 btn btn-sm btn-outline-dark"
+        (click)="reportRoutingPanelService.goBack()"
+      >
+        ⬅️ Volver
+      </button>
     </div>
-
-    <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
-      💾 Exportar
-    </button>
-
-    <button
-      class="ml-2 btn btn-sm btn-outline-dark"
-      (click)="reportRoutingPanelService.goBack()"
+    <div
+      class="d-flex flex-wrap justify-content-between align-items-center mt-3"
     >
-      ⬅️ Volver
-    </button>
+      <ng-container *ngIf="groupedRedemptions.length">
+        <!--        <div><h6 class="mb-0 mr-5">Canjes por tipo:</h6></div>-->
+        <div *ngFor="let coupon of groupedRedemptions">
+          <h6 class="mb-0 mr-3">
+            {{ coupon.title }}: {{ coupon.redemptions.length }}
+          </h6>
+        </div>
+        <div class="">
+          <h6 class="mb-0">
+            {{
+              "TOTAL CANJES: " + reportRedeemedCouponsService.redeemed.length
+            }}
+          </h6>
+        </div>
+      </ng-container>
+    </div>
   </div>
   <div class="card-body">
     <wj-flex-grid

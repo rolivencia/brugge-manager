@@ -40,6 +40,8 @@ export class ReportRedeemedCouponsComponent implements OnInit {
     }
   ];
 
+  groupedRedemptions = [];
+
   // Sólo usados para almacenar valores de los date input.
   dateFrom: Date = moment()
     .subtract(1, "day")
@@ -69,9 +71,9 @@ export class ReportRedeemedCouponsComponent implements OnInit {
         .getRedeemedInterval(moment(this.dateFrom), moment(this.dateTo))
         .pipe(first())
         .subscribe(redeemed => {
-          console.log(redeemed);
           this.loadingGrid = false;
           this.reportRedeemedCouponsService.redeemed = redeemed;
+          this.groupedRedemptions = this.groupByCouponId(redeemed);
           this.reportRedeemedCouponsService.gridCollection = new CollectionView(
             redeemed
           );
@@ -98,5 +100,28 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       { includeColumnHeaders: true, includeCellStyles: false },
       exportName
     );
+  }
+
+  groupByCouponId(redeemed: any[]): any[] {
+    // Obtengo el set de cupones activos dentro del conjunto de las redenciones
+    const parsed = [];
+    const coupons = [];
+
+    for (const redemption of redeemed) {
+      if (!parsed.includes(redemption.coupon.id)) {
+        coupons.push({ ...redemption.coupon, redemptions: [] });
+        parsed.push(redemption.coupon.id);
+      }
+    }
+
+    for (const redemption of redeemed) {
+      for (const coupon of coupons) {
+        if (coupon.id === redemption.coupon.id) {
+          coupon.redemptions.push(redemption.coupon);
+        }
+      }
+    }
+
+    return coupons;
   }
 }
