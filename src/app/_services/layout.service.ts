@@ -1,9 +1,25 @@
+import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: "root"
 })
 export class LayoutService {
+  get semanticColors(): string[] {
+    return this._semanticColors;
+  }
+
+  private _semanticColors = [
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark"
+  ];
+
   constructor() {}
 
   /**
@@ -29,5 +45,19 @@ export class LayoutService {
       2 * padding -
       headerContainerElement.offsetHeight +
       "px";
+  }
+
+  /**
+   * Devuelve un string que representa un color semántico de bootstrap, elegido aleatoriamente
+   * @param excluded - Lista de colores semánticos excluidos de la lista
+   */
+  randomSemanticColor(excluded: string[] = []): string {
+    const allowedColors = _.difference(this.semanticColors, excluded);
+    return allowedColors[Math.floor(Math.random() * allowedColors.length)];
+  }
+
+  indexedSemanticColor(index: number, excluded: string[] = []): string {
+    const allowedColors = _.difference(this.semanticColors, excluded);
+    return allowedColors[index % allowedColors.length];
   }
 }

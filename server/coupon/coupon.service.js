@@ -608,7 +608,7 @@ async function getRedeemedByDate(dateFrom, dateTo) {
       {
         as: "coupon",
         model: Coupon(),
-        attributes: ["id", "title"],
+        attributes: ["id", "title", "description"],
         include: [
           { as: "type", model: CouponType(), attributes: ["id", "description"] }
         ]

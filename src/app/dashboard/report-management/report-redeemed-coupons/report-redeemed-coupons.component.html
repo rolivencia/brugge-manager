@@ -1,7 +1,8 @@
 <div class="card h-100">
   <div id="grid-container-header" class="card-header">
     <div class="d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">Reporte: Cupones Canjeados</h5>
+      <!--      <h5 class="mb-0">Reporte: Cupones Canjeados</h5>-->
+      <h5 class="mb-0">Cupones Canjeados</h5>
 
       <div class="input-group input-group-sm">
         <div class="input-group-prepend">
@@ -33,6 +34,15 @@
         </wj-input-date>
       </div>
 
+      <h5 class="mb-0">
+        <span class="badge badge-success">
+          {{ "TOTAL CANJES: " }}
+          <label class="mb-0 font-weight-light">{{
+            reportRedeemedCouponsService.redeemed.length
+          }}</label>
+        </span>
+      </h5>
+
       <button class="btn btn-sm btn-outline-dark" (click)="exportToXls()">
         💾 Exportar
       </button>
@@ -49,19 +59,20 @@
     >
       <ng-container *ngIf="groupedRedemptions.length">
         <!--        <div><h6 class="mb-0 mr-5">Canjes por tipo:</h6></div>-->
-        <div *ngFor="let coupon of groupedRedemptions">
+        <div *ngFor="let coupon of groupedRedemptions; let i = index">
           <h5 class="mb-0 mr-3">
-            <span class="badge badge-primary">
-              {{ coupon.title }}: {{ coupon.redemptions.length }}
-            </span>
-          </h5>
-        </div>
-        <div class="">
-          <h5 class="mb-0">
-            <span class="badge badge-success">
-              {{
-                "TOTAL CANJES: " + reportRedeemedCouponsService.redeemed.length
-              }}
+            <span
+              class="badge"
+              [ngClass]="
+                'badge-' +
+                layoutService.indexedSemanticColor(i, ['light', 'success'])
+              "
+            >
+              {{ coupon.title }}
+              <label *ngIf="coupon.description" class="mb-0 font-weight-light"
+                >( {{ coupon.description }} )</label
+              >
+              - {{ coupon.redemptions.length }}
             </span>
           </h5>
         </div>
