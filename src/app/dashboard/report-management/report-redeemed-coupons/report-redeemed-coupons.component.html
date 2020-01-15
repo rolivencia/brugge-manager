@@ -50,16 +50,20 @@
       <ng-container *ngIf="groupedRedemptions.length">
         <!--        <div><h6 class="mb-0 mr-5">Canjes por tipo:</h6></div>-->
         <div *ngFor="let coupon of groupedRedemptions">
-          <h6 class="mb-0 mr-3">
-            {{ coupon.title }}: {{ coupon.redemptions.length }}
-          </h6>
+          <h5 class="mb-0 mr-3">
+            <span class="badge badge-primary">
+              {{ coupon.title }}: {{ coupon.redemptions.length }}
+            </span>
+          </h5>
         </div>
         <div class="">
-          <h6 class="mb-0">
-            {{
-              "TOTAL CANJES: " + reportRedeemedCouponsService.redeemed.length
-            }}
-          </h6>
+          <h5 class="mb-0">
+            <span class="badge badge-success">
+              {{
+                "TOTAL CANJES: " + reportRedeemedCouponsService.redeemed.length
+              }}
+            </span>
+          </h5>
         </div>
       </ng-container>
     </div>
