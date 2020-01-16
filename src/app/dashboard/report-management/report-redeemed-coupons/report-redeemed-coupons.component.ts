@@ -17,6 +17,8 @@ import * as wjcGridXlsx from "wijmo/wijmo.grid.xlsx";
 export class ReportRedeemedCouponsComponent implements OnInit {
   @ViewChild("redeemedCouponsReportGrid", { static: false })
   redeemedCouponsReportGrid: WjFlexGrid;
+  @ViewChild("groupedRedeemedCouponsGrid", { static: false })
+  groupedRedeemedCouponsGrid: WjFlexGrid;
 
   columns = [
     { header: "Cupón", binding: "coupon.title", width: "*", id: "coupon" },
@@ -40,7 +42,35 @@ export class ReportRedeemedCouponsComponent implements OnInit {
     }
   ];
 
-  groupedRedemptions = [];
+  groupedColumns = [
+    { header: "Cupón", binding: "title", width: "*", id: "title" },
+    {
+      header: "Descripción",
+      binding: "description",
+      width: 500,
+      id: "description"
+    },
+    {
+      header: "Canje diario",
+      binding: "dailyCoupon",
+      width: 120,
+      id: "dailyCoupon"
+    },
+    {
+      header: "Tipo",
+      binding: "type.description",
+      width: 120,
+      id: "type"
+    },
+    {
+      header: "Nro. Canjes",
+      binding: "count",
+      width: 120,
+      id: "count"
+    }
+  ];
+
+  groupedRedemptions = new CollectionView();
 
   // Sólo usados para almacenar valores de los date input.
   dateFrom: Date = moment()
@@ -73,7 +103,9 @@ export class ReportRedeemedCouponsComponent implements OnInit {
         .subscribe(redeemed => {
           this.loadingGrid = false;
           this.reportRedeemedCouponsService.redeemed = redeemed;
-          this.groupedRedemptions = this.groupByCouponId(redeemed);
+          this.groupedRedemptions = new CollectionView(
+            this.groupByCouponId(redeemed)
+          );
           this.reportRedeemedCouponsService.gridCollection = new CollectionView(
             redeemed
           );
@@ -107,6 +139,7 @@ export class ReportRedeemedCouponsComponent implements OnInit {
     const parsed = [];
     const coupons = [];
 
+    // Separo en un conjunto los cupones existentes, sin repetir
     for (const redemption of redeemed) {
       if (!parsed.includes(redemption.coupon.id)) {
         coupons.push({ ...redemption.coupon, redemptions: [] });
@@ -114,6 +147,7 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       }
     }
 
+    // Navego la lista de redenciones para asignar redenciones a cada cupón agrupadamente
     for (const redemption of redeemed) {
       for (const coupon of coupons) {
         if (coupon.id === redemption.coupon.id) {
@@ -122,6 +156,10 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       }
     }
 
-    return coupons;
+    return coupons.map(coupon => ({
+      ...coupon,
+      dailyCoupon: coupon.dailyCoupon ? "Sí" : "No",
+      count: coupon.redemptions.length
+    }));
   }
 }
