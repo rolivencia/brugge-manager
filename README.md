@@ -29,3 +29,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## To run NodeJS server:
 
 Run nodemon server.js on the command prompt
+
+## To generate local HTTPS certificate and key:
+
+Run the next command. It requires openssl to be installed in your computer.
+
+`openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout cert.key -out cert.pem -config req.cnf -sha256`
