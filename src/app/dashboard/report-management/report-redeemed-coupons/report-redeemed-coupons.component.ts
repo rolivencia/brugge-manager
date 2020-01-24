@@ -35,10 +35,16 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       id: "customer"
     },
     {
-      header: "Fecha y Hora de Canje",
-      binding: "createdAt",
-      width: 250,
-      id: "createdAt"
+      header: "Fecha",
+      binding: "date",
+      width: 100,
+      id: "date"
+    },
+    {
+      header: "Hora",
+      binding: "time",
+      width: 80,
+      id: "time"
     }
   ];
 
@@ -107,7 +113,8 @@ export class ReportRedeemedCouponsComponent implements OnInit {
             this.groupByCouponId(redeemed)
           );
           this.reportRedeemedCouponsService.gridCollection = new CollectionView(
-            redeemed
+            redeemed,
+            { groupDescriptions: ["date"] }
           );
 
           const sortByDateTime = new SortDescription("createdAt", true);
