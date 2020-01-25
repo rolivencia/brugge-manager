@@ -26,24 +26,35 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       header: "Tipo",
       binding: "coupon.type.description",
       width: 140,
+      visible: true,
       id: "type"
     },
     {
       header: "Cliente",
       binding: "customer.fullName",
       width: 250,
+      visible: true,
       id: "customer"
+    },
+    {
+      header: "Jornada",
+      binding: "workday",
+      width: 0,
+      visible: false,
+      id: "workday"
     },
     {
       header: "Fecha",
       binding: "date",
       width: 100,
+      visible: true,
       id: "date"
     },
     {
       header: "Hora",
       binding: "time",
       width: 80,
+      visible: true,
       id: "time"
     }
   ];
@@ -54,18 +65,21 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       header: "Descripción",
       binding: "description",
       width: 500,
+      visible: true,
       id: "description"
     },
     {
       header: "Canje diario",
       binding: "dailyCoupon",
       width: 120,
+      visible: true,
       id: "dailyCoupon"
     },
     {
       header: "Tipo",
       binding: "type.description",
       width: 120,
+      visible: true,
       id: "type"
     },
     {
@@ -114,7 +128,7 @@ export class ReportRedeemedCouponsComponent implements OnInit {
           );
           this.reportRedeemedCouponsService.gridCollection = new CollectionView(
             redeemed,
-            { groupDescriptions: ["date"] }
+            { groupDescriptions: ["workday"] }
           );
 
           const sortByDateTime = new SortDescription("createdAt", true);

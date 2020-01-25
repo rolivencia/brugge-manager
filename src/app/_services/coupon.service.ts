@@ -163,9 +163,40 @@ export class CouponService {
             ...redemption,
             createdAt: moment(redemption.createdAt).format("YYYY/MM/DD"),
             date: moment(redemption.createdAt).format("YYYY/MM/DD"),
-            time: moment(redemption.createdAt).format("HH:mm")
+            time: moment(redemption.createdAt).format("HH:mm"),
+            workday: this.getWorkday(redemption.createdAt)
           }))
         )
       );
   };
+
+  /**
+   * Devuelve la jornada de trabajo, en formato fecha del día, para un date en formato ISOstring pasado como parámetro
+   * @param date - Formato ISOstring
+   */
+  private getWorkday(date: string): string {
+    const duplicate = moment(date);
+
+    const lowerLimit = moment(date).set({
+      hour: 12,
+      minute: 0,
+      second: 0,
+      millisecond: 0
+    });
+    const upperLimit = moment(date)
+      .add(1, "day")
+      .set({ hour: 11, minute: 59, second: 59, millisecond: 999 });
+
+    // La fecha corresponde a antes del mediodía del día dado. Corresponde a la jornada anterior.
+    if (duplicate.isBefore(lowerLimit)) {
+      return moment(duplicate)
+        .subtract(1, "day")
+        .format("YYYY/MM/DD");
+    } else if (
+      duplicate.isSameOrAfter(lowerLimit) &&
+      duplicate.isSameOrBefore(upperLimit)
+    ) {
+      return moment(duplicate).format("YYYY/MM/DD");
+    }
+  }
 }
