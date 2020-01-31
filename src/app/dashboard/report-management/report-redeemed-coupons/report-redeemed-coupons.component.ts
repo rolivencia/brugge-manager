@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import * as moment from "moment";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CollectionView, SortDescription } from "wijmo/wijmo";
@@ -26,14 +27,12 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       header: "Tipo",
       binding: "coupon.type.description",
       width: 140,
-      visible: true,
       id: "type"
     },
     {
       header: "Cliente",
       binding: "customer.fullName",
       width: 250,
-      visible: true,
       id: "customer"
     },
     {
@@ -47,45 +46,37 @@ export class ReportRedeemedCouponsComponent implements OnInit {
       header: "Fecha",
       binding: "date",
       width: 100,
-      visible: true,
       id: "date"
     },
     {
       header: "Hora",
       binding: "time",
       width: 80,
-      visible: true,
       id: "time"
     }
   ];
 
   groupedColumns = [
-    { header: "Cupón", binding: "title", width: "*", id: "title" },
-    {
-      header: "Descripción",
-      binding: "description",
-      width: 500,
-      visible: true,
-      id: "description"
-    },
-    {
-      header: "Canje diario",
-      binding: "dailyCoupon",
-      width: 120,
-      visible: true,
-      id: "dailyCoupon"
-    },
+    { header: "Cupón", binding: "coupon.title", width: "*", id: "coupon" },
     {
       header: "Tipo",
-      binding: "type.description",
-      width: 120,
+      binding: "coupon.type.description",
+      width: 140,
       visible: true,
       id: "type"
     },
     {
-      header: "Nro. Canjes",
-      binding: "count",
-      width: 120,
+      header: "Jornada",
+      binding: "workday",
+      width: 0,
+      visible: false,
+      id: "workday"
+    },
+    {
+      header: "Cantidad",
+      binding: "redemptions.length",
+      width: 100,
+      visible: true,
       id: "count"
     }
   ];
@@ -123,11 +114,14 @@ export class ReportRedeemedCouponsComponent implements OnInit {
         .subscribe(redeemed => {
           this.loadingGrid = false;
           this.reportRedeemedCouponsService.redeemed = redeemed;
+
           this.groupedRedemptions = new CollectionView(
-            this.groupByCouponId(redeemed)
+            this.groupByCouponTypeInWorkday(redeemed),
+            { groupDescriptions: ["workday"] }
           );
+
           this.reportRedeemedCouponsService.gridCollection = new CollectionView(
-            redeemed,
+            this.reportRedeemedCouponsService.redeemed,
             { groupDescriptions: ["workday"] }
           );
 
@@ -155,32 +149,31 @@ export class ReportRedeemedCouponsComponent implements OnInit {
     );
   }
 
-  groupByCouponId(redeemed: any[]): any[] {
-    // Obtengo el set de cupones activos dentro del conjunto de las redenciones
-    const parsed = [];
-    const coupons = [];
+  groupByCouponTypeInWorkday(redeemed: any[]): any[] {
+    const sameWorkdayAndCoupon = (workday, redemption) =>
+      workday.workday === redemption.workday &&
+      workday.coupon.id === redemption.coupon.id;
 
-    // Separo en un conjunto los cupones existentes, sin repetir
-    for (const redemption of redeemed) {
-      if (!parsed.includes(redemption.coupon.id)) {
-        coupons.push({ ...redemption.coupon, redemptions: [] });
-        parsed.push(redemption.coupon.id);
-      }
-    }
+    // Obtengo el set de cupones diferentes en jornadas de trabajo dentro del conjunto de las redenciones
+    const groupedByWorkday = _.uniqWith(
+      redeemed.map(redemption => ({
+        workday: redemption.workday,
+        coupon: redemption.coupon,
+        redemptions: []
+      })),
+      _.isEqual
+    );
 
-    // Navego la lista de redenciones para asignar redenciones a cada cupón agrupadamente
-    for (const redemption of redeemed) {
-      for (const coupon of coupons) {
-        if (coupon.id === redemption.coupon.id) {
-          coupon.redemptions.push(redemption.coupon);
+    // Recorro en el bucle exterior las jornadas existentes en el intervalo
+    // En el bucle interior, asigno a cada redención dentro del agrupamiento por jornada correspondiente
+    for (const workday of groupedByWorkday) {
+      for (const redemption of redeemed) {
+        if (sameWorkdayAndCoupon(workday, redemption)) {
+          workday.redemptions = workday.redemptions.concat(redemption);
         }
       }
     }
 
-    return coupons.map(coupon => ({
-      ...coupon,
-      dailyCoupon: coupon.dailyCoupon ? "Sí" : "No",
-      count: coupon.redemptions.length
-    }));
+    return groupedByWorkday;
   }
 }
