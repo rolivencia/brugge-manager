@@ -444,7 +444,7 @@ async function getCurrent() {
       deleted: 0,
       enabled: 1,
       startsAt: {
-        [Op.lte]: moment.toDate()
+        [Op.lte]: moment().toDate()
       },
       endsAt: {
         [Op.gte]: moment().toDate()
