@@ -67,6 +67,9 @@ async function getCurrentRedeemed(idCustomer) {
         where: {
           deleted: 0,
           enabled: 1,
+          startsAt: {
+            [Op.lte]: moment().toDate()
+          },
           endsAt: {
             [Op.gte]: moment().toDate()
           }
@@ -440,6 +443,9 @@ async function getCurrent() {
     where: {
       deleted: 0,
       enabled: 1,
+      startsAt: {
+        [Op.lte]: moment.toDate()
+      },
       endsAt: {
         [Op.gte]: moment().toDate()
       }
