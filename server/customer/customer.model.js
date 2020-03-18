@@ -39,11 +39,11 @@ Customer.init(
       allowNull: true,
       field: "image_url"
     },
-    uidFirebase: {
+    idDevice: {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false,
-      field: "uid_firebase"
+      field: "id_device"
     },
     createdAt: {
       type: Sequelize.DATE,
