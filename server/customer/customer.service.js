@@ -20,7 +20,8 @@ async function getByEmail(email) {
   });
 }
 
-async function create({ firstName, lastName, email, imageUrl, uidFirebase }) {
+// TODO: Agregar lógica requerida para lidiar con idDevice duplicados, a fin de evitar el fraude de utilizar varios chips gratuitos con distinto número en un mismo móvil.
+async function create({ firstName, lastName, email, imageUrl, idDevice }) {
   const newCustomer = await Customer().findOrCreate({
     where: { email: email },
     defaults: {
@@ -28,7 +29,7 @@ async function create({ firstName, lastName, email, imageUrl, uidFirebase }) {
       lastName: lastName,
       email: email,
       imageUrl: imageUrl,
-      uidFirebase: uidFirebase
+      idDevice: idDevice
     }
   });
 
@@ -47,5 +48,6 @@ async function create({ firstName, lastName, email, imageUrl, uidFirebase }) {
   });
 }
 
+// TODO: Implement remove and update
 async function remove() {}
 async function update() {}
