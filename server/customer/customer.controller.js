@@ -8,6 +8,7 @@ router.put("/update", update);
 router.post("/create", create);
 router.get("/getById/:id", getById);
 router.get("/getByEmail/:email", getByEmail);
+router.get("/login/:email/:idDevice", login);
 router.get("/", getAll);
 
 module.exports = router;
@@ -21,7 +22,6 @@ function create(req, res, next) {
     .create(req.body)
     .then(customer => {
       if (customer) {
-        console.log(customer);
         res.json(customer);
       } else {
         res
@@ -41,7 +41,7 @@ function getById(req, res, next) {
         firstName: customerRaw.firstName,
         lastName: customerRaw.lastName,
         email: customerRaw.email,
-        uidFirebase: customerRaw.uidFirebase,
+        idDevice: customerRaw.idDevice,
         audit: {
           createdAt: customerRaw.createdAt,
           updatedAt: customerRaw.updatedAt,
@@ -63,7 +63,7 @@ function getByEmail(req, res, next) {
           firstName: customerRaw.firstName,
           lastName: customerRaw.lastName,
           email: customerRaw.email,
-          uidFirebase: customerRaw.uidFirebase,
+          idDevice: customerRaw.idDevice,
           audit: {
             createdAt: customerRaw.createdAt,
             updatedAt: customerRaw.updatedAt,
@@ -89,7 +89,7 @@ function getAll(req, res, next) {
             firstName: customer.firstName,
             lastName: customer.lastName,
             email: customer.email,
-            uidFirebase: customer.uidFirebase,
+            idDevice: customer.idDevice,
             audit: {
               createdAt: customer.createdAt,
               updatedAt: customer.updatedAt,
@@ -98,6 +98,31 @@ function getAll(req, res, next) {
             }
           }))
         );
+      }
+    })
+    .catch(err => next(err));
+}
+
+function login(req, res, next) {
+  customerService
+    .login(req.params.email, req.params.idDevice)
+    .then(customerRaw => {
+      if (customerRaw) {
+        res.json({
+          id: customerRaw.id,
+          firstName: customerRaw.firstName,
+          lastName: customerRaw.lastName,
+          email: customerRaw.email,
+          idDevice: customerRaw.idDevice,
+          audit: {
+            createdAt: customerRaw.createdAt,
+            updatedAt: customerRaw.updatedAt,
+            enabled: customerRaw.enabled,
+            deleted: customerRaw.deleted
+          }
+        });
+      } else {
+        res.json(null);
       }
     })
     .catch(err => next(err));

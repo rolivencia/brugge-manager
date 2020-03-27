@@ -12,8 +12,10 @@ function jwt() {
       "/backend",
       "/customer/create",
       "/customer/getByEmail",
+      "/customer/login",
       "/api/keys/get",
       new RegExp("/customer/getByEmail/*", "i"),
+      new RegExp("/customer/login/*", "i"),
       new RegExp("/recommended/get/*/*", "i")
     ]
   });

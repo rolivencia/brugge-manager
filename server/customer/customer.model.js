@@ -41,8 +41,8 @@ Customer.init(
     },
     idDevice: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false,
+      unique: false,
+      allowNull: true,
       field: "id_device"
     },
     createdAt: {

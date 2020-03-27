@@ -6,7 +6,7 @@ export class Customer {
   firstName: string;
   lastName: string;
   email: string;
-  uidFirebase: string;
+  idDevice: string;
   audit: Audit;
 
   constructor(customerRaw) {
@@ -14,7 +14,7 @@ export class Customer {
     this.firstName = customerRaw.firstName;
     this.lastName = customerRaw.lastName;
     this.email = customerRaw.email;
-    this.uidFirebase = customerRaw.uidFirebase;
+    this.idDevice = customerRaw.idDevice;
     this.audit = customerRaw.audit;
 
     this.audit.createdAt = moment(customerRaw.audit.createdAt);
