@@ -121,7 +121,7 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
             ? "El cliente ya se encuentra registrado"
             : deviceEnabledForRegister
             ? "Ha ocurrido un error. Intente nuevamente"
-            : "Usuario deshabilitado por doble registro en un mismo dispositivo."
+            : "Usuario deshabilitado por doble registro en un mismo dispositivo. Ingrese con su usuario válido."
         });
   });
 }
