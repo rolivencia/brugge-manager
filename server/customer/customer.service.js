@@ -100,7 +100,7 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
       lastName: lastName,
       email: email,
       imageUrl: imageUrl,
-      idDevice: idDevice,
+      idDevice: idDevice ? idDevice : null,
       enabled: deviceEnabledForRegister
     }
   });
