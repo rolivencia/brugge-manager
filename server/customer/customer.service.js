@@ -1,6 +1,7 @@
 const environment = require("server/_helpers/environment");
 const Customer = require("./customer.model");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
@@ -61,6 +62,9 @@ async function login(email, idDevice) {
 
 // TODO: Agregar lógica requerida para lidiar con idDevice duplicados, a fin de evitar el fraude de utilizar varios chips gratuitos con distinto número en un mismo móvil.
 async function create({ firstName, lastName, email, imageUrl, idDevice }) {
+  // Se busca si existe un registro habilitado que tenga el mismo Device ID recibido como argumento.
+  // Se busca cuál es la creación del registro más reciente que corresponda a este Device ID.
+
   const existingDevice = await Customer().findOne({
     where: { idDevice: idDevice, enabled: true, deleted: false },
     order: [["createdAt", "DESC"]]
@@ -68,8 +72,12 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
 
   let deviceEnabledForRegister = true;
 
-  // En caso de que ya exista el dispositivo desde el que se intenta registrar, se busca cuál es la creación
-  // de un registro más reciente que corresponda al Device ID del dispositivo
+  // Si el dispositivo existe como registrado, se calcula una ventana de tiempo respecto de la cual
+  // se permite o no el registro del cliente con un Device ID ya existente.
+
+  // El registro que contiene el Device ID anterior no se altera, dado que se considera un registro
+  // anterior válido.
+
   if (existingDevice) {
     const timeWindow = { amount: 2, unit: "month" };
     const lastUpdate = moment(existingDevice.createdAt);
@@ -80,8 +88,12 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
     }
   }
 
-  // Creación de un nuevo registro
-  const customer = await Customer().create({
+  // Procedemos a crear un nuevo registro. El nuevo registro se crea como habilitado o no dependiendo
+  // de las condiciones del procedimiento de la sección anterior.
+  // En todos los casos se crea un nuevo registro, pero depende del último registro del Device ID
+  // determinar si el nuevo registro se crea como habilitado o no.
+
+  const [customer, isNewCustomer] = await Customer().findOrCreate({
     where: { email: email },
     defaults: {
       firstName: firstName,
@@ -94,7 +106,7 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
   });
 
   return new Promise((resolve, reject) => {
-    customer.dataValues && deviceEnabledForRegister
+    customer.dataValues && !isNewCustomer && deviceEnabledForRegister
       ? resolve({
           ...customer.dataValues,
           created: true,
@@ -105,7 +117,9 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
           )
         })
       : reject({
-          message: deviceEnabledForRegister
+          message: !isNewCustomer
+            ? "El cliente ya se encuentra registrado"
+            : deviceEnabledForRegister
             ? "Ha ocurrido un error. Intente nuevamente"
             : "Usuario deshabilitado por doble registro en un mismo dispositivo."
         });

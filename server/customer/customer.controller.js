@@ -17,21 +17,6 @@ function remove() {}
 
 function update() {}
 
-function create(req, res, next) {
-  customerService
-    .create(req.body)
-    .then(customer => {
-      if (customer) {
-        res.json(customer);
-      } else {
-        res
-          .status(400)
-          .json({ message: "Customer could not be added to the database." });
-      }
-    })
-    .catch(err => next(err));
-}
-
 function getById(req, res, next) {
   customerService
     .getById(req.params.id)
@@ -50,7 +35,7 @@ function getById(req, res, next) {
         }
       });
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 function getByEmail(req, res, next) {
@@ -75,7 +60,7 @@ function getByEmail(req, res, next) {
         res.json(null);
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 function getAll(req, res, next) {
@@ -100,7 +85,22 @@ function getAll(req, res, next) {
         );
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
+}
+
+function create(req, res, next) {
+  customerService
+    .create(req.body)
+    .then(customer => {
+      if (customer) {
+        res.json(customer);
+      } else {
+        res
+          .status(400)
+          .json({ message: "Customer could not be added to the database." });
+      }
+    })
+    .catch(err => next(res.status(400).json(err)));
 }
 
 function login(req, res, next) {
@@ -125,5 +125,5 @@ function login(req, res, next) {
         res.json(null);
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }

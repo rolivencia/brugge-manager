@@ -21,7 +21,7 @@ async function getAll(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function update(req, res, next) {
@@ -38,7 +38,7 @@ async function update(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function remove(req, res, next) {
@@ -55,7 +55,7 @@ async function remove(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function create(req, res, next) {
@@ -70,5 +70,5 @@ async function create(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }

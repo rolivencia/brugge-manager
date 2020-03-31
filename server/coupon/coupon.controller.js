@@ -30,7 +30,7 @@ async function getRedeemable(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function getRedeemed(req, res, next) {
@@ -47,7 +47,7 @@ async function getRedeemed(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function getRedeemedByDate(req, res, next) {
@@ -63,7 +63,7 @@ async function getRedeemedByDate(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function status(req, res, next) {
@@ -82,7 +82,7 @@ async function status(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function remove(req, res, next) {
@@ -98,7 +98,7 @@ async function remove(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function update(req, res, next) {
@@ -114,7 +114,7 @@ async function update(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function create(req, res, next) {
@@ -129,7 +129,7 @@ async function create(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function get(req, res, next) {
@@ -138,14 +138,14 @@ async function get(req, res, next) {
     .then(coupons => {
       res.json(coupons);
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function getAll(req, res, next) {
   couponService
     .getAll(req.params.expired, req.params.deleted)
     .then(coupons => res.json(coupons))
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function getCurrent(req, res, next) {
@@ -154,7 +154,7 @@ async function getCurrent(req, res, next) {
 
     .then(coupons => res.json(coupons))
 
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
 
 async function redeem(req, res, next) {
@@ -169,5 +169,5 @@ async function redeem(req, res, next) {
         });
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(res.status(400).json(err)));
 }
