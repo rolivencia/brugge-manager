@@ -132,10 +132,12 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
         })
       : reject({
           message: !isNewCustomer
-            ? "El cliente ya se encuentra registrado"
+            ? customer.dataValues.enabled === false
+              ? "Cliente deshabilitado. Contacte a BRUGGE"
+              : "El cliente ya se encuentra registrado"
             : deviceEnabledForRegister
             ? "Ha ocurrido un error. Intente nuevamente"
-            : "Usuario deshabilitado por múltiple registro en un mismo dispositivo. Ingrese con su usuario original."
+            : "Usuario deshabilitado por múltiple registro en este dispositivo. Ingrese con el número registrado previamente."
         });
   });
 }
