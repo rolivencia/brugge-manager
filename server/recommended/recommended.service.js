@@ -42,7 +42,6 @@ async function create({ title, description, imageUrl, info }) {
 }
 
 async function update({ id, title, description, imageUrl, info }) {
-  console.log(info);
   return Recommended().update(
     {
       title: title,

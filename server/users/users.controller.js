@@ -18,12 +18,12 @@ function authenticate(req, res, next) {
         res.status(400).json({ message: "Username or password is incorrect." });
       }
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
 
 function getAll(req, res, next) {
   userService
     .getAll()
     .then(users => res.json(users))
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }

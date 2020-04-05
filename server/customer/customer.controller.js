@@ -8,6 +8,7 @@ router.put("/update", update);
 router.post("/create", create);
 router.get("/getById/:id", getById);
 router.get("/getByEmail/:email", getByEmail);
+router.get("/login/:email", login);
 router.get("/login/:email/:idDevice", login);
 router.get("/", getAll);
 
@@ -35,7 +36,7 @@ function getById(req, res, next) {
         }
       });
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
 
 function getByEmail(req, res, next) {
@@ -60,7 +61,7 @@ function getByEmail(req, res, next) {
         res.json(null);
       }
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
 
 function getAll(req, res, next) {
@@ -85,7 +86,7 @@ function getAll(req, res, next) {
         );
       }
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
 
 function create(req, res, next) {
@@ -100,30 +101,18 @@ function create(req, res, next) {
           .json({ message: "Customer could not be added to the database." });
       }
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
 
 function login(req, res, next) {
   customerService
     .login(req.params.email, req.params.idDevice)
-    .then(customerRaw => {
-      if (customerRaw) {
-        res.json({
-          id: customerRaw.id,
-          firstName: customerRaw.firstName,
-          lastName: customerRaw.lastName,
-          email: customerRaw.email,
-          idDevice: customerRaw.idDevice,
-          audit: {
-            createdAt: customerRaw.createdAt,
-            updatedAt: customerRaw.updatedAt,
-            enabled: customerRaw.enabled,
-            deleted: customerRaw.deleted
-          }
-        });
+    .then(customer => {
+      if (customer) {
+        res.json(customer);
       } else {
         res.json(null);
       }
     })
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }

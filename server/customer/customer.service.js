@@ -31,7 +31,7 @@ async function login(email, idDevice) {
     }
   });
 
-  if (customer) {
+  if (customer && idDevice) {
     await Customer().update(
       { idDevice: idDevice },
       {
@@ -46,10 +46,24 @@ async function login(email, idDevice) {
   return new Promise((resolve, reject) => {
     customer && customer.enabled && !customer.deleted
       ? resolve({
-          ...customer.dataValues,
+          id: customer.dataValues.id,
+          firstName: customer.dataValues.firstName,
+          lastName: customer.dataValues.lastName,
+          email: customer.dataValues.email,
+          idDevice: customer.dataValues.idDevice,
+          audit: {
+            createdAt: customer.dataValues.createdAt,
+            updatedAt: customer.dataValues.updatedAt,
+            enabled: customer.dataValues.enabled,
+            deleted: customer.dataValues.deleted
+          },
+
           created: false,
           message: "Cliente ingresado correctamente.",
-          token: jwt.sign({ sub: customer.id }, environment.serverConfig.secret)
+          token: jwt.sign(
+            { sub: customer.dataValues.id },
+            environment.serverConfig.secret
+          )
         })
       : reject({
           message:
@@ -100,13 +114,13 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
       lastName: lastName,
       email: email,
       imageUrl: imageUrl,
-      idDevice: idDevice ? idDevice : null,
+      idDevice: idDevice ? idDevice : "",
       enabled: deviceEnabledForRegister
     }
   });
 
   return new Promise((resolve, reject) => {
-    customer.dataValues && !isNewCustomer && deviceEnabledForRegister
+    customer.dataValues && isNewCustomer && deviceEnabledForRegister
       ? resolve({
           ...customer.dataValues,
           created: true,
@@ -121,7 +135,7 @@ async function create({ firstName, lastName, email, imageUrl, idDevice }) {
             ? "El cliente ya se encuentra registrado"
             : deviceEnabledForRegister
             ? "Ha ocurrido un error. Intente nuevamente"
-            : "Usuario deshabilitado por doble registro en un mismo dispositivo. Ingrese con su usuario válido."
+            : "Usuario deshabilitado por múltiple registro en un mismo dispositivo. Ingrese con su usuario original."
         });
   });
 }

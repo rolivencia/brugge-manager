@@ -11,5 +11,5 @@ function get(req, res, next) {
   keysService
     .get(req.query.key)
     .then(retrievedKey => res.json(retrievedKey))
-    .catch(err => next(res.status(400).json(err)));
+    .catch(err => next(res.status(400).json({ message: err })));
 }
