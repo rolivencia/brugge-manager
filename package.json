@@ -32,7 +32,7 @@
     "ajv-keywords": "^3.4.1",
     "angularx-qrcode": "^1.6.4",
     "aws-sdk": "^2.569.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.3.1",
     "caniuse-lite": "^1.0.30001035",
