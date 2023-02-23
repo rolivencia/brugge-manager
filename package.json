@@ -56,7 +56,7 @@
     "popper.js": "^1.14.7",
     "rootpath": "^0.1.2",
     "rxjs": "~6.5.2",
-    "sequelize": "^5.17.2",
+    "sequelize": "^6.28.2",
     "tslib": "^1.9.0",
     "wijmo": "^5.20193.637",
     "zone.js": "~0.9.1"
